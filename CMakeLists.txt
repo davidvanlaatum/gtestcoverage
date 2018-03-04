@@ -28,6 +28,7 @@ find_package ( Boost REQUIRED COMPONENTS filesystem )
 find_package ( tinyxml REQUIRED )
 find_package ( iwyu )
 find_package ( clang-tidy )
+find_package ( valgrind )
 
 checkandaddflag ( -Wall CMAKE_CXX_FLAGS )
 checkandaddflag ( -Wextra CMAKE_CXX_FLAGS )
