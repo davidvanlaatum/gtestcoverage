@@ -37,7 +37,6 @@ function ( clang_tidy_target TARGET )
     add_for_headers ( ${TARGET}_clang_tidy )
     target_include_directories ( ${TARGET}_clang_tidy SYSTEM PUBLIC ${CXX_DEFAULT_INCLUDES} )
     add_dependencies ( clang_tidy ${TARGET}_clang_tidy )
-    register_target ( ${TARGET}_clang_tidy )
     if ( DISABLE_COMPILE )
       set_target_properties ( ${TARGET} PROPERTIES
                               C_COMPILER_LAUNCHER ${CMAKE_SOURCE_DIR}/scripts/nulllinker.sh
