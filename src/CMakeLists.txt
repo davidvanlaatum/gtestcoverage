@@ -4,7 +4,7 @@ add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListen
               FileInfo.cpp FileInfo.h
               LineInfo.cpp LineInfo.h
               TestInfo.cpp TestInfo.h
-              gmockmain.cpp )
+              )
 target_link_libraries ( gtestcoverage PUBLIC Boost::filesystem ${CMAKE_DL_LIBS} PRIVATE tinyxml googleinclude )
 set_property ( TARGET gtestcoverage APPEND PROPERTY LINK_FLAGS "${DYNAMIC_LOOKUP_LIST}" )
 target_include_directories ( gtestcoverage PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}> )
@@ -26,3 +26,11 @@ target_compile_definitions ( coveragedumperunit PRIVATE -DPREFIX=unit )
 set_target_properties ( coveragedumperunit PROPERTIES POSITION_INDEPENDENT_CODE ON )
 iwyu_target ( gtestcoverage )
 clang_tidy_target ( gtestcoverage )
+
+add_library ( gtestcoveragemain SHARED gmockmain.cpp )
+install ( TARGETS gtestcoveragemain
+          EXPORT getestcoverage
+          LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
+          )
+target_link_libraries ( gtestcoveragemain PUBLIC gtestcoverage PRIVATE googleinclude )
+set_property ( TARGET gtestcoveragemain APPEND PROPERTY LINK_FLAGS "${DYNAMIC_LOOKUP_LIST}" )

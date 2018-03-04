@@ -9,6 +9,26 @@ endif ()
 include ( CheckAndAddFlag )
 include ( GenerateExportHeader )
 include ( GNUInstallDirs )
+add_custom_target ( checks )
+
+option ( BUILD_TESTING "Testing" ON )
+if ( BUILD_TESTING )
+  enable_testing ()
+endif ()
+
+find_package ( GTest REQUIRED )
+if ( NOT EXISTS ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake )
+  file ( DOWNLOAD https://raw.githubusercontent.com/Kitware/CMake/release/Modules/FindBoost.cmake
+         ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake
+         SHOW_PROGRESS
+         STATUS find_boost_download
+         TIMEOUT 10 )
+endif ()
+find_package ( Boost REQUIRED COMPONENTS filesystem )
+find_package ( tinyxml REQUIRED )
+find_package ( iwyu )
+find_package ( clang-tidy )
+
 checkandaddflag ( -Wall CMAKE_CXX_FLAGS )
 checkandaddflag ( -Wextra CMAKE_CXX_FLAGS )
 checkandaddflag ( -Wunused CMAKE_CXX_FLAGS )
@@ -59,27 +79,11 @@ checkandaddflag ( -Wsuggest-override CMAKE_CXX_FLAGS )
 checkandaddflag ( -Wduplicated-branches CMAKE_CXX_FLAGS )
 checkandaddflag ( -Wduplicated-cond CMAKE_CXX_FLAGS )
 checkandaddflag ( -fmessage-length=160 CMAKE_CXX_FLAGS )
-add_custom_target ( checks )
-find_package ( GTest REQUIRED )
-if ( NOT EXISTS ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake )
-  file ( DOWNLOAD https://raw.githubusercontent.com/Kitware/CMake/release/Modules/FindBoost.cmake
-         ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake
-         SHOW_PROGRESS
-         STATUS find_boost_download
-         TIMEOUT 10 )
-endif ()
-find_package ( Boost REQUIRED COMPONENTS filesystem )
-find_package ( tinyxml REQUIRED )
-find_package ( iwyu )
-find_package ( clang-tidy )
 
 add_subdirectory ( src )
-add_subdirectory ( test )
-
-add_custom_target ( installtest
-                    COMMAND ${CMAKE_COMMAND} -E remove_directory installtest
-                    COMMAND ${CMAKE_COMMAND} -E env DESTDIR=installtest ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_install.cmake
-                    )
+if ( BUILD_TESTING )
+  add_subdirectory ( test )
+endif ()
 
 include ( CMakePackageConfigHelpers )
 write_basic_package_version_file ( "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageVersion.cmake"
@@ -87,10 +91,38 @@ write_basic_package_version_file ( "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageVer
 export ( EXPORT gtestcoverage FILE "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageConfig.cmake" )
 install ( EXPORT gtestcoverage
           FILE gtestcoverageConfig.cmake
-          COMPONENT Devel
+          COMPONENT devel
           DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gtestcoverage
           )
 install ( FILES "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageVersion.cmake"
           DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gtestcoverage
           COMPONENT devel
           )
+
+if ( NOT DEFINED SUBBUILD )
+  set ( CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR} )
+  set ( CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR} )
+  set ( CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH} )
+  set ( CPACK_PACKAGE_VENDOR "David van Laatum" )
+  set ( CPACK_PACKAGE_DESCRIPTION_SUMMARY "gtest coverage collector" )
+  set ( CPACK_PROJECT_CONFIG_FILE ${CMAKE_SOURCE_DIR}/CPack.cmake )
+  include ( CPack )
+  include ( CPackComponent )
+
+  foreach ( C ${CPACK_COMPONENTS_ALL} )
+    list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E env DESTDIR=installtest ${CMAKE_COMMAND} -DCOMPONENT=${C} -P ${CMAKE_BINARY_DIR}/cmake_install.cmake )
+  endforeach ()
+  if ( NOT COMMANDS )
+    list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E env DESTDIR=installtest ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_install.cmake )
+  endif ()
+  if ( Unspecified IN_LIST CPACK_COMPONENTS_ALL )
+    message ( WARNING "Files that have not been assigned to a category exist" )
+  endif ()
+  if ( BUILD_TESTING )
+    add_custom_target ( installtest
+                        COMMAND ${CMAKE_COMMAND} -E remove_directory installtest
+                        COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/install_manifest*
+                        ${COMMANDS}
+                        )
+  endif ()
+endif ()
