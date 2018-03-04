@@ -1,0 +1,98 @@
+list ( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" )
+cmake_minimum_required ( VERSION 3.6 )
+project ( dvmon VERSION 1.0.0 )
+set ( CMAKE_CXX_STANDARD 11 )
+set ( CMAKE_CXX_STANDARD_REQUIRED ON )
+if ( NOT ${CMAKE_VERSION} VERSION_LESS 3.9 )
+  cmake_policy ( SET CMP0068 NEW )
+endif ()
+include ( CheckAndAddFlag )
+include ( GenerateExportHeader )
+include ( GNUInstallDirs )
+checkandaddflag ( -Wall CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wextra CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wunused CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wuninitialized CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wmaybe-uninitialized CMAKE_CXX_FLAGS )
+checkandaddflag ( -Winit-self CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wfloat-equal CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wshadow CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wshadow-all CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wsign-conversion CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wconversion CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wpedantic CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-variadic-macros CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-long-long CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-c99-extensions CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-unused-command-line-argument CMAKE_CXX_FLAGS )
+checkandaddflag ( -fdiagnostics-show-template-tree CMAKE_CXX_FLAGS )
+checkandaddflag ( -Qunused-arguments CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wfatal-errors CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-error=unknown-pragmas CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-unknown-pragmas CMAKE_CXX_FLAGS )
+checkandaddflag ( -fstrict-aliasing CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-unknown-warning-option CMAKE_CXX_FLAGS )
+checkandaddflag ( -fcolor-diagnostics CMAKE_CXX_FLAGS )
+checkandaddflag ( -fdiagnostics-color CMAKE_CXX_FLAGS )
+checkandaddflag ( -fdebug-macro CMAKE_CXX_FLAGS )
+checkandaddflag ( -fmerge-constants CMAKE_CXX_FLAGS )
+checkandaddflag ( -fspell-checking CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wdocumentation CMAKE_CXX_FLAGS )
+checkandaddflag ( -Weverything CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-c++98-compat CMAKE_CXX_FLAGS )
+checkandaddflag ( -fcomment-block-commands=requirement,internal,endinternal,nosubgrouping CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-documentation-unknown-command CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-padded CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-missing-prototypes CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-zero-as-null-pointer-constant CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-global-constructors CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-exit-time-destructors CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-weak-vtables CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-c++98-compat-bind-to-temporary-copy CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-packed CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-c++98-compat-pedantic CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-used-but-marked-unused CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-covered-switch-default CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-reserved-id-macro CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wno-undef CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wsuggest-override CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wduplicated-branches CMAKE_CXX_FLAGS )
+checkandaddflag ( -Wduplicated-cond CMAKE_CXX_FLAGS )
+checkandaddflag ( -fmessage-length=160 CMAKE_CXX_FLAGS )
+add_custom_target ( checks )
+find_package ( GTest REQUIRED )
+if ( NOT EXISTS ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake )
+  file ( DOWNLOAD https://raw.githubusercontent.com/Kitware/CMake/release/Modules/FindBoost.cmake
+         ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake
+         SHOW_PROGRESS
+         STATUS find_boost_download
+         TIMEOUT 10 )
+endif ()
+find_package ( Boost REQUIRED COMPONENTS filesystem )
+find_package ( tinyxml REQUIRED )
+find_package ( iwyu )
+find_package ( clang-tidy )
+
+add_subdirectory ( src )
+add_subdirectory ( test )
+
+install ( TARGETS googleinclude EXPORT gtestcoverage )
+
+add_custom_target ( installtest
+                    COMMAND ${CMAKE_COMMAND} -E remove_directory installtest
+                    COMMAND ${CMAKE_COMMAND} -E env DESTDIR=installtest ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_install.cmake
+                    )
+
+include ( CMakePackageConfigHelpers )
+write_basic_package_version_file ( "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageVersion.cmake"
+                                   VERSION ${PROJECT_VERSION} COMPATIBILITY AnyNewerVersion )
+export ( EXPORT gtestcoverage FILE "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageConfig.cmake" )
+install ( EXPORT gtestcoverage
+          FILE gtestcoverageConfig.cmake
+          COMPONENT Devel
+          DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gtestcoverage
+          )
+install ( FILES "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageVersion.cmake"
+          DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gtestcoverage
+          COMPONENT devel
+          )

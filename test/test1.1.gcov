@@ -1,0 +1,289 @@
+        -:    0:Source:/home/david/host/Projects/dvmon/src/em/ClassMetaData.cpp
+        -:    0:Graph:/home/david/build/src/em/CMakeFiles/dvem.dir/ClassMetaData.cpp.gcno
+        -:    0:Data:/home/david/build/src/em/CMakeFiles/dvem.dir/ClassMetaData.cpp.gcda
+        -:    0:Runs:3
+        -:    0:Programs:1
+        -:    1:#include "ClassMetaData.h"
+        -:    2:#include "MetaDataStore.h"
+        -:    3:
+        -:    4:using namespace dv::em;
+        -:    5:
+function _ZN2dv2em13ClassMetaDataC2ERKSt9type_info called 2 returned 100% blocks executed 54%
+        4:    6:ClassMetaData::ClassMetaData( const std::type_info &info ) : mangledName( info.name() ) {
+        2:    6-block  0
+        2:    6-block  1
+call    0 returned 2
+call    1 returned 2
+call    2 returned 2
+branch  3 taken 2 (fallthrough)
+branch  4 taken 0 (throw)
+        2:    6-block  2
+call    5 returned 2
+call    6 returned 2
+branch  7 taken 2 (fallthrough)
+branch  8 taken 0 (throw)
+        2:    6-block  3
+call    9 returned 2
+branch 10 taken 2 (fallthrough)
+branch 11 taken 0 (throw)
+        2:    6-block  4
+call   12 returned 2
+branch 13 taken 2 (fallthrough)
+branch 14 taken 0 (throw)
+        2:    6-block  5
+call   15 returned 2
+branch 16 taken 2 (fallthrough)
+branch 17 taken 0 (throw)
+    %%%%%:    6-block  6
+call   18 never executed
+call   19 never executed
+    %%%%%:    6-block  7
+call   20 never executed
+    %%%%%:    6-block  8
+call   21 never executed
+    %%%%%:    6-block  9
+call   22 never executed
+    %%%%%:    6-block 10
+call   23 never executed
+    %%%%%:    6-block 11
+call   24 never executed
+        2:    7:  name = boost::core::demangle( mangledName.c_str() );
+        2:    7-block  0
+call    0 returned 2
+call    1 returned 2
+branch  2 taken 2 (fallthrough)
+branch  3 taken 0 (throw)
+        2:    7-block  1
+call    4 returned 2
+branch  5 taken 2 (fallthrough)
+branch  6 taken 0 (throw)
+        2:    7-block  2
+call    7 returned 2
+    %%%%%:    7-block  3
+call    8 never executed
+        2:    8:  MetaDataStore::registerClass( this );
+call    0 returned 2
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0 (throw)
+        2:    9:}
+        2:    9-block  0
+        -:   10:
+function _ZN2dv2em13ClassMetaDataD0Ev called 0 returned 0% blocks executed 0%
+function _ZN2dv2em13ClassMetaDataD2Ev called 1 returned 100% blocks executed 89%
+        2:   11:ClassMetaData::~ClassMetaData() {
+    $$$$$:   11-block  0
+        1:   11-block  1
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+call    3 returned 1
+call    4 returned 1
+        1:   12:  MetaDataStore::unregisterClass( this );
+        1:   12-block  0
+call    0 returned 1
+        1:   13:}
+    $$$$$:   13-block  0
+call    0 never executed
+call    1 never executed
+branch  2 taken 0 (fallthrough)
+branch  3 taken 1
+    $$$$$:   13-block  1
+call    4 never executed
+        -:   14:
+function _ZN2dv2em13ClassMetaData8addFieldERKN5boost10shared_ptrINS0_13FieldMetaDataEEE called 6 returned 100% blocks executed 100%
+        6:   15:void ClassMetaData::addField( const FieldMetaDataPtr &field ) {
+        6:   15-block  0
+        6:   16:  fields[field->name()] = field;
+        6:   16-block  0
+call    0 returned 6
+call    1 returned 6
+call    2 returned 6
+call    3 returned 6
+        6:   17:}
+        -:   18:
+        -:   19:void
+function _ZNK2dv2em13ClassMetaData8setFieldERKSsRN5boost10shared_ptrINS0_6EntityEEENS4_3anyE called 0 returned 0% blocks executed 0%
+    #####:   20:ClassMetaData::setField( const std::string &fieldName, EntityPtr &ent, const boost::any value ) const {
+    $$$$$:   20-block  0
+    #####:   21:  setField( fieldName, *ent.get(), value );
+    $$$$$:   21-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    $$$$$:   21-block  1
+call    5 never executed
+    %%%%%:   21-block  2
+call    6 never executed
+    #####:   22:}
+        -:   23:
+        -:   24:void
+function _ZNK2dv2em13ClassMetaData8setFieldERKSsRNS0_6EntityEN5boost3anyE called 0 returned 0% blocks executed 0%
+    #####:   25:ClassMetaData::setField( const std::string &fieldName, Entity &ent, const boost::any value ) const {
+    $$$$$:   25-block  0
+    #####:   26:  fieldsType::const_iterator it = fields.find( fieldName );
+    $$$$$:   26-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:   27:  if ( it == fields.end() ) {
+    $$$$$:   27-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   27-block  1
+branch  4 never executed
+branch  5 never executed
+    %%%%%:   27-block  2
+    #####:   28:    BOOST_THROW_EXCEPTION( NoSuchFieldException() );
+    $$$$$:   28-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    $$$$$:   28-block  1
+call    3 never executed
+    %%%%%:   28-block  2
+call    4 never executed
+        -:   29:  }
+    #####:   30:  it->second->setValue( &ent, value );
+    $$$$$:   30-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    $$$$$:   30-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    $$$$$:   30-block  2
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    $$$$$:   30-block  3
+call    9 never executed
+branch 10 never executed
+branch 11 never executed
+    $$$$$:   30-block  4
+call   12 never executed
+    %%%%%:   30-block  5
+call   13 never executed
+    #####:   31:}
+        -:   32:
+function _ZNK2dv2em13ClassMetaData8getFieldERKSsRKN5boost10shared_ptrINS0_6EntityEEE called 0 returned 0% blocks executed 0%
+    #####:   33:const boost::any ClassMetaData::getField( const std::string &fieldName, const EntityPtr &ent ) const {
+    $$$$$:   33-block  0
+    #####:   34:  return getField( fieldName, *ent.get() );
+    $$$$$:   34-block  0
+call    0 never executed
+call    1 never executed
+        -:   35:}
+        -:   36:
+function _ZNK2dv2em13ClassMetaData8getFieldERKSsRKNS0_6EntityE called 0 returned 0% blocks executed 0%
+    #####:   37:const boost::any ClassMetaData::getField( const std::string &fieldName, const Entity &ent ) const {
+    $$$$$:   37-block  0
+    #####:   38:  return getField( fieldName )->getValue( &ent );
+    $$$$$:   38-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   38-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    $$$$$:   38-block  2
+    $$$$$:   38-block  3
+call    7 never executed
+    $$$$$:   38-block  4
+    %%%%%:   38-block  5
+call    8 never executed
+        -:   39:}
+        -:   40:
+function _ZNK2dv2em13ClassMetaData8getFieldERKSs called 0 returned 0% blocks executed 0%
+    #####:   41:const FieldMetaDataPtr ClassMetaData::getField( const std::string &fieldName ) const {
+    $$$$$:   41-block  0
+    #####:   42:  fieldsType::const_iterator it = fields.find( fieldName );
+    $$$$$:   42-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:   43:  if ( it == fields.end() ) {
+    $$$$$:   43-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   43-block  1
+branch  4 never executed
+branch  5 never executed
+    %%%%%:   43-block  2
+    #####:   44:    BOOST_THROW_EXCEPTION( NoSuchFieldException() );
+    $$$$$:   44-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    $$$$$:   44-block  1
+call    3 never executed
+    %%%%%:   44-block  2
+call    4 never executed
+        -:   45:  }
+    #####:   46:  return it->second;
+    $$$$$:   46-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    $$$$$:   46-block  1
+call    3 never executed
+    $$$$$:   46-block  2
+        -:   47:}
+        -:   48:
+function _ZNK2dv2em13ClassMetaData14getMangledNameEv called 3 returned 100% blocks executed 100%
+        3:   49:const std::string &ClassMetaData::getMangledName() const {
+        3:   49-block  0
+        3:   50:  return mangledName;
+        3:   50-block  0
+        -:   51:}
+        -:   52:
+function _ZNK2dv2em13ClassMetaData7getNameEv called 0 returned 0% blocks executed 0%
+    #####:   53:const std::string &ClassMetaData::getName() const {
+    $$$$$:   53-block  0
+    #####:   54:  return name;
+    $$$$$:   54-block  0
+        -:   55:}
+        -:   56:
+function _ZNK2dv2em13ClassMetaData9getFieldsEv called 0 returned 0% blocks executed 0%
+    #####:   57:const ClassMetaData::fieldsType &ClassMetaData::getFields() const {
+    $$$$$:   57-block  0
+    #####:   58:  return fields;
+    $$$$$:   58-block  0
+        -:   59:}
+        -:   60:
+function _ZNK2dv2em13ClassMetaData8getTableEv called 0 returned 0% blocks executed 0%
+    #####:   61:const std::string &ClassMetaData::getTable() const {
+    $$$$$:   61-block  0
+    #####:   62:  return table;
+    $$$$$:   62-block  0
+        -:   63:}
+        -:   64:
+function _ZN2dv2em13ClassMetaData8setTableERKSs called 2 returned 100% blocks executed 100%
+        2:   65:void ClassMetaData::setTable( const std::string &tableName ) {
+        2:   65-block  0
+        2:   66:  table = tableName;
+        2:   66-block  0
+call    0 returned 2
+function _GLOBAL__sub_I_ClassMetaData.cpp called 2 returned 100% blocks executed 100%
+function _Z41__static_initialization_and_destruction_0ii called 2 returned 100% blocks executed 64%
+        8:   67:}
+        2:   67-block  0
+        2:   67-block  1
+call    0 returned 2
+        2:   67-block  2
+        2:   67-block  3
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0
+        2:   67-block  4
+branch  3 taken 2 (fallthrough)
+branch  4 taken 0
+        2:   67-block  5
+

@@ -1,0 +1,355 @@
+        -:    0:Source:/home/david/host/Projects/dvmon/src/em/FieldMetaData.cpp
+        -:    0:Graph:/home/david/build/src/em/CMakeFiles/dvem.dir/FieldMetaData.cpp.gcno
+        -:    0:Data:/home/david/build/src/em/CMakeFiles/dvem.dir/FieldMetaData.cpp.gcda
+        -:    0:Runs:2
+        -:    0:Programs:1
+        -:    1:#include "FieldMetaData.h"
+        -:    2:#include <iostream>
+        -:    3:
+        -:    4:using namespace dv::em;
+function _ZNK2dv2em16EnumMetaDataBaseINS0_13FieldDataTypeEE11getMappingsEv called 0 returned 0% blocks executed 0%
+function _ZNK2dv2em16EnumMetaDataBaseINS0_13FieldDataTypeEE7getNameEv called 0 returned 0% blocks executed 0%
+        1:    5:INITENUM( FieldDataType )
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+call    3 returned 1
+branch  4 taken 1 (fallthrough)
+branch  5 taken 0 (throw)
+        1:    5-block  0
+call    6 returned 1
+call    7 returned 1
+    %%%%%:    5-block  1
+call    8 never executed
+    $$$$$:    5-block  2
+    $$$$$:    5-block  3
+    $$$$$:    5-block  4
+    $$$$$:    5-block  5
+        -:    6:
+function _ZN2dv2em14convertToValueIaE7convertERKN5boost3anyE called 0 returned 0% blocks executed 0%
+    #####:    7:template<> const boost::any dv::em::convertToValue<int8_t>::convert( const boost::any &value ) {
+    $$$$$:    7-block  0
+    #####:    8:  if ( value.type() == typeid( int64_t ) ) {
+    $$$$$:    8-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:    9:    return boost::any( (int8_t) boost::any_cast<int64_t>( value ) );
+    $$$$$:    9-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:    9-block  1
+    %%%%%:    9-block  2
+call    4 never executed
+    #####:   10:  } else if ( value.type() == typeid( int32_t ) ) {
+    $$$$$:   10-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   11:    return boost::any( (int8_t) boost::any_cast<int32_t>( value ) );
+    $$$$$:   11-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   11-block  1
+    %%%%%:   11-block  2
+call    4 never executed
+    #####:   12:  } else if ( value.type() == typeid( int16_t ) ) {
+    $$$$$:   12-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   13:    return boost::any( (int8_t) boost::any_cast<int16_t>( value ) );
+    $$$$$:   13-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   13-block  1
+    %%%%%:   13-block  2
+call    4 never executed
+    #####:   14:  } else if ( value.type() == typeid( int8_t ) ) {
+    $$$$$:   14-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   15:    return boost::any( (int8_t) boost::any_cast<int8_t>( value ) );
+    $$$$$:   15-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   15-block  1
+        -:   16:  } else {
+    #####:   17:    return value;
+    $$$$$:   17-block  0
+call    0 never executed
+    $$$$$:   17-block  1
+        -:   18:  }
+        -:   19:}
+        -:   20:
+function _ZN2dv2em14convertToValueIsE7convertERKN5boost3anyE called 0 returned 0% blocks executed 0%
+    #####:   21:template<> const boost::any dv::em::convertToValue<int16_t>::convert( const boost::any &value ) {
+    $$$$$:   21-block  0
+    #####:   22:  if ( value.type() == typeid( int64_t ) ) {
+    $$$$$:   22-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   23:    return boost::any( (int16_t) boost::any_cast<int64_t>( value ) );
+    $$$$$:   23-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   23-block  1
+    %%%%%:   23-block  2
+call    4 never executed
+    #####:   24:  } else if ( value.type() == typeid( int32_t ) ) {
+    $$$$$:   24-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   25:    return boost::any( (int16_t) boost::any_cast<int32_t>( value ) );
+    $$$$$:   25-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   25-block  1
+    %%%%%:   25-block  2
+call    4 never executed
+    #####:   26:  } else if ( value.type() == typeid( int16_t ) ) {
+    $$$$$:   26-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   27:    return boost::any( (int16_t) boost::any_cast<int16_t>( value ) );
+    $$$$$:   27-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   27-block  1
+    %%%%%:   27-block  2
+call    4 never executed
+    #####:   28:  } else if ( value.type() == typeid( int8_t ) ) {
+    $$$$$:   28-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   29:    return boost::any( (int16_t) boost::any_cast<int8_t>( value ) );
+    $$$$$:   29-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   29-block  1
+        -:   30:  } else {
+    #####:   31:    return value;
+    $$$$$:   31-block  0
+call    0 never executed
+    $$$$$:   31-block  1
+        -:   32:  }
+        -:   33:}
+        -:   34:
+function _ZN2dv2em14convertToValueIiE7convertERKN5boost3anyE called 0 returned 0% blocks executed 0%
+    #####:   35:template<> const boost::any dv::em::convertToValue<int32_t>::convert( const boost::any &value ) {
+    $$$$$:   35-block  0
+    #####:   36:  if ( value.type() == typeid( int64_t ) ) {
+    $$$$$:   36-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   37:    return boost::any( (int32_t) boost::any_cast<int64_t>( value ) );
+    $$$$$:   37-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   37-block  1
+    %%%%%:   37-block  2
+call    4 never executed
+    #####:   38:  } else if ( value.type() == typeid( int32_t ) ) {
+    $$$$$:   38-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   39:    return boost::any( (int32_t) boost::any_cast<int32_t>( value ) );
+    $$$$$:   39-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   39-block  1
+    %%%%%:   39-block  2
+call    4 never executed
+    #####:   40:  } else if ( value.type() == typeid( int16_t ) ) {
+    $$$$$:   40-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   41:    return boost::any( (int32_t) boost::any_cast<int16_t>( value ) );
+    $$$$$:   41-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   41-block  1
+    %%%%%:   41-block  2
+call    4 never executed
+    #####:   42:  } else if ( value.type() == typeid( int8_t ) ) {
+    $$$$$:   42-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   43:    return boost::any( (int32_t) boost::any_cast<int8_t>( value ) );
+    $$$$$:   43-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   43-block  1
+        -:   44:  } else {
+    #####:   45:    return value;
+    $$$$$:   45-block  0
+call    0 never executed
+    $$$$$:   45-block  1
+        -:   46:  }
+        -:   47:}
+        -:   48:
+function _ZN2dv2em14convertToValueIlE7convertERKN5boost3anyE called 0 returned 0% blocks executed 0%
+    #####:   49:template<> const boost::any dv::em::convertToValue<int64_t>::convert( const boost::any &value ) {
+    $$$$$:   49-block  0
+    #####:   50:  if ( value.type() == typeid( int64_t ) ) {
+    $$$$$:   50-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   51:    return boost::any( (int64_t) boost::any_cast<int64_t>( value ) );
+    $$$$$:   51-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   51-block  1
+    %%%%%:   51-block  2
+call    4 never executed
+    #####:   52:  } else if ( value.type() == typeid( int32_t ) ) {
+    $$$$$:   52-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   53:    return boost::any( (int64_t) boost::any_cast<int32_t>( value ) );
+    $$$$$:   53-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   53-block  1
+    %%%%%:   53-block  2
+call    4 never executed
+    #####:   54:  } else if ( value.type() == typeid( int16_t ) ) {
+    $$$$$:   54-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   55:    return boost::any( (int64_t) boost::any_cast<int16_t>( value ) );
+    $$$$$:   55-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   55-block  1
+    %%%%%:   55-block  2
+call    4 never executed
+    #####:   56:  } else if ( value.type() == typeid( int8_t ) ) {
+    $$$$$:   56-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   57:    return boost::any( (int64_t) boost::any_cast<int8_t>( value ) );
+    $$$$$:   57-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   57-block  1
+        -:   58:  } else {
+    #####:   59:    return value;
+    $$$$$:   59-block  0
+call    0 never executed
+    $$$$$:   59-block  1
+        -:   60:  }
+        -:   61:}
+        -:   62:
+function _ZN2dv2em16convertFromValueISsE7convertERKN5boost3anyE called 0 returned 0% blocks executed 0%
+    #####:   63:template<> const boost::any convertFromValue<std::string>::convert( const boost::any &value ) {
+    $$$$$:   63-block  0
+    #####:   64:  if ( value.type() == typeid( const char * ) ) {
+    $$$$$:   64-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   65:    return boost::any( std::string( boost::any_cast<const char *>( value ) ) );
+    $$$$$:   65-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:   65-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    $$$$$:   65-block  2
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    $$$$$:   65-block  3
+call   10 never executed
+call   11 never executed
+    %%%%%:   65-block  4
+call   12 never executed
+    %%%%%:   65-block  5
+call   13 never executed
+        -:   66:  } else {
+    #####:   67:    return value;
+    $$$$$:   67-block  0
+call    0 never executed
+    $$$$$:   67-block  1
+        -:   68:  }
+function _GLOBAL__sub_I_FieldMetaData.cpp called 1 returned 100% blocks executed 100%
+function _Z41__static_initialization_and_destruction_0ii called 1 returned 100% blocks executed 71%
+        4:   69:}
+        1:   69-block  0
+        1:   69-block  1
+call    0 returned 1
+        1:   69-block  2
+        1:   69-block  3
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0
+        1:   69-block  4
+branch  3 taken 1 (fallthrough)
+branch  4 taken 0
+        1:   69-block  5
+
