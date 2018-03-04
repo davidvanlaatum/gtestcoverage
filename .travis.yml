@@ -21,7 +21,7 @@ matrix:
               - cmake-data
               - cmake
               - ninja-build
-              - boost-devel
+              - libboost-all-dev
     - os: linux
       compiler: gcc
       addons:
@@ -32,4 +32,4 @@ matrix:
               - cmake-data
               - cmake
               - ninja-build
-              - boost-devel
+              - libboost-all-dev
