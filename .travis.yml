@@ -9,7 +9,6 @@ script:
 cache:
   directories:
     - ${TRAVIS_BUILD_DIR}/boost-1.66.0
-    - ${TRAVIS_BUILD_DIR}/build/external
 before_install: |
               if [[ "${BOOST_VERSION}" != "" ]]; then
                 BOOST_DIR=boost-${BOOST_VERSION}
