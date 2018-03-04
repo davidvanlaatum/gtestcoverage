@@ -5,7 +5,7 @@ add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListen
               LineInfo.cpp LineInfo.h
               TestInfo.cpp TestInfo.h
               gmockmain.cpp )
-target_link_libraries ( gtestcoverage PUBLIC Boost::filesystem googleinclude PRIVATE tinyxml )
+target_link_libraries ( gtestcoverage PUBLIC Boost::filesystem PRIVATE tinyxml googleinclude )
 set_property ( TARGET gtestcoverage APPEND PROPERTY LINK_FLAGS "${DYNAMIC_LOOKUP_LIST}" )
 target_include_directories ( gtestcoverage PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}> )
 generate_export_header ( gtestcoverage )

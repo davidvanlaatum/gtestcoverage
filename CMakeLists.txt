@@ -76,8 +76,6 @@ find_package ( clang-tidy )
 add_subdirectory ( src )
 add_subdirectory ( test )
 
-install ( TARGETS googleinclude EXPORT gtestcoverage )
-
 add_custom_target ( installtest
                     COMMAND ${CMAKE_COMMAND} -E remove_directory installtest
                     COMMAND ${CMAKE_COMMAND} -E env DESTDIR=installtest ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_install.cmake
