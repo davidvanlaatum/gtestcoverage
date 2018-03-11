@@ -37,6 +37,7 @@ if ( NOT TARGET googleinclude )
   else ()
     message ( STATUS "Using downloaded gtest" )
     set ( gtest_force_shared_crt ON CACHE BOOL "" FORCE )
+    set ( BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE )
     mark_as_advanced ( gtest_force_shared_crt )
     mark_as_advanced ( gmock_build_tests )
     mark_as_advanced ( gtest_build_samples )
@@ -55,7 +56,6 @@ if ( NOT TARGET googleinclude )
                        TIMEOUT 600e
                        DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/external/
                        )
-    set ( BUILD_SHARED_LIBS ON )
     add_subdirectory ( ${googletest_SOURCE_DIR}/googlemock ${googletest_BINARY_DIR} )
 
     get_target_property ( GTEST_INCLUDE_DIR gtest INTERFACE_INCLUDE_DIRECTORIES )

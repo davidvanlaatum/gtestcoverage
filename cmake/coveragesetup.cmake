@@ -50,7 +50,7 @@ function ( setup_test_for_coverage TEST COVERS )
   if ( NOT READY_FOR_COVERAGE )
     message ( FATAL_ERROR "Missing call to setup_target_for_coverage on ${COVERS}" )
   endif ()
-  target_link_libraries ( ${TEST} PRIVATE coveragedumperunit )
+  target_link_libraries ( ${TEST} PRIVATE coveragedumperunit gtestcoverage )
   cleanup_coverage_files ( ${TEST} )
 endfunction ()
 

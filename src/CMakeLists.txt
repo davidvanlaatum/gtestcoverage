@@ -1,5 +1,6 @@
-#checkandaddflag ( "-Wl,-undefined,dynamic_lookup" DYNAMIC_LOOKUP )
-#checkandaddflag ( "-Wl,-undefined,suppress" DYNAMIC_LOOKUP )
+include ( rpath )
+set ( CMAKE_INSTALL_RPATH "${ORIGIN}" )
+set ( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )
 checkandaddflag ( "-Wl,-U,_main_coverage_dump,-U,_main_coverage_reset,-U,_unit_coverage_dump,-U,_unit_coverage_reset" DYNAMIC_LOOKUP )
 add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListener.h
               CoverageData.cpp CoverageData.h
