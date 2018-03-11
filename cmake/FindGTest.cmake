@@ -53,18 +53,19 @@ if ( NOT TARGET googleinclude )
     cmake_policy ( SET CMP0042 NEW )
     set ( CMAKE_MACOSX_RPATH TRUE )
     download_project ( PROJ googletest
-                       URL https://github.com/google/googletest/archive/release-1.8.0.zip
+                       URL http://github.com/google/googletest/archive/release-1.8.0.zip
                        URL_HASH SHA1=667f873ab7a4d246062565fad32fb6d8e203ee73
                        TIMEOUT 600e
                        DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/external/
                        )
     add_subdirectory ( ${googletest_SOURCE_DIR}/googlemock ${googletest_BINARY_DIR} )
+    set_directory_properties ( TARGETS gtest gtest_main gmock_main PROPERTY EXCLUDE_FROM_ALL TRUE )
 
     get_target_property ( GTEST_INCLUDE_DIR gtest INTERFACE_INCLUDE_DIRECTORIES )
     get_target_property ( GMOCK_INCLUDE_DIR gmock INTERFACE_INCLUDE_DIRECTORIES )
 
     add_library ( GTest::GTest INTERFACE IMPORTED GLOBAL )
-    target_link_libraries ( GTest::GTest INTERFACE gtest )
+    #    target_link_libraries ( GTest::GTest INTERFACE gtest )
     add_library ( GMock::GMock INTERFACE IMPORTED GLOBAL )
     target_link_libraries ( GMock::GMock INTERFACE gmock )
     set_property ( TARGET GMock::GMock APPEND PROPERTY INTERFACE_SYSTEM_INCLUDE_DIRECTORIES ${GTEST_INCLUDE_DIR} ${GMOCK_INCLUDE_DIR} )
