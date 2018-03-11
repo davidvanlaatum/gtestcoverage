@@ -1,3 +1,4 @@
+option ( COVERAGE "Record coverage for tests." OFF )
 add_library ( coveragedumper INTERFACE )
 add_library ( coveragedumperunit INTERFACE )
 if ( COVERAGE_SUPPORTED )
@@ -39,6 +40,26 @@ if ( COVERAGE_SUPPORTED )
   endif ()
 endif ()
 
+function ( dump_target_sources NAME )
+  get_target_property ( BINARY_DIR ${NAME} BINARY_DIR )
+  get_target_property ( SOURCE_DIR ${NAME} SOURCE_DIR )
+  get_target_property ( SOURCES ${NAME} SOURCES )
+  get_target_property ( EXCLUDE ${NAME} COVERAGE_EXCLUDE_FILES )
+  foreach ( S ${SOURCES} )
+    if ( NOT ${S} IN_LIST EXCLUDE )
+      string ( FIND ${S} ${CMAKE_BINARY_DIR} out )
+      if ( out EQUAL 0 )
+      elseif ( IS_ABSOLUTE ${S} )
+        set ( FILES "${FILES}${S}\n" )
+      else ()
+        set ( FILES "${FILES}${SOURCE_DIR}/${S}\n" )
+      endif ()
+    endif ()
+  endforeach ()
+  file ( WRITE ${BINARY_DIR}/${NAME}.lst "${FILES}" )
+  set ( SOURCE_LIST ${BINARY_DIR}/${NAME}.lst PARENT_SCOPE )
+endfunction ()
+
 function ( setup_test_for_coverage TEST COVERS )
   if ( NOT TARGET ${TEST} )
     message ( FATAL_ERROR "No such target ${TEST}" )
@@ -52,6 +73,37 @@ function ( setup_test_for_coverage TEST COVERS )
   endif ()
   target_link_libraries ( ${TEST} PRIVATE coveragedumperunit gtestcoverage )
   cleanup_coverage_files ( ${TEST} )
+  dump_target_sources ( ${COVERS} )
+
+  get_target_property ( BINARY_DIR ${COVERS} BINARY_DIR )
+  get_target_property ( OUTPUT_NAME ${COVERS} OUTPUT_NAME )
+  if ( NOT OUTPUT_NAME )
+    set ( OUTPUT_NAME ${COVERS} )
+  endif ()
+  list ( APPEND OBJECTS_DIRS "${BINARY_DIR}/CMakeFiles/${OUTPUT_NAME}.dir/" )
+  get_target_property ( BINARY_DIR ${TEST} BINARY_DIR )
+  get_target_property ( OUTPUT_NAME ${TEST} OUTPUT_NAME )
+  if ( NOT OUTPUT_NAME )
+    set ( OUTPUT_NAME ${TEST} )
+  endif ()
+  list ( APPEND OBJECTS_DIRS "${BINARY_DIR}/CMakeFiles/${OUTPUT_NAME}.dir/" )
+  set_property ( TEST ${TEST} APPEND PROPERTY ENVIRONMENT
+                 "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}"
+                 "SOURCE_LIST=${SOURCE_LIST}"
+                 "SOURCE_DIR=${CMAKE_SOURCE_DIR}"
+                 "COVERS=${COVERS}"
+                 "COVERS_FILE=$<TARGET_FILE:${COVERS}>"
+                 "COVERAGE_FILE=${BINARY_DIR}/${OUTPUT_NAME}-coverage.xml"
+                 "OBJECTS_DIRS=$<JOIN:${OBJECTS_DIRS},:>" )
+  if ( clang IN_LIST COVERAGE_STYLES )
+    set_property ( TEST ${TEST} APPEND PROPERTY ENVIRONMENT
+                   "LLVM_PROFDATA=${LLVM_PROFDATA_PATH}"
+                   "LLVM_SHOW=${LLVM_SHOW_PATH}"
+                   )
+  elseif ( gcc IN_LIST COVERAGE_STYLES )
+    set_property ( TEST ${TEST} APPEND PROPERTY ENVIRONMENT
+                   "GCOV=${GCOV_PATH}" )
+  endif ()
 endfunction ()
 
 function ( cleanup_coverage_files NAME )

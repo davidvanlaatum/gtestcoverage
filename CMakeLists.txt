@@ -133,10 +133,11 @@ if ( NOT DEFINED SUBBUILD )
          -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
          -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
          -G "${CMAKE_GENERATOR}"
+         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
          -DCMAKE_VERBOSE_MAKEFILE=ON
          ${CMAKE_SOURCE_DIR}/testproject/ )
   list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} --build installtest/testproject )
-  list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E chdir installtest/testproject ${CMAKE_CTEST_COMMAND} --output-on-failure )
+  list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E chdir installtest/testproject ${CMAKE_CTEST_COMMAND} -V --output-on-failure )
   if ( Unspecified IN_LIST CPACK_COMPONENTS_ALL )
     message ( WARNING "Files that have not been assigned to a category exist" )
   endif ()
@@ -146,6 +147,6 @@ if ( NOT DEFINED SUBBUILD )
                         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/install_manifest*
                         ${COMMANDS} USES_TERMINAL
                         )
-    add_test(NAME installtest COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target installtest )
+    add_test ( NAME installtest COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target installtest )
   endif ()
 endif ()
