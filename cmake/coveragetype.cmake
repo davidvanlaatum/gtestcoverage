@@ -1,4 +1,4 @@
-include ( CheckAndAddFlag )
+include ( ${CMAKE_CURRENT_LIST_DIR}/CheckAndAddFlag.cmake )
 
 checkandaddflag ( -fprofile-instr-generate CLANG_COVERAGE_FLAGS )
 if ( NOT CLANG_COVERAGE_FLAGS )

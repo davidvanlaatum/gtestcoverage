@@ -103,8 +103,10 @@ install ( FILES "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageVersion.cmake"
           COMPONENT devel
           )
 configure_file ( gtestcoverage-buildsettings.cmake.in gtestcoverage-buildsettings.cmake )
-install ( FILES cmake/coveragetype.cmake cmake/Findgtestcoverage.cmake cmake/FindGTest.cmake cmake/CheckAndAddFlag.cmake cmake/coveragesetup.cmake
-          ${CMAKE_BINARY_DIR}/gtestcoverage-buildsettings.cmake
+install ( FILES cmake/coveragetype.cmake cmake/CheckAndAddFlag.cmake cmake/coveragesetup.cmake
+          ${CMAKE_BINARY_DIR}/gtestcoverage-buildsettings.cmake cmake/DownloadProject.cmake cmake/DownloadProject.CMakeLists.cmake.in
+          DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gtestcoverage/ COMPONENT devel )
+install ( FILES cmake/Findgtestcoverage.cmake cmake/FindGTest.cmake
           DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ COMPONENT devel )
 
 if ( NOT DEFINED SUBBUILD )
@@ -123,6 +125,7 @@ if ( NOT DEFINED SUBBUILD )
   if ( NOT COMMANDS )
     list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E env DESTDIR=installtest ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_install.cmake )
   endif ()
+  list ( APPEND COMMANDS COMMAND find installtest -type f )
   list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E make_directory installtest/testproject )
   list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E chdir installtest/testproject ${CMAKE_COMMAND}
          -DCMAKE_MODULE_PATH=${CMAKE_BINARY_DIR}/installtest/${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/
@@ -132,7 +135,7 @@ if ( NOT DEFINED SUBBUILD )
          -DCMAKE_VERBOSE_MAKEFILE=ON
          ${CMAKE_SOURCE_DIR}/testproject/ )
   list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} --build installtest/testproject )
-  list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E chdir installtest/testproject ${CMAKE_CTEST_COMMAND} -V )
+  list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E chdir installtest/testproject ${CMAKE_CTEST_COMMAND} --output-on-failure )
   if ( Unspecified IN_LIST CPACK_COMPONENTS_ALL )
     message ( WARNING "Files that have not been assigned to a category exist" )
   endif ()

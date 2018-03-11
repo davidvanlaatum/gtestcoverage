@@ -3,9 +3,7 @@ script:
     - chmod a+x scripts/*
     - mkdir -p build
     - cd build
-    - cmake ../ -G Ninja ${CMAKE_OPTIONS}
-    - cmake --build .
-    - ctest -V
+    - cmake ../ -G Ninja ${CMAKE_OPTIONS} && cmake --build . && ctest -V
 matrix:
   include:
     - os: osx
