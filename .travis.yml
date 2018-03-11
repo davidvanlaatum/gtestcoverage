@@ -10,7 +10,7 @@ matrix:
   include:
     - os: osx
       before_install:
-        - brew install ninja gtest
+        - brew install ninja
     - os: linux
       compiler: clang
       addons:
@@ -22,7 +22,6 @@ matrix:
               - cmake
               - ninja-build
               - libboost-all-dev
-              - gtest
     - os: linux
       compiler: gcc
       addons:
@@ -34,4 +33,3 @@ matrix:
               - cmake
               - ninja-build
               - libboost-all-dev
-              - gtest
