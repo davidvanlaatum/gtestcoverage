@@ -158,3 +158,4 @@ cmake/FindBoost.cmake
 .idea/modules.xml
 .idea/vcs.xml
 .idea/*.iml
+cmake-build*
