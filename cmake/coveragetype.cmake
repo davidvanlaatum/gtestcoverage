@@ -1,0 +1,30 @@
+include ( CheckAndAddFlag )
+
+checkandaddflag ( -fprofile-instr-generate CLANG_COVERAGE_FLAGS )
+if ( NOT CLANG_COVERAGE_FLAGS )
+  checkandaddflag ( --coverage GCC_COVERAGE_FLAGS )
+else ()
+  checkandaddflag ( -fcoverage-mapping CLANG_COVERAGE_FLAGS )
+endif ()
+
+if ( CLANG_COVERAGE_FLAGS )
+  list ( APPEND COVERAGE_STYLES clang )
+elseif ( GCC_COVERAGE_FLAGS )
+  list ( APPEND COVERAGE_STYLES gcc )
+endif ()
+
+if ( DEFINED BUILD_COVERAGE_STYLES )
+  foreach ( STYLE IN LISTS COVERAGE_STYLES )
+    if ( NOT ${STYLE} IN_LIST BUILD_COVERAGE_STYLES )
+      list ( REMOVE_ITEM COVERAGE_STYLES ${STYLE} )
+    endif ()
+  endforeach ()
+endif ()
+
+if ( COVERAGE_STYLES )
+  set ( COVERAGE_SUPPORTED TRUE )
+else ()
+  set ( COVERAGE_SUPPORTED FALSE )
+endif ()
+
+message ( STATUS "Supported coverage styles: ${COVERAGE_STYLES}" )

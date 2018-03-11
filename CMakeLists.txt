@@ -1,6 +1,6 @@
 list ( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" )
 cmake_minimum_required ( VERSION 3.6 )
-project ( dvmon VERSION 1.0.0 )
+project ( gtestcoverage VERSION 1.0.0 )
 set ( CMAKE_CXX_STANDARD 11 )
 set ( CMAKE_CXX_STANDARD_REQUIRED ON )
 if ( NOT ${CMAKE_VERSION} VERSION_LESS 3.9 )
@@ -29,6 +29,7 @@ find_package ( tinyxml REQUIRED )
 find_package ( iwyu )
 find_package ( clang-tidy )
 find_package ( valgrind )
+include ( coveragetype )
 
 checkandaddflag ( -Wall CMAKE_CXX_FLAGS )
 checkandaddflag ( -Wextra CMAKE_CXX_FLAGS )
@@ -83,7 +84,9 @@ checkandaddflag ( -fmessage-length=160 CMAKE_CXX_FLAGS )
 
 add_subdirectory ( src )
 if ( BUILD_TESTING )
+  include ( coveragesetup )
   add_subdirectory ( test )
+  add_subdirectory ( testproject )
 endif ()
 
 include ( CMakePackageConfigHelpers )
@@ -99,6 +102,10 @@ install ( FILES "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageVersion.cmake"
           DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gtestcoverage
           COMPONENT devel
           )
+configure_file ( gtestcoverage-buildsettings.cmake.in gtestcoverage-buildsettings.cmake )
+install ( FILES cmake/coveragetype.cmake cmake/Findgtestcoverage.cmake cmake/FindGTest.cmake cmake/CheckAndAddFlag.cmake cmake/coveragesetup.cmake
+          ${CMAKE_BINARY_DIR}/gtestcoverage-buildsettings.cmake
+          DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ COMPONENT devel )
 
 if ( NOT DEFINED SUBBUILD )
   set ( CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR} )
@@ -116,6 +123,16 @@ if ( NOT DEFINED SUBBUILD )
   if ( NOT COMMANDS )
     list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E env DESTDIR=installtest ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_install.cmake )
   endif ()
+  list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E make_directory installtest/testproject )
+  list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E chdir installtest/testproject ${CMAKE_COMMAND}
+         -DCMAKE_MODULE_PATH=${CMAKE_BINARY_DIR}/installtest/${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/
+         -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+         -G "${CMAKE_GENERATOR}"
+         -DCMAKE_VERBOSE_MAKEFILE=ON
+         ${CMAKE_SOURCE_DIR}/testproject/ )
+  list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} --build installtest/testproject )
+  list ( APPEND COMMANDS COMMAND ${CMAKE_COMMAND} -E chdir installtest/testproject ${CMAKE_CTEST_COMMAND} -V )
   if ( Unspecified IN_LIST CPACK_COMPONENTS_ALL )
     message ( WARNING "Files that have not been assigned to a category exist" )
   endif ()
@@ -123,7 +140,8 @@ if ( NOT DEFINED SUBBUILD )
     add_custom_target ( installtest
                         COMMAND ${CMAKE_COMMAND} -E remove_directory installtest
                         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/install_manifest*
-                        ${COMMANDS}
+                        ${COMMANDS} USES_TERMINAL
                         )
+    add_test(NAME installtest COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target installtest )
   endif ()
 endif ()

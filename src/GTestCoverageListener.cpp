@@ -6,7 +6,6 @@
 #include <gtest/gtest.h>
 
 #ifdef HAVE_GTEST_COVERAGE
-#include <dlfcn.h>
 extern "C" {
 void main_coverage_reset();
 void main_coverage_dump();
@@ -18,51 +17,17 @@ void unit_coverage_dump();
 using namespace testing::coverage;
 using namespace boost::filesystem;
 using namespace std;
-#ifdef HAVE_GTEST_COVERAGE
-void *dlhandle;
-typedef void (*gcovfunction)();
-gcovfunction reset;
-gcovfunction dump;
-union gcovFunctionCaster {
-  void *pointer;
-  gcovfunction function;
-};
-#endif
 
 GTestCoverageListener::GTestCoverageListener() {
   data = boost::make_shared<CoverageData>();
-#ifdef HAVE_GTEST_COVERAGE
-  if ( std::getenv( "COVERS_FILE" ) ) {
-    dlhandle = dlopen( std::getenv( "COVERS_FILE" ), RTLD_NOW | RTLD_NOLOAD );
-    if ( !dlhandle ) {
-      dlhandle = dlopen( std::getenv( "COVERS_FILE" ), RTLD_NOW );
-      if ( dlhandle ) {
-        gcovFunctionCaster caster;
-        caster.pointer = dlsym( dlhandle, "main_coverage_reset" );
-        reset = caster.function;
-        caster.pointer = dlsym( dlhandle, "main_coverage_dump" );
-        dump = caster.function;
-      }
-    }
-  }
-#endif
 }
 
-GTestCoverageListener::~GTestCoverageListener() {
-#ifdef HAVE_GTEST_COVERAGE
-  if ( dlhandle ) {
-    dlclose( dlhandle );
-  }
-#endif
-}
+GTestCoverageListener::~GTestCoverageListener() = default;
 
 void GTestCoverageListener::OnTestStart( const testing::TestInfo &info __attribute__((unused)) ) {
 #ifdef HAVE_GTEST_COVERAGE
   main_coverage_reset();
   unit_coverage_reset();
-  if ( reset ) {
-    reset();
-  }
 #endif
   data->beginNewTest();
 }
@@ -90,9 +55,6 @@ void GTestCoverageListener::OnTestEnd( const testing::TestInfo &info ) {
 #ifdef HAVE_GTEST_COVERAGE
   main_coverage_dump();
   unit_coverage_dump();
-  if ( dump ) {
-    dump();
-  }
   data->loadTestData( info.test_case_name(), info.name(), info.result()->Passed() );
 #endif
 }
@@ -101,14 +63,8 @@ void GTestCoverageListener::OnTestProgramStart( const testing::UnitTest &test __
 #ifdef HAVE_GTEST_COVERAGE
   main_coverage_reset();
   unit_coverage_reset();
-  if ( reset ) {
-    reset();
-  }
   main_coverage_dump();
   unit_coverage_dump();
-  if ( dump ) {
-    dump();
-  }
 #endif
   loadSources();
 }

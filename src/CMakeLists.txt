@@ -1,36 +1,38 @@
-checkandaddflag ( "-undefined dynamic_lookup" DYNAMIC_LOOKUP )
+#checkandaddflag ( "-Wl,-undefined,dynamic_lookup" DYNAMIC_LOOKUP )
+#checkandaddflag ( "-Wl,-undefined,suppress" DYNAMIC_LOOKUP )
+checkandaddflag ( "-Wl,-U,_main_coverage_dump,-U,_main_coverage_reset,-U,_unit_coverage_dump,-U,_unit_coverage_reset" DYNAMIC_LOOKUP )
 add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListener.h
               CoverageData.cpp CoverageData.h
               FileInfo.cpp FileInfo.h
               LineInfo.cpp LineInfo.h
               TestInfo.cpp TestInfo.h
               )
-target_link_libraries ( gtestcoverage PUBLIC Boost::filesystem ${CMAKE_DL_LIBS} PRIVATE tinyxml googleinclude )
-set_property ( TARGET gtestcoverage APPEND PROPERTY LINK_FLAGS "${DYNAMIC_LOOKUP_LIST}" )
+target_link_libraries ( gtestcoverage PUBLIC ${CMAKE_DL_LIBS} GMock::GMock PRIVATE Boost::filesystem tinyxml ${DYNAMIC_LOOKUP_LIST} )
 target_include_directories ( gtestcoverage PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}> )
 generate_export_header ( gtestcoverage )
-install ( TARGETS gtestcoverage EXPORT gtestcoverage
-          LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
-          PUBLIC_HEADER DESTINATION include/gtestcoverage COMPONENT devel )
 target_compile_definitions ( gtestcoverage PUBLIC -DHAVE_GTEST_COVERAGE )
-add_library ( coveragedumper STATIC coveragedumper.cpp )
-target_compile_definitions ( coveragedumper PRIVATE -DPREFIX=main )
-set_target_properties ( coveragedumper PROPERTIES POSITION_INDEPENDENT_CODE ON )
-install ( TARGETS coveragedumper
-          EXPORT getestcoverage
-          ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
-          PUBLIC_HEADER DESTINATION include/gtestcoverage COMPONENT devel
-          )
-add_library ( coveragedumperunit STATIC EXCLUDE_FROM_ALL coveragedumper.cpp )
-target_compile_definitions ( coveragedumperunit PRIVATE -DPREFIX=unit )
-set_target_properties ( coveragedumperunit PROPERTIES POSITION_INDEPENDENT_CODE ON )
 iwyu_target ( gtestcoverage )
 clang_tidy_target ( gtestcoverage )
 
+foreach ( STYLE IN LISTS COVERAGE_STYLES )
+  add_library ( coveragedumper-${STYLE} STATIC coveragedumper.cpp )
+  target_compile_definitions ( coveragedumper-${STYLE} PRIVATE -DPREFIX=main -DSTYLE=${STYLE} -DSTYLE_${STYLE} )
+  set_target_properties ( coveragedumper-${STYLE} PROPERTIES POSITION_INDEPENDENT_CODE ON )
+  install ( TARGETS coveragedumper-${STYLE}
+            EXPORT gtestcoverage
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
+            )
+  add_library ( coveragedumperunit-${STYLE} STATIC coveragedumper.cpp )
+  target_compile_definitions ( coveragedumperunit-${STYLE} PRIVATE -DPREFIX=unit -DSTYLE=${STYLE} -DSTYLE_${STYLE} )
+  set_target_properties ( coveragedumperunit-${STYLE} PROPERTIES POSITION_INDEPENDENT_CODE ON )
+  install ( TARGETS coveragedumperunit-${STYLE}
+            EXPORT gtestcoverage
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
+            )
+endforeach ()
+
 add_library ( gtestcoveragemain SHARED gmockmain.cpp )
-install ( TARGETS gtestcoveragemain
-          EXPORT getestcoverage
+target_link_libraries ( gtestcoveragemain PUBLIC gtestcoverage PRIVATE GMock::GMock ${DYNAMIC_LOOKUP_LIST} )
+install ( TARGETS gtestcoverage gtestcoveragemain EXPORT gtestcoverage
           LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
-          )
-target_link_libraries ( gtestcoveragemain PUBLIC gtestcoverage PRIVATE googleinclude )
-set_property ( TARGET gtestcoveragemain APPEND PROPERTY LINK_FLAGS "${DYNAMIC_LOOKUP_LIST}" )
+          PUBLIC_HEADER DESTINATION include/gtestcoverage COMPONENT devel )

@@ -1,5 +1,6 @@
 include ( FindPkgConfig )
 pkg_check_modules ( tinyxml QUIET IMPORTED_TARGET tinyxml2 )
+mark_as_advanced ( pkgcfg_lib_tinyxml_tinyxml2 )
 
 if ( TARGET PkgConfig::tinyxml )
   set ( TINY_XML_FOUND TRUE )
