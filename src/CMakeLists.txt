@@ -8,7 +8,7 @@ add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListen
               LineInfo.cpp LineInfo.h
               TestInfo.cpp TestInfo.h
               )
-target_link_libraries ( gtestcoverage PUBLIC ${CMAKE_DL_LIBS} GMock::GMock PRIVATE Boost::filesystem tinyxml ${DYNAMIC_LOOKUP_LIST} )
+target_link_libraries ( gtestcoverage PUBLIC ${CMAKE_DL_LIBS} GMock::GMock PRIVATE Boost::boost Boost::filesystem tinyxml ${DYNAMIC_LOOKUP_LIST} )
 target_include_directories ( gtestcoverage PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}> )
 generate_export_header ( gtestcoverage )
 target_compile_definitions ( gtestcoverage PUBLIC -DHAVE_GTEST_COVERAGE )
@@ -33,7 +33,7 @@ foreach ( STYLE IN LISTS COVERAGE_STYLES )
 endforeach ()
 
 add_library ( gtestcoveragemain SHARED gmockmain.cpp )
-target_link_libraries ( gtestcoveragemain PUBLIC gtestcoverage PRIVATE GMock::GMock ${DYNAMIC_LOOKUP_LIST} )
+target_link_libraries ( gtestcoveragemain PUBLIC gtestcoverage PRIVATE Boost::boost GMock::GMock ${DYNAMIC_LOOKUP_LIST} )
 install ( TARGETS gtestcoverage gtestcoveragemain EXPORT gtestcoverage
           LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
           PUBLIC_HEADER DESTINATION include/gtestcoverage COMPONENT devel )
