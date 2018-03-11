@@ -52,6 +52,7 @@ else ()
                        TIMEOUT 600e
                        DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/external/
                        )
+    set ( BUILD_SHARED_LIBS ON )
     add_subdirectory ( ${googletest_SOURCE_DIR}/googlemock ${googletest_BINARY_DIR} )
 
     get_target_property ( GTEST_INCLUDE_DIR gtest INTERFACE_INCLUDE_DIRECTORIES )
