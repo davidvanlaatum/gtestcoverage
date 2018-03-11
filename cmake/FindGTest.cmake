@@ -61,7 +61,9 @@ else ()
     target_link_libraries ( GTest::GTest INTERFACE gtest )
     add_library ( GMock::GMock INTERFACE IMPORTED GLOBAL )
     target_link_libraries ( GMock::GMock INTERFACE gmock )
-    target_include_directories ( GMock::GMock INTERFACE ${GTEST_INCLUDE_DIR} )
+    set_target_properties ( GMock::GMock PROPERTIES
+                            INTERFACE_SYSTEM_INCLUDE_DIRECTORIES ${GTEST_INCLUDE_DIR}
+                            INTERFACE_INCLUDE_DIRECTORIES ${GTEST_INCLUDE_DIR} )
     find_package_handle_standard_args ( GTest REQUIRED_VARS GTEST_INCLUDE_DIR GMOCK_INCLUDE_DIR )
   endif ()
   add_library ( googleinclude INTERFACE )
