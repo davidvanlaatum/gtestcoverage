@@ -1,6 +1,6 @@
 language: cpp
 before_install: if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo add-apt-repository ppa:ostogvin/tjo-develop -y; fi
-install: if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo apt install -y boost1.65.1; fi
+install: if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo apt install -y boost; fi
 script:
     - chmod a+x scripts/*
     - mkdir -p build
