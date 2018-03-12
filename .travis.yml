@@ -12,11 +12,12 @@ matrix:
       sudo: required
       compiler: clang
       env: CMAKE_OPTIONS=-GNinja
+      before_install:
+        - sudo add-apt-repository ppa:ostogvin/tjo-develop -y
       addons:
           apt:
             sources:
               - ubuntu-toolchain-r-test
-              - ppa:ostogvin/tjo-develop
             packages:
               - cmake-data
               - cmake
@@ -27,6 +28,8 @@ matrix:
       sudo: required
       compiler: gcc
       env: CMAKE_OPTIONS=-GNinja
+      before_install:
+        - sudo add-apt-repository ppa:ostogvin/tjo-develop -y
       addons:
           apt:
             sources:
