@@ -1,34 +1,29 @@
 #include "GTestCoverageListener.h"
 #include "CoverageData.h"
-#include <boost/make_shared.hpp>
 #include <cstddef>
 #include <fstream>
 #include <gtest/gtest.h>
 
-#ifdef HAVE_GTEST_COVERAGE
 extern "C" {
 void main_coverage_reset();
 void main_coverage_dump();
 void unit_coverage_reset();
 void unit_coverage_dump();
 }
-#endif
 
 using namespace testing::coverage;
 using namespace boost::filesystem;
 using namespace std;
 
 GTestCoverageListener::GTestCoverageListener() {
-  data = boost::make_shared<CoverageData>();
+  data = std::make_shared<CoverageData>();
 }
 
 GTestCoverageListener::~GTestCoverageListener() = default;
 
-void GTestCoverageListener::OnTestStart( const testing::TestInfo &info __attribute__((unused)) ) {
-#ifdef HAVE_GTEST_COVERAGE
+void GTestCoverageListener::OnTestStart( const testing::TestInfo & ) {
   main_coverage_reset();
   unit_coverage_reset();
-#endif
   data->beginNewTest();
 }
 
@@ -52,27 +47,21 @@ void GTestCoverageListener::OnTestEnd( const testing::TestInfo &info ) {
   if ( !found ) {
     GTEST_LOG_( WARNING ) << info.test_case_name() << "::" << info.name() << " does not specify what it covers";
   }
-#ifdef HAVE_GTEST_COVERAGE
   main_coverage_dump();
   unit_coverage_dump();
   data->loadTestData( info.test_case_name(), info.name(), info.result()->Passed() );
-#endif
 }
 
 void GTestCoverageListener::OnTestProgramStart( const testing::UnitTest &test __attribute__((unused)) ) {
-#ifdef HAVE_GTEST_COVERAGE
   main_coverage_reset();
   unit_coverage_reset();
   main_coverage_dump();
   unit_coverage_dump();
-#endif
   loadSources();
 }
 
 void GTestCoverageListener::OnTestProgramEnd( const testing::UnitTest &test __attribute__((unused)) ) {
-#ifdef HAVE_GTEST_COVERAGE
   data->dumpStats();
-#endif
 }
 
 void GTestCoverageListener::loadSources() {

@@ -5,19 +5,18 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/filesystem.hpp>
 #include <map>
+#include "fwd.h"
 
 namespace testing {
   namespace coverage {
-    class LineInfo;
-    class TestInfo {
+    class TestInfo : public std::enable_shared_from_this<TestInfo> {
     public:
-      typedef boost::shared_ptr<TestInfo> Ptr;
       typedef std::vector<boost::filesystem::path> coveredFilesType;
       TestInfo( std::string nSuite, std::string nName, coveredFilesType nCoveredFiles,
                 bool nPassed );
       const std::string &getName() const;
       const std::string &getSuite() const;
-      void addLine( const boost::shared_ptr<LineInfo> &line );
+      void addLine( const LineInfoPtr &line );
     protected:
       std::string suite;
       std::string name;

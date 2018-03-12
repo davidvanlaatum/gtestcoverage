@@ -8,11 +8,11 @@
 
 using namespace testing::coverage;
 
-LineInfo::LineInfo( boost::weak_ptr<FileInfo> filePtr, size_t num ) : number( num ), file( std::move( std::move( filePtr ) ) ) {
+LineInfo::LineInfo( const FileInfoPtr &filePtr, size_t num ) : number( num ), file( filePtr ) {
   executedCount = 0;
 }
 
-void LineInfo::addExecutionCount( size_t count, const TestInfo::Ptr &test, const std::string &sourceCode ) {
+void LineInfo::addExecutionCount( size_t count, const TestInfoPtr &test, const std::string &sourceCode ) {
   if ( test ) {
     executedCount += count;
     if ( count != 0u ) {
@@ -33,7 +33,7 @@ size_t LineInfo::getNumber() const {
   return number;
 }
 
-const boost::shared_ptr<FileInfo> LineInfo::getFile() const {
+FileInfoPtr LineInfo::getFile() const {
   return file.lock();
 }
 

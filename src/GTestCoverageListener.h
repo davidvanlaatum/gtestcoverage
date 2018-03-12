@@ -4,12 +4,12 @@
 
 #include "gtestcoverage_export.h"
 #include <gtest/gtest.h>
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <memory>
 
 namespace testing {
   namespace coverage {
     class CoverageData;
-    typedef boost::shared_ptr<CoverageData> CoverageDataPtr;
+    typedef std::shared_ptr<CoverageData> CoverageDataPtr;
     class GTESTCOVERAGE_EXPORT GTestCoverageListener : public ::testing::EmptyTestEventListener {
     public:
       GTestCoverageListener();

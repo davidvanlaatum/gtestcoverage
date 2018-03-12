@@ -50,7 +50,6 @@
       <option name="SPACE_WITHIN_FUNCTION_CALL_PARENTHESES" value="true" />
       <option name="SPACE_BETWEEN_ADJACENT_BRACKETS" value="true" />
       <option name="FIELDS_PREFIX" value="n" />
-      <option name="GENERATE_COMPARISON_OPERATORS_USE_STD_TIE" value="true" />
       <option name="INTRODUCE_CONST_VARS" value="true" />
       <option name="INTRODUCE_AUTO_VARS" value="true" />
       <option name="INTRODUCE_GLOBALS_TO_HEADER" value="false" />

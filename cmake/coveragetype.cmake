@@ -11,9 +11,16 @@ else ()
   checkandaddflag ( -fcoverage-mapping CLANG_COVERAGE_FLAGS )
 endif ()
 
+foreach ( MAJOR RANGE 10 3 -1 )
+  foreach ( MINOR RANGE 10 0 -1 )
+    list ( APPEND LLVM_PROFDATA_ALIASES llvm-profdata-${MAJOR}.${MINOR} llvm-profdata-mp-${MAJOR}.${MINOR} )
+    list ( APPEND LLVM_SHOW_ALIASES llvm-cov-${MAJOR}.${MINOR} llvm-cov-mp-${MAJOR}.${MINOR} )
+  endforeach ()
+endforeach ()
+
 find_program ( GCOV_PATH gcov )
-find_program ( LLVM_PROFDATA_PATH NAMES llvm-profdata PATHS /Library/Developer/CommandLineTools/usr/bin/ )
-find_program ( LLVM_SHOW_PATH NAMES llvm-cov PATHS /Library/Developer/CommandLineTools/usr/bin/ )
+find_program ( LLVM_PROFDATA_PATH NAMES ${LLVM_PROFDATA_ALIASES} llvm-profdata PATHS /Library/Developer/CommandLineTools/usr/bin/ )
+find_program ( LLVM_SHOW_PATH NAMES ${LLVM_SHOW_ALIASES} llvm-cov PATHS /Library/Developer/CommandLineTools/usr/bin/ )
 
 if ( CLANG_COVERAGE_FLAGS AND LLVM_PROFDATA_PATH AND LLVM_SHOW_PATH )
   list ( APPEND COVERAGE_STYLES clang )

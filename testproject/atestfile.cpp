@@ -1,4 +1,5 @@
 #include "atestfile.h"
+#include <iostream>
 
 int atestfile::aFunction( const char *param ) {
   if ( param ) {
@@ -6,4 +7,13 @@ int atestfile::aFunction( const char *param ) {
   } else {
     return 1;
   }
+}
+
+int atestfile::aFunction( int param ) {
+  int i;
+  i = 1;
+  if ( param ) {
+    std::cout << "";
+  }
+  return 0;
 }

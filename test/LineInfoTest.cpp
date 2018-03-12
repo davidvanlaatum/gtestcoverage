@@ -1,7 +1,6 @@
 #include <FileInfo.h>
 //#include <IsIn.h>
 //#include <StreamUtils.h>
-#include <boost/make_shared.hpp>
 #include <fstream>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -12,11 +11,11 @@ using testing::SizeIs;
 
 TEST( LineInfoTest, Test1 ) {
   RecordProperty( "COVERS_NOTHING", 1 );
-  FileInfo::Ptr info = boost::make_shared<FileInfo>( "abc123" );
+  FileInfoPtr info = std::make_shared<FileInfo>( "abc123" );
   std::ifstream file1( TEST_LOCATION "/test1.1.gcov", std::ios_base::in );
-  info->processFile( TestInfo::Ptr(), file1 );
+  info->processFile( TestInfoPtr(), file1 );
   std::ifstream file2( TEST_LOCATION "/test1.2.gcov", std::ios_base::in );
-  info->processFile( TestInfo::Ptr(), file2 );
+  info->processFile( TestInfoPtr(), file2 );
   info->cleanUp();
   auto it = info->getLines().find( 38 );
   ASSERT_NE( it, info->getLines().end() );
@@ -25,14 +24,14 @@ TEST( LineInfoTest, Test1 ) {
 
 TEST( LineInfoTest, Test2 ) {
   RecordProperty( "COVERS_NOTHING", 1 );
-  FileInfo::Ptr info = boost::make_shared<FileInfo>( "abc123" );
+  FileInfoPtr info = std::make_shared<FileInfo>( "abc123" );
   for ( auto name : {
       TEST_LOCATION "/test2.1.gcov",
       TEST_LOCATION "/test2.2.gcov",
       TEST_LOCATION "/test2.3.gcov"
   } ) {
     std::ifstream file( name, std::ios_base::in );
-    info->processFile( TestInfo::Ptr(), file );
+    info->processFile( TestInfoPtr(), file );
   }
   info->cleanUp();
   auto it = info->getLines().find( 14 );

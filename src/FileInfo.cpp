@@ -1,6 +1,5 @@
 #include "FileInfo.h"
 #include <boost/lexical_cast.hpp>
-#include <boost/make_shared.hpp>
 #include <fstream>
 #include <gtest/gtest.h>
 #include <iostream>
@@ -54,7 +53,7 @@ bool startsWith( const std::string &s1, const std::string &s2 ) {
   return rt;
 }
 
-void FileInfo::processFile( const TestInfo::Ptr &test, std::istream &data ) {
+void FileInfo::processFile( const TestInfoPtr &test, std::istream &data ) {
 #ifdef LOG_GCOV_OUTPUT
   std::string name = source.string();
   if ( test ) {
@@ -67,7 +66,7 @@ void FileInfo::processFile( const TestInfo::Ptr &test, std::istream &data ) {
   std::ofstream log( name, std::ios_base::out );
 #endif
   std::string line;
-  LineInfo::Ptr lastLine;
+  LineInfoPtr lastLine;
   size_t blockNum = 0;
   bool inIgnore = false;
   while ( data ) {
@@ -127,7 +126,7 @@ void FileInfo::processFile( const TestInfo::Ptr &test, std::istream &data ) {
   }
 }
 
-void FileInfo::processLine( const TestInfo::Ptr &test, const string &line, LineInfo::Ptr &lastLine, size_t &blockNum ) {
+void FileInfo::processLine( const TestInfoPtr &test, const string &line, LineInfoPtr &lastLine, size_t &blockNum ) {
   std::string count;
   std::string lineNum;
 
@@ -178,13 +177,13 @@ void FileInfo::processLine( const TestInfo::Ptr &test, const string &line, LineI
   }
 }
 
-LineInfo::Ptr FileInfo::addLine( size_t lineNum, size_t executed, const TestInfo::Ptr &test, const string &code ) {
-  LineInfo::Ptr line;
+LineInfoPtr FileInfo::addLine( size_t lineNum, size_t executed, const TestInfoPtr &test, const string &code ) {
+  LineInfoPtr line;
   auto it = lines.find( lineNum );
   if ( it != lines.end() ) {
     line = it->second;
   } else {
-    line = boost::make_shared<LineInfo>( shared_from_this(), lineNum );
+    line = std::make_shared<LineInfo>( shared_from_this(), lineNum );
     lines[lineNum] = line;
   }
   line->addExecutionCount( executed, test, code );

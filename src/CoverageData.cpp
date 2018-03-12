@@ -1,15 +1,19 @@
 #include "CoverageData.h"
-#include <boost/make_shared.hpp>
 #include <fstream>
 #include <gtest/gtest.h>
 #include <tinyxml2.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <boost/process.hpp>
+#include <json.hpp>
+#include "ClangCoverageData.h"
+#include <boost/dll/runtime_symbol_info.hpp>
 
 using namespace testing::coverage;
 using namespace std;
 using namespace boost::filesystem;
+using boost::process::child;
 
 namespace std {
   template<class X, class Y> ostream &operator<<( ostream &os, const map<X, Y> &data ) {
@@ -32,19 +36,8 @@ namespace std {
   }
 }  // namespace std
 
-namespace boost {
-  template<class T> ostream &operator<<( ostream &os, const boost::shared_ptr<T> &ptr ) {
-    if ( ptr ) {
-      os << *ptr.get();
-    } else {
-      os << "NULL";
-    }
-    return os;
-  }
-} // namespace boost
-
 void CoverageData::addFile( CoverageData::path file ) {
-  files[file] = boost::make_shared<FileInfo>( file );
+  files[file] = std::make_shared<FileInfo>( file );
 }
 
 void CoverageData::addCoversDir( const CoverageData::path &dir ) {
@@ -72,12 +65,16 @@ void CoverageData::setOutputFile( const path &file ) {
   outputFile = file;
 }
 
-TestInfo::Ptr CoverageData::loadTestData( const std::string &suite, const std::string &name, bool passed ) {
-  TestInfo::Ptr test = boost::make_shared<TestInfo>( suite, name, coveredFiles, passed );
+TestInfoPtr CoverageData::loadTestData( const std::string &suite, const std::string &name, bool passed ) {
+  TestInfoPtr test = std::make_shared<TestInfo>( suite, name, coveredFiles, passed );
   tests.push_back( test );
   for ( auto &coverageFile : coverageFiles ) {
     if ( exists( coverageFile ) ) {
-      processGCDAFile( test, coverageFile );
+      if ( coverageFile.extension() == ".gcda" ) {
+        processGCDAFile( test, coverageFile );
+      } else if ( coverageFile.extension() == ".profraw" ) {
+        processProfRaw( test, coverageFile );
+      }
       remove( coverageFile );
     }
   }
@@ -94,6 +91,14 @@ void CoverageData::resolveFiles() {
       }
       dir++;
     }
+  }
+  directory_iterator dir( current_path() );
+  while ( dir != directory_iterator() ) {
+    if ( dir->path().extension() == ".profraw" ) {
+      coverageFiles.push_back( dir->path() );
+      remove( dir->path() );
+    }
+    dir++;
   }
 }
 
@@ -114,7 +119,7 @@ void CoverageData::dumpStats() {
   }
   size_t coveredLines = 0, totalLines = 0, explicitCoveredLines = 0, explicitTotalLines = 0;
   for ( auto &it : files ) {
-    boost::shared_ptr<FileInfo> &file = it.second;
+    FileInfoPtr &file = it.second;
     if ( file->isExplicitCovered() ) {
       explicitTotalLines += file->getTotalLines();
       explicitCoveredLines += file->getCoveredLines();
@@ -130,12 +135,12 @@ void CoverageData::dumpStats() {
 }
 
 void CoverageData::attachGCDAFile( const path &file ) {
-  if ( processGCDAFile( TestInfo::Ptr(), file ) ) {
+  if ( processGCDAFile( TestInfoPtr(), file ) ) {
     coverageFiles.push_back( file );
   }
 }
 
-bool CoverageData::processGCDAFile( const TestInfo::Ptr &test, const path &file ) {
+bool CoverageData::processGCDAFile( const TestInfoPtr &test, const path &file ) {
   bool rt = false;
   int odir = open( ".", O_RDONLY );
   chdir( getenv( "CMAKE_BINARY_DIR" ) );
@@ -160,7 +165,7 @@ bool CoverageData::processGCDAFile( const TestInfo::Ptr &test, const path &file 
   return rt;
 }
 
-bool CoverageData::processGCovFile( const TestInfo::Ptr &test, const path &file ) {
+bool CoverageData::processGCovFile( const TestInfoPtr &test, const path &file ) {
   bool rt = false;
   std::ifstream data( file.string().c_str(), std::ios_base::in );
   std::string line;
@@ -176,6 +181,54 @@ bool CoverageData::processGCovFile( const TestInfo::Ptr &test, const path &file 
     }
   }
   return rt;
+}
+
+bool CoverageData::processProfRaw( const TestInfoPtr &test, const path &file ) {
+  std::clog << "Process " << file << std::endl;
+  if ( not getenv( "LLVM_PROFDATA" ) ) {
+    throw std::runtime_error( "LLVM_PROFDATA env var is not set" );
+  }
+  if ( not getenv( "LLVM_SHOW" ) ) {
+    throw std::runtime_error( "LLVM_SHOW env var is not set" );
+  }
+  if ( not getenv( "COVERS_FILE" ) ) {
+    throw std::runtime_error( "COVERS_FILE env var is not set" );
+  }
+  auto exitcode = boost::process::system( getenv( "LLVM_PROFDATA" ), "merge", "-sparse", file, "-o", "out.profdata" );
+  if ( exitcode != 0 ) {
+    throw std::runtime_error( "LLVM_PROFDATA returned exit code " + std::to_string( exitcode ) );
+  }
+  auto data = std::make_shared<clang::ClangCoverageData>();
+  try {
+    boost::process::ipstream output;
+    child exportjson( getenv( "LLVM_SHOW" ), "export", "-instr-profile", "out.profdata", getenv( "COVERS_FILE" ), boost::process::std_out > output );
+    nlohmann::json coverage;
+    output >> coverage;
+    data->merge( coverage );
+    exportjson.wait();
+    if ( exportjson.exit_code() != 0 ) {
+      throw std::runtime_error( "LLVM_SHOW returned exit code " + std::to_string( exportjson.exit_code() ) );
+    }
+  } catch ( std::exception &e ) {
+    std::clog << "Failed to run " << getenv( "LLVM_SHOW" ) << ": " << e.what() << std::endl;
+  }
+  try {
+    boost::process::ipstream output;
+    child exportjson( getenv( "LLVM_SHOW" ), "export", "-instr-profile", "out.profdata", boost::dll::program_location(), boost::process::std_out > output );
+    nlohmann::json coverage;
+    output >> coverage;
+    data->merge( coverage );
+    exportjson.wait();
+    if ( exportjson.exit_code() != 0 ) {
+      throw std::runtime_error( "LLVM_SHOW returned exit code " + std::to_string( exportjson.exit_code() ) );
+    }
+  } catch ( std::exception &e ) {
+    std::clog << "Failed to run " << getenv( "LLVM_SHOW" ) << ": " << e.what() << std::endl;
+  }
+
+  std::clog << data;
+
+  return false;
 }
 
 bool CoverageData::isInteresting( const path &path ) {

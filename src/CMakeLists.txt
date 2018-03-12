@@ -7,8 +7,8 @@ add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListen
               FileInfo.cpp FileInfo.h
               LineInfo.cpp LineInfo.h
               TestInfo.cpp TestInfo.h
-              )
-target_link_libraries ( gtestcoverage PUBLIC ${CMAKE_DL_LIBS} GMock::GMock PRIVATE Boost::boost Boost::filesystem tinyxml ${DYNAMIC_LOOKUP_LIST} )
+              ClangCoverageData.cpp ClangCoverageData.h ClangCoverageFunction.cpp ClangCoverageFunction.h ClangCoverageFile.cpp ClangCoverageFile.h ClangCoverageFwd.h ClangCoverageDriver.cpp ClangCoverageDriver.h CoverageDriver.cpp CoverageDriver.h fwd.h )
+target_link_libraries ( gtestcoverage PUBLIC ${CMAKE_DL_LIBS} GMock::GMock PRIVATE json Boost::boost Boost::filesystem tinyxml ${DYNAMIC_LOOKUP_LIST} )
 target_include_directories ( gtestcoverage PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}> )
 generate_export_header ( gtestcoverage )
 target_compile_definitions ( gtestcoverage PUBLIC -DHAVE_GTEST_COVERAGE )

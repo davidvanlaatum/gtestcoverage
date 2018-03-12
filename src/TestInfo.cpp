@@ -6,8 +6,7 @@
 
 using namespace testing::coverage;
 
-TestInfo::TestInfo( std::string nSuite, std::string nName, coveredFilesType nCoveredFiles,
-                    bool nPassed ) :
+TestInfo::TestInfo( std::string nSuite, std::string nName, coveredFilesType nCoveredFiles, bool nPassed ) :
     suite( std::move( nSuite ) ), name( std::move( nName ) ), coveredFiles( std::move( nCoveredFiles ) ), passed( nPassed ) {}
 
 const std::string &TestInfo::getName() const {
@@ -18,7 +17,7 @@ const std::string &TestInfo::getSuite() const {
   return suite;
 }
 
-void TestInfo::addLine( const boost::shared_ptr<LineInfo> &line ) {
+void TestInfo::addLine( const LineInfoPtr &line ) {
   covered[line->getFile()->getSource()] += 1;
 }
 
