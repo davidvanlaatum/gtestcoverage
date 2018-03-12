@@ -25,7 +25,7 @@ if ( NOT EXISTS ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake )
          STATUS find_boost_download
          TIMEOUT 10 )
 endif ()
-find_package ( Boost REQUIRED COMPONENTS filesystem )
+find_package ( Boost 1.64 REQUIRED COMPONENTS filesystem )
 find_package ( tinyxml REQUIRED )
 find_package ( iwyu )
 find_package ( clang-tidy )
