@@ -15,6 +15,7 @@ matrix:
           apt:
             sources:
               - george-edison55-precise-backports
+              - ppa:ostogvin/tjo-develop
             packages:
               - cmake-data
               - cmake
@@ -28,6 +29,7 @@ matrix:
           apt:
             sources:
               - george-edison55-precise-backports
+              - ppa:ostogvin/tjo-develop
             packages:
               - cmake-data
               - cmake
