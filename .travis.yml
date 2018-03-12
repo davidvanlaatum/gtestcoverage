@@ -8,6 +8,7 @@ matrix:
   include:
     - os: osx
     - os: linux
+      dist: trusty
       compiler: clang
       env: CMAKE_OPTIONS=-GNinja
       addons:
@@ -20,6 +21,7 @@ matrix:
               - ninja-build
               - libboost-all-dev
     - os: linux
+      dist: trusty
       compiler: gcc
       env: CMAKE_OPTIONS=-GNinja
       addons:
