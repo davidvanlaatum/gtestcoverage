@@ -9,12 +9,13 @@ matrix:
     - os: osx
     - os: linux
       dist: trusty
+      sudo: required
       compiler: clang
       env: CMAKE_OPTIONS=-GNinja
       addons:
           apt:
             sources:
-              - george-edison55-precise-backports
+              - ubuntu-toolchain-r-test
               - ppa:ostogvin/tjo-develop
             packages:
               - cmake-data
@@ -23,12 +24,13 @@ matrix:
               - libboost-all-dev
     - os: linux
       dist: trusty
+      sudo: required
       compiler: gcc
       env: CMAKE_OPTIONS=-GNinja
       addons:
           apt:
             sources:
-              - george-edison55-precise-backports
+              - ubuntu-toolchain-r-test
               - ppa:ostogvin/tjo-develop
             packages:
               - cmake-data
