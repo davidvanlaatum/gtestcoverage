@@ -1,9 +1,19 @@
 language: cpp
+before_install: if [[ "$TRAVIS_OS_NAME" != "osx" ]]; sudo add-apt-repository ppa:ostogvin/tjo-develop -y; fi
+install: if [[ "$TRAVIS_OS_NAME" != "osx" ]]; sudo apt install -y boost1.65.1; fi
 script:
     - chmod a+x scripts/*
     - mkdir -p build
     - cd build
     - cmake ../ -DCMAKE_BUILD_TYPE=Debug ${CMAKE_OPTIONS} && cmake --build . && ctest -V
+addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+      packages:
+        - cmake-data
+        - cmake
+        - ninja-build
 matrix:
   include:
     - os: osx
@@ -12,31 +22,8 @@ matrix:
       sudo: required
       compiler: clang
       env: CMAKE_OPTIONS=-GNinja
-      before_install:
-        - sudo add-apt-repository ppa:ostogvin/tjo-develop -y
-      addons:
-          apt:
-            sources:
-              - ubuntu-toolchain-r-test
-            packages:
-              - cmake-data
-              - cmake
-              - ninja-build
-              - libboost-all-dev
     - os: linux
       dist: trusty
       sudo: required
       compiler: gcc
       env: CMAKE_OPTIONS=-GNinja
-      before_install:
-        - sudo add-apt-repository ppa:ostogvin/tjo-develop -y
-      addons:
-          apt:
-            sources:
-              - ubuntu-toolchain-r-test
-              - ppa:ostogvin/tjo-develop
-            packages:
-              - cmake-data
-              - cmake
-              - ninja-build
-              - libboost-all-dev
