@@ -1,5 +1,6 @@
 #include "ClangCoverageFunction.h"
 #include <boost/filesystem/path.hpp>
+#include <boost/core/demangle.hpp>
 #include <vector>
 #include <iostream>
 
