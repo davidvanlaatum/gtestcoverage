@@ -3,21 +3,19 @@ cache:
   directories:
     - ${TRAVIS_BUILD_DIR}/boost-1.66.0
 before_install: |
-              if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
-                if [[ "${BOOST_VERSION}" != "" ]]; then
-                  BOOST_DIR=boost-${BOOST_VERSION}
-                  if [[ -z "$(ls -A ${BOOST_DIR})" ]]; then
-                      BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz"
-                      mkdir -p ${BOOST_DIR}
-                      { travis_retry wget -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_DIR}; } || exit 1
-                  fi
-                  cd ${BOOST_DIR}
-                  ./bootstrap.sh --with-libraries=filesystem,program_options,system
-                  ./b2
-                  cd ..
-                  CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
-                fi
-              fi
+    if [[ "${BOOST_VERSION}" != "" ]]; then
+      BOOST_DIR=boost-${BOOST_VERSION}
+      if [[ -z "$(ls -A ${BOOST_DIR})" ]]; then
+          BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz"
+          mkdir -p ${BOOST_DIR}
+          { travis_retry wget -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_DIR}; }
+      fi
+      cd ${BOOST_DIR}
+      ./bootstrap.sh --with-libraries=filesystem,program_options,system
+      ./b2
+      cd ..
+      CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
+    fi
 script:
     - chmod a+x scripts/*
     - mkdir -p build
@@ -34,18 +32,11 @@ addons:
         - ninja-build
         - g++-4.9
         - clang-5.0
-matrix:
-  include:
-    - os: osx
-    - os: linux
-      dist: trusty
-      compiler: clang
-      env:
-        - CMAKE_OPTIONS=-GNinja
-        - BOOST_VERSION=1.66.0
-    - os: linux
-      dist: trusty
-      compiler: gcc
-      env:
-        - CMAKE_OPTIONS=-GNinja
-        - BOOST_VERSION=1.66.0
+compiler:
+  - clang
+  - gcc
+os:
+  - osx
+  - linux
+env:
+  - BOOST_VERSION=1.66.0

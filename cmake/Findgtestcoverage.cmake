@@ -10,7 +10,7 @@ if ( NOT TARGET gtestcoverage )
     list ( APPEND OPTS QUIET )
   endif ()
 
-  find_package ( boost 1.64 REQUIRED )
+  find_package ( Boost 1.64 REQUIRED )
 
   set ( gtestcoverage_DIR ${CMAKE_CURRENT_LIST_DIR}/gtestcoverage/ )
   include ( ${CMAKE_CURRENT_LIST_DIR}/gtestcoverage/gtestcoverageConfig.cmake )
