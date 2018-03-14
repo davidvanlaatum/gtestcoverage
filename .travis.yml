@@ -17,6 +17,9 @@ before_install: |
       CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
       export BOOST_ROOT=`pwd`/${BOOST_DIR}
     fi
+    if [[ "$CC" == "gcc" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      export CC=gcc-4.9 CXX=g++-4.9
+    fi
 script:
     - chmod a+x scripts/*
     - mkdir -p build
