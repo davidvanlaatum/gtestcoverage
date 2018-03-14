@@ -32,7 +32,7 @@ add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListen
 get_target_property ( SOURCES gtestcoverage SOURCES )
 list ( FILTER SOURCES INCLUDE REGEX ".*.h$" )
 set_target_properties ( gtestcoverage PROPERTIES PUBLIC_HEADER "${SOURCES}" )
-target_link_libraries ( gtestcoverage PUBLIC ${CMAKE_DL_LIBS} GMock::GMock PRIVATE json Boost::boost Boost::filesystem tinyxml ${DYNAMIC_LOOKUP_LIST} )
+target_link_libraries ( gtestcoverage PUBLIC ${CMAKE_DL_LIBS} GMock::GMock Boost::boost PRIVATE json Boost::filesystem tinyxml ${DYNAMIC_LOOKUP_LIST} )
 target_include_directories ( gtestcoverage PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
                              $<INSTALL_INTERFACE:include/gtestcoverage> )
 target_compile_definitions ( gtestcoverage PRIVATE VERSION="${PROJECT_VERSION}" )

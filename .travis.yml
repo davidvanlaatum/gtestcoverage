@@ -1,4 +1,7 @@
 language: cpp
+cache:
+  directories:
+    - ${TRAVIS_BUILD_DIR}/boost-1.66.0
 before_install: |
               if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
                 if [[ "${BOOST_VERSION}" != "" ]]; then
