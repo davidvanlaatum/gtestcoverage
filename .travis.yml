@@ -11,6 +11,7 @@ before_install: |
                   cd ${BOOST_DIR}
                   ./bootstrap.sh --with-libraries=filesystem,program_options,system
                   ./b2
+                  cd ..
                   CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
                 fi
               fi
@@ -32,14 +33,12 @@ matrix:
     - os: osx
     - os: linux
       dist: trusty
-      sudo: required
       compiler: clang
       env:
         - CMAKE_OPTIONS=-GNinja
         - BOOST_VERSION=1.66.0
     - os: linux
       dist: trusty
-      sudo: required
       compiler: gcc
       env:
         - CMAKE_OPTIONS=-GNinja
