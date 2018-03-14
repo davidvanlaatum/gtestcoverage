@@ -27,10 +27,13 @@ addons:
     apt:
       sources:
         - ubuntu-toolchain-r-test
+        - llvm-toolchain-trusty-5.0
       packages:
         - cmake-data
         - cmake
         - ninja-build
+        - g++-4.9
+        - clang-5.0
 matrix:
   include:
     - os: osx
