@@ -11,7 +11,7 @@ else ()
   checkandaddflag ( -fcoverage-mapping CLANG_COVERAGE_FLAGS )
 endif ()
 
-foreach ( MAJOR RANGE 10 3 -1 )
+foreach ( MAJOR RANGE 10 4 -1 )
   foreach ( MINOR RANGE 10 0 -1 )
     list ( APPEND LLVM_PROFDATA_ALIASES llvm-profdata-${MAJOR}.${MINOR} llvm-profdata-mp-${MAJOR}.${MINOR} )
     list ( APPEND LLVM_SHOW_ALIASES llvm-cov-${MAJOR}.${MINOR} llvm-cov-mp-${MAJOR}.${MINOR} )
