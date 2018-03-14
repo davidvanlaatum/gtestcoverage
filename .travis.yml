@@ -34,9 +34,13 @@ matrix:
       dist: trusty
       sudo: required
       compiler: clang
-      env: CMAKE_OPTIONS=-GNinja
+      env:
+        - CMAKE_OPTIONS=-GNinja
+        - BOOST_VERSION=1.66.0
     - os: linux
       dist: trusty
       sudo: required
       compiler: gcc
-      env: CMAKE_OPTIONS=-GNinja
+      env:
+        - CMAKE_OPTIONS=-GNinja
+        - BOOST_VERSION=1.66.0
