@@ -3,11 +3,11 @@ cmake_minimum_required ( VERSION 3.6 )
 project ( gtestcoverage VERSION 1.0.0 )
 
 if ( CMAKE_CXX_COMPILER_ID STREQUAL "clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.9.0 )
-  status ( FATAL_ERROR "Unsupported clang version" )
+  message ( FATAL_ERROR "Unsupported clang version" )
 endif ()
 
 if ( CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9.0 )
-  status ( FATAL_ERROR "Unsupported gcc version" )
+  message ( FATAL_ERROR "Unsupported gcc version" )
 endif ()
 
 set ( CMAKE_CXX_STANDARD 11 )
