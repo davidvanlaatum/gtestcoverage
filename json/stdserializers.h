@@ -10,17 +10,17 @@ namespace nlohmann {
     struct adl_serializer<std::shared_ptr<T>> {
       static void to_json( json &j, const std::shared_ptr<T> &opt ) {
         if ( opt ) {
-          to_json( j, *opt );
+          adl_serializer<T>::to_json( j, *opt );
         } else {
           j = nullptr;
         }
       }
 
-      template<typename X=T> static void from_json( const json &j, std::shared_ptr<X> &data ) {
+      static void from_json( const json &j, std::shared_ptr<T> &data ) {
         if ( !data ) {
           data = std::make_shared<T>();
         }
-        adl_serializer<X>::from_json( j, *data );
+        adl_serializer<T>::from_json( j, *data );
       }
     };
 }

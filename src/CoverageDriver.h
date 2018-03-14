@@ -4,17 +4,18 @@
 
 #include <string>
 #include <memory>
+#include <CoverageData.h>
 
 namespace testing {
   namespace coverage {
     class CoverageDriver : public std::enable_shared_from_this<CoverageDriver> {
     public:
       virtual ~CoverageDriver() = default;
-      virtual bool isAvailible() const = 0;
+      virtual bool isAvailable( std::string &error ) const = 0;
       virtual const std::string getName() const = 0;
       virtual void startProgram() = 0;
       virtual void beginTest() = 0;
-      virtual void endTest() = 0;
+      virtual void endTest( const TestInfoPtr &test, const CoverageDataPtr &coverageData ) = 0;
       virtual void endProgram() = 0;
     };
   }

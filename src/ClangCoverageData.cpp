@@ -1,7 +1,13 @@
 #include "ClangCoverageData.h"
 #include "ClangCoverageFile.h"
 #include "ClangCoverageFunction.h"
+#include "CoverageData.h"
+#include "FunctionInfo.h"
+#include "TestInfo.h"
 #include <stdserializers.h>
+#include <set>
+#include <iostream>
+#include <boost/algorithm/string/join.hpp>
 
 using namespace testing::coverage::clang;
 
@@ -54,6 +60,61 @@ void ClangCoverageData::merge( const ClangCoverageData &data ) {
       functions.emplace( function );
     } else {
       existing->second->merge( *function.second );
+    }
+  }
+}
+
+ClangCoverageDataPtr ClangCoverageData::diff( const ClangCoverageData &other ) const {
+  auto rt = std::make_shared<ClangCoverageData>();
+  std::set<std::string> left, right, all;
+
+  for ( const auto &function : functions ) {
+    left.emplace( function.first );
+  }
+  for ( const auto &function : other.functions ) {
+    right.emplace( function.first );
+  }
+
+  if ( left != right ) {
+    std::clog << "Function name mismatch";
+    all.insert( left.begin(), left.end() );
+    all.insert( right.begin(), right.end() );
+  } else {
+    all = left;
+  }
+
+  for ( const auto &func : all ) {
+    const auto &leftFunc = functions.find( func );
+    const auto &rightFunc = other.functions.find( func );
+    ClangCoverageFunctionPtr result;
+    if ( leftFunc != functions.end() && rightFunc != other.functions.end() ) {
+      result = leftFunc->second->diff( *rightFunc->second );
+    } else if ( leftFunc != functions.end() ) {
+      result = std::make_shared<ClangCoverageFunction>( *leftFunc->second );
+    } else {
+      result = std::make_shared<ClangCoverageFunction>( *rightFunc->second );
+    }
+    rt->functions.emplace( result->getName(), result );
+  }
+
+  return rt;
+}
+
+void ClangCoverageData::fill( const testing::coverage::TestInfoPtr &test, const testing::coverage::CoverageDataPtr &data ) const {
+  std::set<std::string> demangled;
+  const auto &coveredFunctions = test->getCoveredFunctions();
+  for ( const auto &func : functions ) {
+    auto demangledName = boost::core::demangle( func.first.c_str() );
+    demangled.emplace( demangledName );
+    if ( coveredFunctions.find( demangledName ) != coveredFunctions.end() ) {
+      const auto &coveredFunc = data->getFunction( demangledName );
+      func.second->fill( coveredFunc );
+    }
+  }
+
+  for ( const auto &func : coveredFunctions ) {
+    if ( demangled.find( func ) == demangled.end() ) {
+      throw std::runtime_error( "Function " + func + " not found in coverage data\n" + boost::join( demangled, "\n" ) );
     }
   }
 }

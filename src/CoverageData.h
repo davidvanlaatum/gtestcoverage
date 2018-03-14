@@ -1,48 +1,40 @@
 #pragma once
-#ifndef DVMON_COVERAGEDATA_H
-#define DVMON_COVERAGEDATA_H
+#ifndef GTESTCOVERAGE_COVERAGEDATA_H
+#define GTESTCOVERAGE_COVERAGEDATA_H
 
+#include "fwd.h"
+#include <memory>
 #include <map>
-#include <vector>
-#include <boost/filesystem.hpp>
-#include "FileInfo.h"
+#include <boost/filesystem/path.hpp>
+#include <json.hpp>
 
 namespace testing {
   namespace coverage {
-    class CoverageData {
+    class CoverageData : public std::enable_shared_from_this<CoverageData> {
     public:
-      typedef boost::filesystem::path path;
-      void addFile( path file );
-      void addCoversDir( const path &dir );
-      void resolveFiles();
-      void dumpStats();
-      TestInfoPtr loadTestData( const std::string &suite, const std::string &name, bool passed );
-      void addCovers( path file );
-      void beginNewTest();
-      void setOutputFile( const path &file );
+      CoverageData();
+      void loadFileList( const boost::filesystem::path &list );
+      const FunctionInfoPtr &getFunction( const std::string &name );
+      const FileInfoPtr &getFile( const boost::filesystem::path &name );
+      void printSummary( std::ostream &os ) const;
+      void setOutputFile( const boost::filesystem::path &name );
+      const TestCaseInfoPtr &getTestCase( const std::string &name );
+      void writeOutput() const;
+      bool resolveSourceFile( const boost::filesystem::path &file, boost::filesystem::path &path ) const;
     protected:
-      typedef std::map<path, FileInfoPtr> filesType;
-      filesType files;
-      typedef std::vector<path> coveredDirsType;
-      coveredDirsType coveredDirs;
-      typedef std::vector<path> coverageFilesType;
-      coverageFilesType coverageFiles;
-      typedef std::vector<TestInfoPtr> testsType;
-      testsType tests;
-      typedef std::vector<path> coveredFilesType;
-      coveredFilesType coveredFiles;
-      path outputFile;
+      std::map<boost::filesystem::path, FileInfoPtr> files;
+      std::map<std::string, FunctionInfoPtr> functions;
+      boost::filesystem::path outputFile;
+      boost::filesystem::path coversSourceDir;
+      std::map<std::string, TestCaseInfoPtr> testCases;
 
-      void attachGCDAFile( const path &file );
-      bool processGCovFile( const TestInfoPtr &test, const path &file );
-      bool processGCDAFile( const TestInfoPtr &test, const path &file );
-      bool processProfRaw( const TestInfoPtr &test, const path &file );
-      bool isInteresting( const path &path );
-      void writeOutputFile();
-      void writeCobertura() const;
-      void cleanUp();
+      friend void from_json( const nlohmann::json &j, CoverageData &data );
+      friend void to_json( nlohmann::json &j, const CoverageData &data );
     };
+
+    void from_json( const nlohmann::json &j, CoverageData &data );
+    void to_json( nlohmann::json &j, const CoverageData &data );
   }
 }
 
-#endif //DVMON_COVERAGEDATA_H
+#endif //GTESTCOVERAGE_COVERAGEDATA_H

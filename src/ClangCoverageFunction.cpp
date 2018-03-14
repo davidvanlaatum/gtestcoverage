@@ -1,13 +1,16 @@
 #include "ClangCoverageFunction.h"
+#include "FunctionInfo.h"
 #include <boost/filesystem/path.hpp>
 #include <boost/core/demangle.hpp>
 #include <vector>
 #include <iostream>
+#include <boost/fusion/container/set.hpp>
 
 using namespace testing::coverage::clang;
 
 void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCoverageFunction &data ) {
   data.name = json.at( "name" );
+  data.hits = json.at( "count" );
   auto filenames = json["filenames"].get<std::vector<std::string>>();
   auto segments = json["regions"].get<std::vector<ClangCoverageFunctionSegment>>();
   data.segments.clear();
@@ -17,10 +20,13 @@ void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCover
       data.segments.emplace_back( segment );
     }
   }
+  for ( auto &file : filenames ) {
+    data.sources.emplace( file );
+  }
 }
 
 std::ostream &testing::coverage::clang::operator<<( std::ostream &os, const ClangCoverageFunction &data ) {
-  os << "Function: " << boost::core::demangle( data.name.c_str() ) << std::endl;
+  os << "Function: " << boost::core::demangle( data.name.c_str() ) << " hits: " << data.hits << std::endl;
   for ( const auto &segment : data.segments ) {
     std::clog << segment << std::endl;
   }
@@ -31,7 +37,39 @@ const std::string &ClangCoverageFunction::getName() const {
   return name;
 }
 
-void ClangCoverageFunction::merge( const ClangCoverageFunction & ) {
+void ClangCoverageFunction::merge( const ClangCoverageFunction &other ) {
+  for ( const auto &file : other.sources ) {
+    sources.emplace( file );
+  }
+  hits += other.hits;
+}
+
+ClangCoverageFunctionPtr ClangCoverageFunction::diff( const ClangCoverageFunction &other ) const {
+  ClangCoverageFunctionPtr rt = std::make_shared<ClangCoverageFunction>();
+  rt->name = name;
+  rt->hits = hits - other.hits;
+  for ( const auto &file : sources ) {
+    rt->sources.emplace( file );
+  }
+  for ( const auto &file : other.sources ) {
+    rt->sources.emplace( file );
+  }
+  return rt;
+}
+
+const std::set<boost::filesystem::path> &ClangCoverageFunction::getSources() const {
+  return sources;
+}
+
+uint32_t ClangCoverageFunction::getHits() const {
+  return hits;
+}
+
+void ClangCoverageFunction::fill( const testing::coverage::FunctionInfoPtr &function ) const {
+  for ( const auto &file : sources ) {
+    function->addSourceFile( file );
+  }
+  function->addHits( hits );
 }
 
 void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCoverageFunctionSegment &data ) {

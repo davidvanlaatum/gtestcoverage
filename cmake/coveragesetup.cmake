@@ -87,13 +87,15 @@ function ( setup_test_for_coverage TEST COVERS )
     set ( OUTPUT_NAME ${TEST} )
   endif ()
   list ( APPEND OBJECTS_DIRS "${BINARY_DIR}/CMakeFiles/${OUTPUT_NAME}.dir/" )
+  get_target_property ( SOURCE_DIR ${COVERS} SOURCE_DIR )
   set_property ( TEST ${TEST} APPEND PROPERTY ENVIRONMENT
                  "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}"
                  "SOURCE_LIST=${SOURCE_LIST}"
                  "SOURCE_DIR=${CMAKE_SOURCE_DIR}"
                  "COVERS=${COVERS}"
+                 "COVERS_SOURCE_DIR=${SOURCE_DIR}"
                  "COVERS_FILE=$<TARGET_FILE:${COVERS}>"
-                 "COVERAGE_FILE=${BINARY_DIR}/${OUTPUT_NAME}-coverage.xml"
+                 "COVERAGE_FILE=${BINARY_DIR}/${OUTPUT_NAME}-coverage.json"
                  "OBJECTS_DIRS=$<JOIN:${OBJECTS_DIRS},:>" )
   if ( clang IN_LIST COVERAGE_STYLES )
     set_property ( TEST ${TEST} APPEND PROPERTY ENVIRONMENT

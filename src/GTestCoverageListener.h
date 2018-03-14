@@ -5,24 +5,26 @@
 #include "gtestcoverage_export.h"
 #include <gtest/gtest.h>
 #include <memory>
+#include "fwd.h"
 
 namespace testing {
   namespace coverage {
-    class CoverageData;
-    typedef std::shared_ptr<CoverageData> CoverageDataPtr;
     class GTESTCOVERAGE_EXPORT GTestCoverageListener : public ::testing::EmptyTestEventListener {
     public:
       GTestCoverageListener();
       ~GTestCoverageListener() override;
-      void OnTestStart( const TestInfo &info ) override;
-      void OnTestEnd( const TestInfo &info ) override;
-      void OnTestProgramStart( const UnitTest &test ) override;
-      void OnTestProgramEnd( const UnitTest &test ) override;
+      void OnTestStart( const testing::TestInfo &info ) override;
+      void OnTestEnd( const testing::TestInfo &info ) override;
+      void OnTestProgramStart( const testing::UnitTest &test ) override;
+      void OnTestProgramEnd( const testing::UnitTest &test ) override;
 
     protected:
       CoverageDataPtr data;
+      std::vector<CoverageDriverPtr> drivers;
+      CoverageDriverPtr driver;
 
-      void loadSources();
+      std::string fullTestCaseName( const testing::TestInfo &info ) const;
+      std::string fullTestName( const testing::TestInfo &info ) const;
     };
   }
 }

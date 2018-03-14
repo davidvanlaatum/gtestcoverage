@@ -15,6 +15,8 @@ namespace testing {
         void updateFile( ClangCoverageFilePtr &&file );
         void updateFunction( ClangCoverageFunctionPtr &&function );
         void merge( const ClangCoverageData &data );
+        ClangCoverageDataPtr diff( const ClangCoverageData &other ) const;
+        void fill( const TestInfoPtr &test, const CoverageDataPtr &data ) const;
 
       protected:
         std::map<boost::filesystem::path, ClangCoverageFilePtr> files;

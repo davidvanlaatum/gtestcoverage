@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <json.hpp>
-#include <iosfwd>
+#include "fwd.h"
 
 namespace testing {
   namespace coverage {
@@ -16,18 +16,6 @@ namespace testing {
       class ClangCoverageFile;
       typedef std::shared_ptr<ClangCoverageFile> ClangCoverageFilePtr;
     }
-  }
-}
-
-namespace std {
-  template<typename T> inline auto operator<<( std::ostream &os, const std::shared_ptr<T> &ptr )
-  -> decltype( os << std::declval<T>() ) {
-    if ( ptr ) {
-      os << *ptr;
-    } else {
-      os << "(null)";
-    }
-    return os;
   }
 }
 

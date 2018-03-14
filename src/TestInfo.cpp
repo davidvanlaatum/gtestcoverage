@@ -1,30 +1,47 @@
 #include "TestInfo.h"
-#include "FileInfo.h"
-#include "LineInfo.h"
-#include <iostream>
-#include <utility>
+#include <filesystemserializers.h>
 
 using namespace testing::coverage;
 
-TestInfo::TestInfo( std::string nSuite, std::string nName, coveredFilesType nCoveredFiles, bool nPassed ) :
-    suite( std::move( nSuite ) ), name( std::move( nName ) ), coveredFiles( std::move( nCoveredFiles ) ), passed( nPassed ) {}
+TestInfo::TestInfo( const std::string &nName, const TestCaseInfoPtr &pTestCase ) : name( nName ), testCase( pTestCase ) {}
+
+bool TestInfo::isSuccess() const {
+  return success;
+}
+
+void TestInfo::setSuccess( bool nSuccess ) {
+  success = nSuccess;
+}
 
 const std::string &TestInfo::getName() const {
   return name;
 }
 
-const std::string &TestInfo::getSuite() const {
-  return suite;
+TestCaseInfoPtr TestInfo::getTestCase() const {
+  return testCase.lock();
 }
 
-void TestInfo::addLine( const LineInfoPtr &line ) {
-  covered[line->getFile()->getSource()] += 1;
+//void testing::coverage::from_json( const nlohmann::json &j, TestInfo &data ) {
+//}
+
+void testing::coverage::to_json( nlohmann::json &j, const TestInfo &data ) {
+  j["success"] = data.success;
+  j["coveredFiles"] = data.coveredFiles;
+  j["coveredFunctions"] = data.coveredFunctions;
 }
 
-std::ostream &testing::coverage::operator<<( std::ostream &os, const TestInfo &test ) {
-  os << test.getSuite() << "::" << test.getName() << " covers:";
-  for ( const auto &it : test.covered ) {
-    os << std::endl << it.first << ": " << it.second;
-  }
-  return os;
+void TestInfo::addCoveredFile( const boost::filesystem::path &file ) {
+  coveredFiles.emplace( file );
+}
+
+void TestInfo::addCoveredFunction( const std::string &functionName ) {
+  coveredFunctions.emplace( functionName );
+}
+
+const std::set<boost::filesystem::path> &TestInfo::getCoveredFiles() const {
+  return coveredFiles;
+}
+
+const std::set<std::string> &TestInfo::getCoveredFunctions() const {
+  return coveredFunctions;
 }

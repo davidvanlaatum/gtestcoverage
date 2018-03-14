@@ -1,7 +1,7 @@
 add_executable ( coveragetest LineInfoTest.cpp FakeCoverageDumper.cpp test1.1.gcov test1.2.gcov
                  test2.1.gcov test2.2.gcov test2.3.gcov )
 target_compile_definitions ( coveragetest PRIVATE -DTEST_LOCATION="${CMAKE_CURRENT_SOURCE_DIR}" )
-target_link_libraries ( coveragetest PUBLIC Boost::boost Boost::filesystem gtestcoveragemain GMock::GMock PRIVATE tinyxml )
+target_link_libraries ( coveragetest PUBLIC Boost::boost Boost::filesystem gtestcoveragemain GMock::GMock json PRIVATE tinyxml )
 
 add_test ( NAME coveragetest COMMAND ${CMAKE_SOURCE_DIR}/scripts/testdriver.sh $<TARGET_FILE:coveragetest> WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 set_property ( TEST coveragetest PROPERTY ENVIRONMENT "NAME=coveragetest" )

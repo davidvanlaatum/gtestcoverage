@@ -1,35 +1,41 @@
 #pragma once
-#ifndef DVMON_TESTINFO_H
-#define DVMON_TESTINFO_H
+#ifndef GTESTCOVERAGE_TESTINFO_H
+#define GTESTCOVERAGE_TESTINFO_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/filesystem.hpp>
-#include <map>
 #include "fwd.h"
+#include <memory>
+#include <json.hpp>
+#include <string>
+#include <set>
+#include <boost/filesystem/path.hpp>
 
 namespace testing {
   namespace coverage {
     class TestInfo : public std::enable_shared_from_this<TestInfo> {
     public:
-      typedef std::vector<boost::filesystem::path> coveredFilesType;
-      TestInfo( std::string nSuite, std::string nName, coveredFilesType nCoveredFiles,
-                bool nPassed );
+      TestInfo( const std::string &nName, const TestCaseInfoPtr &pTestCase );
       const std::string &getName() const;
-      const std::string &getSuite() const;
-      void addLine( const LineInfoPtr &line );
+      TestCaseInfoPtr getTestCase() const;
+      bool isSuccess() const;
+      void setSuccess( bool nSuccess );
+      void addCoveredFile( const boost::filesystem::path &file );
+      void addCoveredFunction( const std::string &functionName );
+      const std::set<boost::filesystem::path> &getCoveredFiles() const;
+      const std::set<std::string> &getCoveredFunctions() const;
     protected:
-      std::string suite;
       std::string name;
-      typedef std::map<boost::filesystem::path, size_t> coveredType;
-      coveredType covered;
-      coveredFilesType coveredFiles;
-      bool passed;
-      friend std::ostream &operator<<( std::ostream &os, const TestInfo &test );
+      TestCaseInfoWeakPtr testCase;
+      bool success{ false };
+      std::set<boost::filesystem::path> coveredFiles;
+      std::set<std::string> coveredFunctions;
+
+      friend void from_json( const nlohmann::json &j, TestInfo &data );
+      friend void to_json( nlohmann::json &j, const TestInfo &data );
     };
 
-    std::ostream &operator<<( std::ostream &os, const TestInfo &test );
+    void from_json( const nlohmann::json &j, TestInfo &data );
+    void to_json( nlohmann::json &j, const TestInfo &data );
   }
 }
 
-#endif //DVMON_TESTINFO_H
-
+#endif //GTESTCOVERAGE_TESTINFO_H

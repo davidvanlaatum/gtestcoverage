@@ -5,8 +5,11 @@
 #include <string>
 #include <json.hpp>
 #include <iosfwd>
+#include <set>
 #include <boost/filesystem/path.hpp>
 #include <memory>
+#include <boost/fusion/container/set.hpp>
+#include "ClangCoverageFwd.h"
 
 namespace testing {
   namespace coverage {
@@ -65,9 +68,15 @@ namespace testing {
       public:
         const std::string &getName() const;
         void merge( const ClangCoverageFunction &other );
+        ClangCoverageFunctionPtr diff( const ClangCoverageFunction &other ) const;
+        const std::set<boost::filesystem::path> &getSources() const;
+        uint32_t getHits() const;
+        void fill( const FunctionInfoPtr &function ) const;
       protected:
         std::string name;
         std::vector<ClangCoverageFunctionSegment> segments;
+        std::set<boost::filesystem::path> sources;
+        uint32_t hits{ 0 };
         friend void from_json( const nlohmann::json &json, ClangCoverageFunction &data );
         friend std::ostream &operator<<( std::ostream &os, const ClangCoverageFunction &data );
       };

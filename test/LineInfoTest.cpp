@@ -8,6 +8,7 @@
 using namespace testing::coverage;
 using testing::IsEmpty;
 using testing::SizeIs;
+#if 0
 
 TEST( LineInfoTest, Test1 ) {
   RecordProperty( "COVERS_NOTHING", 1 );
@@ -41,3 +42,5 @@ TEST( LineInfoTest, Test2 ) {
   EXPECT_EQ( branches.at( 2 ).hits, 1 );
   EXPECT_EQ( branches.at( 3 ).hits, 1 );
 }
+
+#endif

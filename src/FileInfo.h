@@ -1,38 +1,28 @@
 #pragma once
-#ifndef DVMON_FILEINFO_H
-#define DVMON_FILEINFO_H
+#ifndef GTESTCOVERAGE_FILEINFO_H
+#define GTESTCOVERAGE_FILEINFO_H
 
-#include "gtestcoverage_export.h"
+#include "fwd.h"
+#include <memory>
+#include <json.hpp>
 #include <map>
-#include <boost/filesystem.hpp>
-#include "LineInfo.h"
-#include <tinyxml2.h>
+#include <boost/filesystem/path.hpp>
 
 namespace testing {
   namespace coverage {
-    class GTESTCOVERAGE_EXPORT FileInfo : public std::enable_shared_from_this<FileInfo> {
+    class FileInfo : public std::enable_shared_from_this<FileInfo> {
     public:
-      typedef boost::filesystem::path path;
-      typedef std::map<size_t, LineInfoPtr> linesType;
-      explicit FileInfo( path sourceFile );
-      const path &getSource() const;
-      size_t getTotalLines() const;
-      size_t getCoveredLines() const;
-      void processFile( const TestInfoPtr &test, std::istream &data );
-      void setExplicitCovers();
-      bool isExplicitCovered() const;
-      void writeCobertura( tinyxml2::XMLElement *parent, tinyxml2::XMLDocument &doc ) const;
-      void cleanUp();
-      const linesType &getLines() const;
+      explicit FileInfo( const boost::filesystem::path &nName );
+      void addCoveringTest( const TestInfoPtr &test );
     protected:
-      path source;
-      linesType lines;
-      bool explicitCovered;
-      LineInfoPtr addLine( size_t lineNum, size_t executed, const TestInfoPtr &test, const std::string &code );
-      void processLine( const TestInfoPtr &test, const std::string &line, LineInfoPtr &lastLine, size_t &blockNum );
+      boost::filesystem::path name;
+      std::map<std::string, TestInfoWeakPtr> tests;
+      friend void from_json( const nlohmann::json &j, FileInfo &data );
+      friend void to_json( nlohmann::json &j, const FileInfo &data );
     };
-    std::ostream &operator<<( std::ostream &os, const FileInfo &file );
+    void from_json( const nlohmann::json &j, FileInfo &data );
+    void to_json( nlohmann::json &j, const FileInfo &data );
   }
 }
 
-#endif //DVMON_FILEINFO_H
+#endif //GTESTCOVERAGE_FILEINFO_H

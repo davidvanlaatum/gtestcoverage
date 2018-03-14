@@ -33,3 +33,7 @@ extern "C" void NAME( coverage_reset )() {
   __llvm_profile_initialize_file();
 #endif
 }
+
+extern "C" const char *NAME( driver_name )() {
+  return STYLE;
+}
