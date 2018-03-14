@@ -1,6 +1,19 @@
 language: cpp
-before_install: if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo add-apt-repository ppa:ostogvin/tjo-develop -y; fi
-install: if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo apt update && sudo apt install -y libboost\*1.65-dev; fi
+before_install: |
+              if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
+                if [[ "${BOOST_VERSION}" != "" ]]; then
+                  BOOST_DIR=boost-${BOOST_VERSION}
+                  if [[ -z "$(ls -A ${BOOST_DIR})" ]]; then
+                      BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz"
+                      mkdir -p ${BOOST_DIR}
+                      { travis_retry wget -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_DIR}; } || exit 1
+                  fi
+                  cd ${BOOST_DIR}
+                  ./bootstrap.sh --with-libraries=filesystem,program_options,system
+                  ./b2
+                  CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
+                fi
+              fi
 script:
     - chmod a+x scripts/*
     - mkdir -p build
