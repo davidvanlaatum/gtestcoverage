@@ -20,7 +20,7 @@ node("cmake && iwyu && cppcheck && clangtidy") {
                 }
                 sh '${CMAKE} --build . -- package'
                 junit '**/*-unit.xml'
-                archiveArtifacts '**/*valgrind.xml'
+                archiveArtifacts '**/*valgrind.xml,**/*-unit.xml'
                 step([$class        : 'XUnitBuilder',
                       testTimeMargin: '3000',
                       thresholdMode : 1,
