@@ -7,6 +7,15 @@ if ( NOT ${CMAKE_VERSION} VERSION_LESS 3.9 )
   cmake_policy ( SET CMP0068 NEW )
 endif ()
 
+if ( NOT EXISTS ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake )
+  file ( MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
+  file ( DOWNLOAD https://raw.githubusercontent.com/Kitware/CMake/release/Modules/FindBoost.cmake
+         ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake
+         SHOW_PROGRESS
+         STATUS find_boost_download
+         TIMEOUT 10 )
+endif ()
+
 find_package ( GTest REQUIRED )
 find_package ( gtestcoverage REQUIRED )
 
