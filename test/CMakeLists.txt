@@ -7,7 +7,7 @@ add_test ( NAME coveragetest COMMAND ${CMAKE_SOURCE_DIR}/scripts/testdriver.sh $
 set_property ( TEST coveragetest PROPERTY ENVIRONMENT "NAME=coveragetest" )
 set_property ( TEST coveragetest PROPERTY SKIP_RETURN_CODE 10 )
 set_property ( TEST coveragetest PROPERTY TIMEOUT 600 )
-set_property ( TEST coveragetest PROPERTY ENVIRONMENT GTEST_OUTPUT="xml:coveragetest-unit.xml" )
+set_property ( TEST coveragetest APPEND PROPERTY ENVIRONMENT GTEST_OUTPUT=xml:coveragetest-unit.xml )
 
 if ( VALGRIND_PATH )
   add_test ( NAME coveragetest_valgrind COMMAND ${CMAKE_SOURCE_DIR}/scripts/testdriver.sh $<TARGET_FILE:coveragetest> )
