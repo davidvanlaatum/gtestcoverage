@@ -1,9 +1,12 @@
 language: cpp
 cache:
   directories:
-    - ${TRAVIS_BUILD_DIR}/boost-1.66.0
+    - ${TRAVIS_BUILD_DIR}/boost-*
 before_install: |
     if [[ "${BOOST_VERSION}" != "" ]]; then
+      if [[ "${BOOST_VERSION}" == "current" ]]; then
+        BOOST_VERSION=$(curl -s https://sourceforge.net/projects/boost/rss?path=/boost | gsed -e '/link/!d;/.tar.gz\//!d;/beta/d;/snapshots/d;s/<[^>]*>//g;s/.*\([0-9][0-9]*\.[0-9]*\.[0-9]*\).*/\1/;0,/./{p}' -n)
+      fi
       BOOST_DIR=boost-${BOOST_VERSION}
       if [[ -z "$(ls -A ${BOOST_DIR})" ]]; then
           BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz"
@@ -44,4 +47,4 @@ os:
   - linux
 env:
   - BOOST_VERSION=1.64.0
-  - BOOST_VERSION=1.66.0
+  - BOOST_VERSION=current
