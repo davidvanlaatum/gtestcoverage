@@ -43,4 +43,5 @@ os:
   - osx
   - linux
 env:
+  - BOOST_VERSION=1.64.0
   - BOOST_VERSION=1.66.0
