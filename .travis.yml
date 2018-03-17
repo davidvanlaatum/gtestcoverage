@@ -1,4 +1,11 @@
 language: cpp
+skip_commits:
+  files:
+    - Jenkinsfile
+    - iwyu.imp
+    - .gitignore
+    - .clang*
+    - '*.md'
 cache:
   directories:
     - ${TRAVIS_BUILD_DIR}/boost-*
