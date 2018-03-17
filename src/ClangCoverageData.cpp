@@ -8,8 +8,8 @@
 #include <memory>                           // for __shared_ptr_access, shared_ptr, make_shared
 #include <set>                              // for set, operator!=
 #include <stdexcept>                        // for runtime_error
+#include <stdserializers.h>                 // IWYU pragma: keep
 #include <utility>                          // for pair, move
-#include <stdserializers.h> // IWYU pragma: keep
 
 using namespace testing::coverage::clang;
 
