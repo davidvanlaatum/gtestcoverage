@@ -10,8 +10,6 @@ int atestfile::aFunction( const char *param ) {
 }
 
 int atestfile::aFunction( int param ) {
-  int i;
-  i = 1;
   if ( param ) {
     std::cout << "";
   }
