@@ -1,14 +1,14 @@
-Checks: |
-  *
-  -fuchsia-*
-  -google-build-using-namespace
-  -google-readability-namespace-comments
-  -readability-else-after-return
-  -cert-err58-cpp
-  -readability-redundant-declaration
-  -cppcoreguidelines-pro-bounds-array-to-pointer-decay
-  -readability-implicit-bool-cast
-  -clang-analyzer-alpha.*
-  -cppcoreguidelines-pro-type-union-access
-  -cppcoreguidelines-pro-bounds-constant-array-index
-  -cppcoreguidelines-pro-type-vararg
+Checks: '*,
+-fuchsia-*,
+-google-build-using-namespace,
+-google-readability-namespace-comments,
+-readability-else-after-return,
+-cert-err58-cpp,
+-readability-redundant-declaration,
+-cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+-readability-implicit-bool-cast,
+-clang-analyzer-alpha.*,
+-cppcoreguidelines-pro-type-union-access,
+-cppcoreguidelines-pro-bounds-constant-array-index,
+-cppcoreguidelines-pro-type-vararg,
+'
