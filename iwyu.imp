@@ -15,5 +15,12 @@
   { "include": [ "<ext/alloc_traits.h>", "private", "<unordered_set>", "public" ] },
   { "symbol": [ "boost::variant<>", "public", "<boost/variant.hpp>", "public" ] },
   { "symbol": [ "boost::get<>", "public", "<boost/variant/get.hpp>", "public" ] },
-  { "symbol": [ "int64_t", "public", "<cstdint>", "public" ] }
+  { "symbol": [ "int64_t", "public", "<cstdint>", "public" ] },
+  { "symbol": [ "int32_t", "public", "<cstdint>", "public" ] },
+  { "symbol": [ "int16_t", "public", "<cstdint>", "public" ] },
+  { "symbol": [ "int8_t", "public", "<cstdint>", "public" ] },
+  { "symbol": [ "uint64_t", "public", "<cstdint>", "public" ] },
+  { "symbol": [ "uint32_t", "public", "<cstdint>", "public" ] },
+  { "symbol": [ "uint16_t", "public", "<cstdint>", "public" ] },
+  { "symbol": [ "uint8_t", "public", "<cstdint>", "public" ] }
 ]
