@@ -5,6 +5,8 @@
 #include "fwd.h"
 #include "Block.h"
 #include <memory>
+#include <json.hpp>             // for json
+#include <cstdint>
 
 namespace testing {
   namespace coverage {

@@ -5,6 +5,8 @@
 #include <list>
 #include <sstream>
 #include <boost/core/typeinfo.hpp>
+#include <string>                   // for operator<<, string, operator+
+#include <typeinfo>                 // for type_info
 
 namespace testing {
   namespace coverage {

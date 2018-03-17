@@ -2,6 +2,8 @@
 #ifndef GTESTCOVERAGE_GCCCOVERAGEDRIVER_H
 #define GTESTCOVERAGE_GCCCOVERAGEDRIVER_H
 
+#include <string>            // for string
+#include "fwd.h"             // for CoverageDataPtr, TestInfoPtr
 #include "CoverageDriver.h"
 
 namespace testing {

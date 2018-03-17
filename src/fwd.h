@@ -3,6 +3,7 @@
 #define GTESTCOVERAGE_FWD_H
 
 #include <memory>
+#include <type_traits>                // for declval
 #include <iostream>
 #include <boost/filesystem/path.hpp>
 

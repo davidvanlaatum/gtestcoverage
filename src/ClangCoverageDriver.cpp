@@ -1,12 +1,22 @@
 #include "ClangCoverageDriver.h"
-#include "ClangCoverageData.h"
-#include <boost/filesystem.hpp>
-#include <boost/dll/runtime_symbol_info.hpp>
-#include <boost/process.hpp>
-#include <json.hpp>
-#include <iostream>
-#include "fwd.h"
-#include "TestInfo.h"
+#include "ClangCoverageData.h"                  // for ClangCoverageData
+#include "fwd.h"                                // for path, CoverageDataPtr, TestInfoPtr
+#include <stdlib.h>                             // for getenv
+#include <algorithm>                            // for move
+#include <boost/dll/runtime_symbol_info.hpp>    // for program_location
+#include <boost/filesystem/operations.hpp>      // for directory_iterator, remove, current_path, directory_entry
+#include <boost/filesystem/path.hpp>            // for operator==, path
+#include <boost/iterator/iterator_facade.hpp>   // for operator!=, operator++, iterator_facade, iterator_facade_base
+#include <boost/process/child.hpp>              // for child::child
+#include <boost/process/detail/child_decl.hpp>  // for child
+#include <boost/process/io.hpp>                 // for std_out, std_out_
+#include <boost/process/pipe.hpp>               // for ipstream
+#include <boost/process/system.hpp>             // for system
+#include <boost/system/error_code.hpp>          // for error_code
+#include <iostream>                             // for operator<<, basic_ostream, char_traits, endl, clog, ostream, istream
+#include <json.hpp>                             // for json, operator>>
+#include <memory>                               // for __shared_ptr_access, make_shared, shared_ptr
+#include <stdexcept>                            // for exception, runtime_error
 
 using namespace boost::filesystem;
 using namespace testing::coverage::clang;

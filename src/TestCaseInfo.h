@@ -7,6 +7,7 @@
 #include <string>
 #include <map>
 #include <json.hpp>
+#include <utility>     // for pair
 
 namespace testing {
   namespace coverage {

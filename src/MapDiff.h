@@ -2,8 +2,9 @@
 #ifndef GTESTCOVERAGE_MAPDIFF_H
 #define GTESTCOVERAGE_MAPDIFF_H
 
-#include <map>
-#include <functional>
+#include <functional>   // for function
+#include <map>          // for map
+#include <type_traits>  // for add_const, add_lvalue_reference
 
 namespace testing {
   namespace coverage {

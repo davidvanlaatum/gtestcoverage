@@ -2,9 +2,10 @@
 #ifndef GTESTCOVERAGE_CLANGCOVERAGEDRIVER_H
 #define GTESTCOVERAGE_CLANGCOVERAGEDRIVER_H
 
-#include "CoverageDriver.h"
-#include "ClangCoverageFwd.h"
-#include <boost/filesystem/path.hpp>
+#include <string>              // for string
+#include "ClangCoverageFwd.h"  // for ClangCoverageDataPtr
+#include "CoverageDriver.h"    // for CoverageDriver
+#include "fwd.h"               // for path, CoverageDataPtr, TestInfoPtr
 
 namespace testing {
   namespace coverage {

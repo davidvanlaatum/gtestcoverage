@@ -4,6 +4,8 @@
 
 #include "fwd.h"
 #include <json.hpp>
+#include <ostream>              // for operator<<, ostream, basic_ostream, basic_ostream<>::__ostream_type
+#include <cstdint>
 
 namespace testing {
   namespace coverage {
