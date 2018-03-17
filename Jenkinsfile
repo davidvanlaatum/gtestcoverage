@@ -12,13 +12,23 @@ node("cmake && iwyu && cppcheck && clangtidy") {
     withEnv(["CMAKE=${cmake}", "CTEST=${ctest}", "IGNORE_EXIT_CODE=1","CC=clang", "CXX=clang++"]) {
         dir("build") {
             cache(caches: [[$class: 'ArbitraryFileCache', excludes: '', includes: '**/*.zip,**/*.tar.gz', path: 'external']], maxCacheSize: 100) {
-                sh 'nice ${CMAKE} -G Ninja ../ -DBUILD_TESTING=ON -DVALGRIND_XML=ON -DCPACK_BINARY_RPM=ON -DCMAKE_BUILD_TYPE=Debug -DCLANG_TIDY=ON'
-                sh 'nice ${CMAKE} --build . -- all'
-                sh 'nice ${CMAKE} --build . -- checks'
-                catchError {
-                    sh 'nice ${CTEST} --verbose .'
+                stage("Configure") {
+                    sh 'nice ${CMAKE} -G Ninja ../ -DBUILD_TESTING=ON -DVALGRIND_XML=ON -DCPACK_BINARY_RPM=ON -DCMAKE_BUILD_TYPE=Debug -DCLANG_TIDY=ON'
                 }
-                sh '${CMAKE} --build . -- package'
+                stage("Build") {
+                    sh 'nice ${CMAKE} --build . -- all'
+                }
+                stage("Check") {
+                    sh 'nice ${CMAKE} --build . -- checks'
+                }
+                stage("Test") {
+                    catchError {
+                        sh 'nice ${CTEST} --verbose .'
+                    }
+                }
+                stage("Package") {
+                    sh '${CMAKE} --build . -- package'
+                }
                 junit '**/*-unit.xml'
                 archiveArtifacts '**/*valgrind.xml,**/*-unit.xml,**/*.iwyu.log,**/*.clang_tidy.log'
                 step([$class        : 'XUnitBuilder',
