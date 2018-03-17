@@ -1,15 +1,16 @@
 #include "ClangCoverageFunction.h"
-#include "FunctionInfo.h"
-#include <boost/filesystem/path.hpp>
-#include <boost/core/demangle.hpp>
-#include <vector>
-#include <iostream>
-#include <FileInfo.h>
-#include <CoverageData.h>
-#include "TestInfo.h"
-#include <stdserializers.h>
-#include "MapDiff.h"
-#include "BlockInfo.h"
+#include <CoverageData.h>           // for CoverageData
+#include <FileInfo.h>               // for FileInfo
+#include <boost/core/demangle.hpp>  // for demangle
+#include <iostream>                 // for operator<<, basic_ostream, endl, basic_ostream<>::__ostream_type, clog
+#include <utility>                  // for pair
+#include <vector>                   // for vector
+#include "BlockInfo.h"              // for BlockInfo
+#include "FunctionInfo.h"           // for FunctionInfo
+#include "MapDiff.h"                // for mapDiff
+#include "Point.h"                  // for Point
+#include "TestInfo.h"               // for TestInfo
+#include <stdserializers.h> // IWYU pragma: keep
 
 using namespace testing::coverage::clang;
 using testing::coverage::path;

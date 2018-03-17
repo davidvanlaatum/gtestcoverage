@@ -2,10 +2,11 @@
 #ifndef GTESTCOVERAGE_CLANGCOVERAGEFILE_H
 #define GTESTCOVERAGE_CLANGCOVERAGEFILE_H
 
-#include "ClangCoverageFwd.h"
-#include <json.hpp>
-#include <iosfwd>
-#include <boost/filesystem/path.hpp>
+#include "ClangCoverageFwd.h" // IWYU pragma: keep
+#include <cstdint>   // for uint32_t
+#include <iosfwd>    // for ostream
+#include <json.hpp>  // for json
+#include "fwd.h"     // for path
 
 namespace testing {
   namespace coverage {

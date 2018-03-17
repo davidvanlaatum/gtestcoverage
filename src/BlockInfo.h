@@ -2,7 +2,7 @@
 #ifndef GTESTCOVERAGE_BLOCKINFO_H
 #define GTESTCOVERAGE_BLOCKINFO_H
 
-#include "fwd.h"
+#include "fwd.h" // IWYU pragma: keep
 #include "Block.h"
 #include <memory>
 #include <json.hpp>             // for json

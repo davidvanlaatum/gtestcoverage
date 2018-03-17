@@ -2,9 +2,9 @@
 #include "BlockInfo.h"     // for BlockInfo
 #include "TestCaseInfo.h"  // for TestCaseInfo
 #include "TestInfo.h"      // for TestInfo
-#include "LineInfo.h"
+#include "LineInfo.h"      // IWYU pragma: keep
 #include <utility>         // for pair
-#include <stdserializers.h>
+#include <stdserializers.h> // IWYU pragma: keep
 
 using namespace testing::coverage;
 

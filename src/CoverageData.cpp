@@ -12,7 +12,7 @@
 #include <stdexcept>                           // for runtime_error
 #include <type_traits>                         // for declval
 #include <utility>                             // for pair
-#include <stdserializers.h>
+#include <stdserializers.h> // IWYU pragma: keep
 
 using namespace testing::coverage;
 using namespace boost::filesystem;

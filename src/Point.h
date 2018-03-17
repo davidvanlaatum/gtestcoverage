@@ -2,10 +2,9 @@
 #ifndef GTESTCOVERAGE_POINT_H
 #define GTESTCOVERAGE_POINT_H
 
-#include "fwd.h"
-#include <json.hpp>
-#include <ostream>              // for operator<<, ostream, basic_ostream, basic_ostream<>::__ostream_type
-#include <cstdint>
+#include <cstdint>   // for uint32_t
+#include <json.hpp>  // for json, basic_json<>::value_type, basic_json
+#include <ostream>   // for operator<<, ostream, basic_ostream, basic_ostream<>::__ostream_type
 
 namespace testing {
   namespace coverage {

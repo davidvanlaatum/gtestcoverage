@@ -2,9 +2,8 @@
 #ifndef GTESTCOVERAGE_CLANGCOVERAGEFWD_H
 #define GTESTCOVERAGE_CLANGCOVERAGEFWD_H
 
+#include "fwd.h" // IWYU pragma: keep
 #include <memory>
-#include <json.hpp>
-#include "fwd.h"
 
 namespace testing {
   namespace coverage {

@@ -2,9 +2,9 @@
 #ifndef GTESTCOVERAGE_COVERAGEDRIVER_H
 #define GTESTCOVERAGE_COVERAGEDRIVER_H
 
+#include "fwd.h"
 #include <string>
 #include <memory>
-#include <CoverageData.h>
 
 namespace testing {
   namespace coverage {

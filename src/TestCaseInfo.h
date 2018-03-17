@@ -2,12 +2,11 @@
 #ifndef GTESTCOVERAGE_TESTCASEINFO_H
 #define GTESTCOVERAGE_TESTCASEINFO_H
 
-#include "fwd.h"
-#include <memory>
-#include <string>
-#include <map>
-#include <json.hpp>
-#include <utility>     // for pair
+#include "fwd.h"     // for TestInfoPtr
+#include <json.hpp>  // for json
+#include <map>       // for map
+#include <memory>    // for enable_shared_from_this
+#include <string>    // for string
 
 namespace testing {
   namespace coverage {

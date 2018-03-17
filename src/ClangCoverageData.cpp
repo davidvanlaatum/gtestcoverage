@@ -1,13 +1,15 @@
 #include "ClangCoverageData.h"
-#include "ClangCoverageFile.h"
-#include "ClangCoverageFunction.h"
-#include "CoverageData.h"
-#include "FunctionInfo.h"
-#include "TestInfo.h"
-#include <boost/algorithm/string/join.hpp>
-#include <iostream>
-#include <set>
-#include <stdserializers.h>
+#include "ClangCoverageFile.h"              // for ClangCoverageFile
+#include "ClangCoverageFunction.h"          // for ClangCoverageFunction, operator<<
+#include "TestInfo.h"                       // for TestInfo
+#include <boost/algorithm/string/join.hpp>  // for join
+#include <boost/core/demangle.hpp>          // for demangle
+#include <iostream>                         // for ostream, operator<<, char_traits, clog
+#include <memory>                           // for __shared_ptr_access, shared_ptr, make_shared
+#include <set>                              // for set, operator!=
+#include <stdexcept>                        // for runtime_error
+#include <utility>                          // for pair, move
+#include <stdserializers.h> // IWYU pragma: keep
 
 using namespace testing::coverage::clang;
 

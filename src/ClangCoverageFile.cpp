@@ -1,4 +1,6 @@
 #include "ClangCoverageFile.h"
+#include <ostream>  // for operator<<, basic_ostream
+#include <string>   // for string
 
 using namespace testing::coverage::clang;
 using testing::coverage::path;

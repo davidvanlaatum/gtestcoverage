@@ -2,9 +2,10 @@
 #ifndef GTESTCOVERAGE_LINEINFO_H
 #define GTESTCOVERAGE_LINEINFO_H
 
-#include "fwd.h"
-#include <memory>
-#include <json.hpp>
+#include "fwd.h"     // for FileInfoWeakPtr
+#include <cstdint>   // for uint32_t
+#include <json.hpp>  // for json
+#include <memory>    // for enable_shared_from_this
 
 namespace testing {
   namespace coverage {

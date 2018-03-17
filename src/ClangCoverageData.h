@@ -2,10 +2,12 @@
 #ifndef GTESTCOVERAGE_CLANGCOVERAGEDATA_H
 #define GTESTCOVERAGE_CLANGCOVERAGEDATA_H
 
-#include <json.hpp>
-#include <boost/filesystem.hpp>
-#include <map>
-#include "ClangCoverageFwd.h"
+#include "fwd.h"               // for path, CoverageDataPtr, TestInfoPtr
+#include "ClangCoverageFwd.h"  // for ClangCoverageFilePtr, ClangCoverageFunctionPtr, ClangCoverageDataPtr
+#include <iosfwd>              // for ostream
+#include <json.hpp>            // for json
+#include <map>                 // for map
+#include <string>              // for string
 
 namespace testing {
   namespace coverage {

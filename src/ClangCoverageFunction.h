@@ -2,20 +2,20 @@
 #ifndef GTESTCOVERAGE_CLANGCOVERAGEFUNCTION_H
 #define GTESTCOVERAGE_CLANGCOVERAGEFUNCTION_H
 
-#include <string>
-#include <json.hpp>
-#include <iosfwd>
-#include <set>
-#include <boost/filesystem/path.hpp>
-#include <memory>
-#include <boost/fusion/container/set.hpp>
-#include "ClangCoverageFwd.h"
-#include "Block.h"
+#include "fwd.h"               // for path, CoverageDataPtr, FunctionInfoPtr, TestInfoPtr
+#include "ClangCoverageFwd.h"  // for ClangCoverageFunctionSegmentPtr, ClangCoverageFunctionPtr
+#include "Block.h"             // for BlockWithFilename
+#include <cstdint>             // for uint32_t
+#include <iosfwd>              // for ostream
+#include <json.hpp>            // for json
+#include <map>                 // for map
+#include <memory>              // for enable_shared_from_this
+#include <set>                 // for set
+#include <string>              // for string
 
 namespace testing {
   namespace coverage {
     namespace clang {
-      class ClangCoverageFunction;
       class ClangCoverageFunctionSegment : public std::enable_shared_from_this<ClangCoverageFunctionSegment> {
       public:
         enum RegionKind {

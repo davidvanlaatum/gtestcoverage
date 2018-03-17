@@ -2,10 +2,12 @@
 #ifndef GTESTCOVERAGE_BLOCK_H
 #define GTESTCOVERAGE_BLOCK_H
 
-#include "fwd.h"
-#include "Point.h"
-#include <json.hpp>
-#include <ostream>
+#include "Point.h"                    // for Point, operator<<
+#include "fwd.h"                      // for path
+#include <boost/filesystem/path.hpp>  // for operator<, operator<<, operator==
+#include <cstdint>                    // for uint32_t
+#include <json.hpp>                   // for json, basic_json<>::value_type
+#include <ostream>                    // for ostream, operator<<, basic_ostream, char_traits
 
 namespace testing {
   namespace coverage {

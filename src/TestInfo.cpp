@@ -1,5 +1,5 @@
 #include "TestInfo.h"
-#include <filesystemserializers.h>
+#include <filesystemserializers.h> // IWYU pragma: keep
 
 using namespace testing::coverage;
 

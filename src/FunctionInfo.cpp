@@ -1,7 +1,8 @@
 #include "FunctionInfo.h"
-#include "TestInfo.h"
-#include "TestCaseInfo.h"
-#include <filesystemserializers.h>
+#include <utility>         // for pair
+#include "TestCaseInfo.h"  // for TestCaseInfo
+#include "TestInfo.h"      // for TestInfo
+#include <filesystemserializers.h> // IWYU pragma: keep
 
 using namespace testing::coverage;
 
