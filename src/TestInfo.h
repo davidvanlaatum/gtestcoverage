@@ -13,6 +13,7 @@ namespace testing {
     class TestInfo : public std::enable_shared_from_this<TestInfo> {
     public:
       TestInfo( const std::string &nName, const TestCaseInfoPtr &pTestCase );
+      TestInfo( std::string &&nName, const TestCaseInfoPtr &pTestCase );
       const std::string &getName() const;
       TestCaseInfoPtr getTestCase() const;
       bool isSuccess() const;

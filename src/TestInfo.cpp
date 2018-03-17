@@ -5,6 +5,8 @@ using namespace testing::coverage;
 
 TestInfo::TestInfo( const std::string &nName, const TestCaseInfoPtr &pTestCase ) : name( nName ), testCase( pTestCase ) {}
 
+TestInfo::TestInfo( std::string &&nName, const TestCaseInfoPtr &pTestCase ) : name( std::move( nName ) ), testCase( pTestCase ) {}
+
 bool TestInfo::isSuccess() const {
   return success;
 }
