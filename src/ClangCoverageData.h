@@ -24,7 +24,7 @@ namespace testing {
         friend std::ostream &operator<<( std::ostream &os, const ClangCoverageData &data );
       };
 
-      void from_json( const nlohmann::json &json, ClangCoverageData &data );
+      void from_json( const nlohmann::json &json, ClangCoverageData &coverageData );
       std::ostream &operator<<( std::ostream &os, const ClangCoverageData &data );
     }
   }

@@ -4,10 +4,10 @@
 #include "CoverageData.h"
 #include "FunctionInfo.h"
 #include "TestInfo.h"
-#include <stdserializers.h>
-#include <set>
-#include <iostream>
 #include <boost/algorithm/string/join.hpp>
+#include <iostream>
+#include <set>
+#include <stdserializers.h>
 
 using namespace testing::coverage::clang;
 

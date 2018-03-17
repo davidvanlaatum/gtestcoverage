@@ -1,7 +1,7 @@
 #include "ClangCoverageDriver.h"
 #include "ClangCoverageData.h"                  // for ClangCoverageData
 #include "fwd.h"                                // for path, CoverageDataPtr, TestInfoPtr
-#include <stdlib.h>                             // for getenv
+#include <cstdlib>                             // for getenv
 #include <algorithm>                            // for move
 #include <boost/dll/runtime_symbol_info.hpp>    // for program_location
 #include <boost/filesystem/operations.hpp>      // for directory_iterator, remove, current_path, directory_entry
