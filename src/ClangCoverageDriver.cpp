@@ -37,7 +37,7 @@ bool ClangCoverageDriver::isAvailable( std::string &error ) const {
 }
 
 const std::string ClangCoverageDriver::getName() const {
-  return "clang";
+  return std::string( "clang" );
 }
 
 void ClangCoverageDriver::startProgram() {
