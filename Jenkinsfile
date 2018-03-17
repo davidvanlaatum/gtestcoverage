@@ -13,8 +13,8 @@ node("cmake && iwyu && cppcheck && clangtidy") {
         dir("build") {
             cache(caches: [[$class: 'ArbitraryFileCache', excludes: '', includes: '**/*.zip,**/*.tar.gz', path: 'external']], maxCacheSize: 100) {
                 sh 'nice ${CMAKE} -G Ninja ../ -DBUILD_TESTING=ON -DVALGRIND_XML=ON -DCPACK_BINARY_RPM=ON -DCMAKE_BUILD_TYPE=Debug -DCLANG_TIDY=ON'
-                sh 'nice ${CMAKE} --build . -- -j2 -l15 all'
-                sh 'nice ${CMAKE} --build . -- -j2 -l15 checks'
+                sh 'nice ${CMAKE} --build . -- all'
+                sh 'nice ${CMAKE} --build . -- checks'
                 catchError {
                     sh 'nice ${CTEST} --verbose .'
                 }
@@ -37,9 +37,13 @@ node("cmake && iwyu && cppcheck && clangtidy") {
                                stopProcessingIfError: true]
                       ]
                 ])
-                warnings canComputeNew: false, canResolveRelativePaths: false, consoleParsers: [
-                        [parserName: 'GNU C Compiler 4 (gcc)']
-                ], healthy: '0', unstableTotalAll: '0', excludePattern: '.*/include/gmock/.*,.*/include/gtest/.*'
+                warnings parserConfigurations: [
+                    [parserName: 'Clang-Tidy', pattern: '**/*.clang_tidy.log']
+                ], excludePattern: '.*/include/gmock/.*,.*/include/gtest/.*', usePreviousBuildAsReference: true
+
+                warnings consoleParsers: [
+                    [parserName: 'Clang (LLVM based)']
+                ], healthy: '0', unstableTotalAll: '0', excludePattern: '.*/include/gmock/.*,.*/include/gtest/.*', usePreviousBuildAsReference: true
             }
         }
     }

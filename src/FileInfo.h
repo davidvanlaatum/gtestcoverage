@@ -2,12 +2,13 @@
 #ifndef GTESTCOVERAGE_FILEINFO_H
 #define GTESTCOVERAGE_FILEINFO_H
 
-#include "fwd.h"
-#include <memory>
-#include <json.hpp>
-#include <map>
-#include <boost/filesystem/path.hpp>
-#include "Block.h"
+#include "Block.h"   // for Block
+#include "fwd.h"     // for BlockInfoPtr, LineInfoPtr, TestInfoWeakPtr, path, TestInfoPtr
+#include <cstdint>   // for uint32_t
+#include <json.hpp>  // for json
+#include <map>       // for map
+#include <memory>    // for enable_shared_from_this
+#include <string>    // for string
 
 namespace testing {
   namespace coverage {

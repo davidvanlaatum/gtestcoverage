@@ -1,18 +1,21 @@
 #include "GTestCoverageListener.h"
-#include "CoverageData.h"
-#include "FileInfo.h"
-#include "ClangCoverageDriver.h"
-#include "GCCCoverageDriver.h"
-#include "NullCoverageDriver.h"
-#include <cstddef>
-#include <cstring>
-#include <fstream>
-#include <gtest/gtest.h>
-#include <boost/filesystem.hpp>
-#include "TestCaseInfo.h"
-#include "TestInfo.h"
-#include "GTestCoverageCovers.h"
-#include "FunctionInfo.h"
+#include "ClangCoverageDriver.h"            // for ClangCoverageDriver
+#include "CoverageData.h"                   // for CoverageData
+#include "CoverageDriver.h"                 // for CoverageDriver
+#include "FileInfo.h"                       // for FileInfo
+#include "FunctionInfo.h"                   // for FunctionInfo
+#include "GCCCoverageDriver.h"              // for GCCCoverageDriver
+#include "GTestCoverageCovers.h"            // for COVERS_FILES_PROPERTY, COVERS_FUNCTIONS_PROPERTY, COVERS_NOTHING_PROPERTY
+#include "NullCoverageDriver.h"             // for NullCoverageDriver
+#include "TestCaseInfo.h"                   // for TestCaseInfo
+#include "TestInfo.h"                       // for TestInfo
+#include <gtest/gtest.h>                    // for TestInfo, TestProperty, TestResult, GTEST_LOG_, UnitTest (ptr only)
+#include <boost/filesystem/operations.hpp>  // for exists
+#include <cstdlib>                          // for getenv
+#include <cstring>                          // for strcmp
+#include <iostream>                         // for operator<<, basic_ostream, stringstream, endl, clog, ostream
+#include <memory>                           // for allocator, __shared_ptr_access, make_shared, shared_ptr
+#include <stdexcept>                        // for runtime_error
 
 extern "C" {
 void main_coverage_reset();

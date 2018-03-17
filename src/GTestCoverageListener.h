@@ -2,10 +2,11 @@
 #ifndef DVMON_GTESTCOVERAGELISTENER_H
 #define DVMON_GTESTCOVERAGELISTENER_H
 
-#include "gtestcoverage_export.h"
-#include <gtest/gtest.h>
-#include <memory>
-#include "fwd.h"
+#include <gtest/gtest.h>           // for TestInfo (ptr only), UnitTest (ptr only), EmptyTestEventListener
+#include <string>                  // for string
+#include <vector>                  // for vector
+#include "fwd.h"                   // for CoverageDriverPtr, CoverageDataPtr
+#include "gtestcoverage_export.h"  // for GTESTCOVERAGE_EXPORT
 
 namespace testing {
   namespace coverage {

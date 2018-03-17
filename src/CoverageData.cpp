@@ -1,13 +1,18 @@
 #include "CoverageData.h"
-#include "FunctionInfo.h"
-#include "FileInfo.h"
-#include <iostream>
+#include "FileInfo.h"                          // for FileInfo
+#include "FunctionInfo.h"                      // for FunctionInfo
+#include "TestCaseInfo.h"                      // for TestCaseInfo
+#include <boost/filesystem/fstream.hpp>        // for ofstream, ifstream
+#include <boost/filesystem/operations.hpp>     // for absolute, current_path, exists
+#include <boost/filesystem/path.hpp>           // for path::reverse_iterator, operator<<, operator!=, path
+#include <boost/iterator/iterator_facade.hpp>  // for operator!=, iterator_facade_base, iterator_facade
+#include <cstdlib>                             // for getenv
+#include <iostream>                            // for operator<<, basic_ostream, endl, ostream, clog, char_traits, basic_ostream<>::__ostream_type
+#include <set>                                 // for set
+#include <stdexcept>                           // for runtime_error
+#include <type_traits>                         // for declval
+#include <utility>                             // for pair
 #include <stdserializers.h>
-#include <fstream>
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/string/join.hpp>
-#include <set>
-#include "TestCaseInfo.h"
 
 using namespace testing::coverage;
 using namespace boost::filesystem;

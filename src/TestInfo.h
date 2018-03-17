@@ -2,12 +2,11 @@
 #ifndef GTESTCOVERAGE_TESTINFO_H
 #define GTESTCOVERAGE_TESTINFO_H
 
-#include "fwd.h"
-#include <memory>
-#include <json.hpp>
-#include <string>
-#include <set>
-#include <boost/filesystem/path.hpp>
+#include "fwd.h"     // for path, TestCaseInfoPtr, TestCaseInfoWeakPtr
+#include <json.hpp>  // for json
+#include <memory>    // for enable_shared_from_this
+#include <set>       // for set
+#include <string>    // for string
 
 namespace testing {
   namespace coverage {

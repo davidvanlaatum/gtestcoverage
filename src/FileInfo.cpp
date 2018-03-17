@@ -1,8 +1,9 @@
 #include "FileInfo.h"
-#include "TestInfo.h"
-#include "TestCaseInfo.h"
-#include "BlockInfo.h"
+#include "BlockInfo.h"     // for BlockInfo
+#include "TestCaseInfo.h"  // for TestCaseInfo
+#include "TestInfo.h"      // for TestInfo
 #include "LineInfo.h"
+#include <utility>         // for pair
 #include <stdserializers.h>
 
 using namespace testing::coverage;
