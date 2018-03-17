@@ -9,7 +9,7 @@ node("cmake && iwyu && cppcheck && clangtidy") {
     def cmake = sh returnStdout: true, script: 'which cmake3 cmake | head -n1'
     def ctest = sh returnStdout: true, script: 'which ctest3 ctest | head -n1'
     sh 'chmod a+x scripts/*'
-    withEnv(["CMAKE=${cmake}", "CTEST=${ctest}", "IGNORE_EXIT_CODE=1"]) {
+    withEnv(["CMAKE=${cmake}", "CTEST=${ctest}", "IGNORE_EXIT_CODE=1","CC=clang", "CXX=clang++"]) {
         dir("build") {
             cache(caches: [[$class: 'ArbitraryFileCache', excludes: '', includes: '**/*.zip,**/*.tar.gz', path: 'external']], maxCacheSize: 100) {
                 sh 'nice ${CMAKE} -G Ninja ../ -DBUILD_TESTING=ON -DVALGRIND_XML=ON -DCPACK_BINARY_RPM=ON -DCMAKE_BUILD_TYPE=Debug -DCLANG_TIDY=ON'
