@@ -30,7 +30,7 @@ void testing::coverage::to_json( nlohmann::json &j, const TestInfo &data ) {
   j["coveredFunctions"] = data.coveredFunctions;
 }
 
-void TestInfo::addCoveredFile( const boost::filesystem::path &file ) {
+void TestInfo::addCoveredFile( const path &file ) {
   coveredFiles.emplace( file );
 }
 
@@ -38,7 +38,7 @@ void TestInfo::addCoveredFunction( const std::string &functionName ) {
   coveredFunctions.emplace( functionName );
 }
 
-const std::set<boost::filesystem::path> &TestInfo::getCoveredFiles() const {
+const std::set<path> &TestInfo::getCoveredFiles() const {
   return coveredFiles;
 }
 

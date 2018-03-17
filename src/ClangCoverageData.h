@@ -19,7 +19,7 @@ namespace testing {
         void fill( const TestInfoPtr &test, const CoverageDataPtr &data ) const;
 
       protected:
-        std::map<boost::filesystem::path, ClangCoverageFilePtr> files;
+        std::map<path, ClangCoverageFilePtr> files;
         std::map<std::string, ClangCoverageFunctionPtr> functions;
         friend std::ostream &operator<<( std::ostream &os, const ClangCoverageData &data );
       };

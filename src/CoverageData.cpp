@@ -5,6 +5,7 @@
 #include <stdserializers.h>
 #include <fstream>
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string/join.hpp>
 #include <set>
 #include "TestCaseInfo.h"
 
@@ -32,6 +33,9 @@ void testing::coverage::to_json( nlohmann::json &j, const CoverageData &data ) {
 }
 
 const FunctionInfoPtr &CoverageData::getFunction( const std::string &name ) {
+  if ( name.empty() ) {
+    throw std::runtime_error( "Requested function with empty name" );
+  }
   auto &rt = functions[name];
   if ( !rt ) {
     rt = std::make_shared<FunctionInfo>( name );
@@ -39,7 +43,10 @@ const FunctionInfoPtr &CoverageData::getFunction( const std::string &name ) {
   return rt;
 }
 
-const FileInfoPtr &CoverageData::getFile( const boost::filesystem::path &name ) {
+const FileInfoPtr &CoverageData::getFile( const path &name ) {
+  if ( name.empty() ) {
+    throw std::runtime_error( "Requested file with empty name" );
+  }
   auto &rt = files[name];
   if ( !rt ) {
     rt = std::make_shared<FileInfo>( name );
@@ -47,11 +54,11 @@ const FileInfoPtr &CoverageData::getFile( const boost::filesystem::path &name ) 
   return rt;
 }
 
-void CoverageData::setOutputFile( const boost::filesystem::path &name ) {
+void CoverageData::setOutputFile( const path &name ) {
   outputFile = name;
 }
 
-void CoverageData::loadFileList( const boost::filesystem::path &list ) {
+void CoverageData::loadFileList( const path &list ) {
   ifstream sources{ list };
   while ( !sources.eof() ) {
     std::string file;
@@ -64,6 +71,7 @@ void CoverageData::loadFileList( const boost::filesystem::path &list ) {
       }
     }
   }
+  std::clog << "Loaded " << files.size() << " source files" << std::endl;
   if ( files.empty() ) {
     std::clog << "Failed to load any source files from " << list.native() << std::endl;
   }
@@ -96,7 +104,7 @@ void CoverageData::writeOutput() const {
   }
 }
 
-bool endsWith( const boost::filesystem::path &heystack, const boost::filesystem::path &needle ) {
+bool endsWith( const path &heystack, const path &needle ) {
   bool rt = true;
   for ( auto it1 = needle.rbegin(), it2 = heystack.rbegin(); it1 != needle.rend() && it2 != heystack.rend(); ++it1, ++it2 ) {
     if ( *it1 != *it2 ) {
@@ -107,7 +115,24 @@ bool endsWith( const boost::filesystem::path &heystack, const boost::filesystem:
   return rt;
 }
 
-bool CoverageData::resolveSourceFile( const boost::filesystem::path &file, boost::filesystem::path &path ) const {
+namespace std {
+  template<typename T>
+  auto operator<<( std::ostream &os, const std::set<T> &set )
+  -> decltype( std::declval<std::ostream &>() << std::declval<T &>() ) {
+    bool first = true;
+    for ( const auto &item : set ) {
+      if ( first ) {
+        first = false;
+      } else {
+        os << ", ";
+      }
+      os << item;
+    }
+    return os;
+  }
+}
+
+bool CoverageData::resolveSourceFile( const path &file, path &path ) const {
   bool rt = false;
   const auto &it = files.find( boost::filesystem::absolute( file, coversSourceDir ) );
   if ( it != files.end() ) {
@@ -115,7 +140,7 @@ bool CoverageData::resolveSourceFile( const boost::filesystem::path &file, boost
     rt = true;
   }
   if ( not rt ) {
-    std::set<boost::filesystem::path> options;
+    std::set<coverage::path> options;
     for ( const auto &item : files ) {
       if ( endsWith( item.first, file ) ) {
         options.emplace( item.first );
@@ -124,6 +149,8 @@ bool CoverageData::resolveSourceFile( const boost::filesystem::path &file, boost
     if ( options.size() == 1 ) {
       rt = true;
       path = *options.begin();
+    } else if ( not options.empty() ) {
+      std::clog << "Too many possible matches for " << file << ": " << options << std::endl;
     }
   }
   return rt;

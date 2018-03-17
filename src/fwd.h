@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <iostream>
+#include <boost/filesystem/path.hpp>
 
 namespace testing {
   namespace coverage {
@@ -25,6 +26,9 @@ namespace testing {
     typedef std::weak_ptr<CoverageData> CoverageDataWeakPtr;
     class FunctionInfo;
     typedef std::shared_ptr<FunctionInfo> FunctionInfoPtr;
+    class BlockInfo;
+    typedef std::shared_ptr<BlockInfo> BlockInfoPtr;
+    typedef boost::filesystem::path path;
   }
 }
 

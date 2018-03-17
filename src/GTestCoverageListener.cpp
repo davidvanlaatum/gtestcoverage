@@ -55,7 +55,7 @@ void GTestCoverageListener::OnTestEnd( const testing::TestInfo &info ) {
       std::string file;
       while ( !x.eof() ) {
         std::getline( x, file, ':' );
-        boost::filesystem::path path;
+        path path;
         if ( data->resolveSourceFile( file, path ) ) {
           test->addCoveredFile( path );
           data->getFile( path )->addCoveringTest( test );

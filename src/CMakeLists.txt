@@ -28,7 +28,7 @@ add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListen
               FunctionInfo.cpp FunctionInfo.h
               TestCaseInfo.cpp TestCaseInfo.h
               GCCCoverageDriver.cpp GCCCoverageDriver.h
-              GTestCoverageCovers.h NullCoverageDriver.cpp NullCoverageDriver.h )
+              GTestCoverageCovers.h NullCoverageDriver.cpp NullCoverageDriver.h Block.h Point.h BlockInfo.cpp BlockInfo.h LineInfo.cpp LineInfo.h MapDiff.h )
 get_target_property ( SOURCES gtestcoverage SOURCES )
 list ( FILTER SOURCES INCLUDE REGEX ".*.h$" )
 set_target_properties ( gtestcoverage PROPERTIES PUBLIC_HEADER "${SOURCES}" )

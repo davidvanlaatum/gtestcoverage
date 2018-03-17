@@ -13,19 +13,19 @@ namespace testing {
     class CoverageData : public std::enable_shared_from_this<CoverageData> {
     public:
       CoverageData();
-      void loadFileList( const boost::filesystem::path &list );
+      void loadFileList( const path &list );
       const FunctionInfoPtr &getFunction( const std::string &name );
-      const FileInfoPtr &getFile( const boost::filesystem::path &name );
+      const FileInfoPtr &getFile( const path &name );
       void printSummary( std::ostream &os ) const;
-      void setOutputFile( const boost::filesystem::path &name );
+      void setOutputFile( const path &name );
       const TestCaseInfoPtr &getTestCase( const std::string &name );
       void writeOutput() const;
-      bool resolveSourceFile( const boost::filesystem::path &file, boost::filesystem::path &path ) const;
+      bool resolveSourceFile( const path &file, path &path ) const;
     protected:
-      std::map<boost::filesystem::path, FileInfoPtr> files;
+      std::map<path, FileInfoPtr> files;
       std::map<std::string, FunctionInfoPtr> functions;
-      boost::filesystem::path outputFile;
-      boost::filesystem::path coversSourceDir;
+      path outputFile;
+      path coversSourceDir;
       std::map<std::string, TestCaseInfoPtr> testCases;
 
       friend void from_json( const nlohmann::json &j, CoverageData &data );

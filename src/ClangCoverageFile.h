@@ -2,6 +2,7 @@
 #ifndef GTESTCOVERAGE_CLANGCOVERAGEFILE_H
 #define GTESTCOVERAGE_CLANGCOVERAGEFILE_H
 
+#include "ClangCoverageFwd.h"
 #include <json.hpp>
 #include <iosfwd>
 #include <boost/filesystem/path.hpp>
@@ -26,10 +27,10 @@ namespace testing {
 
       class ClangCoverageFile {
       public:
-        const boost::filesystem::path &getFilename() const;
+        const path &getFilename() const;
         void merge( const ClangCoverageFile &other );
       protected:
-        boost::filesystem::path filename;
+        path filename;
         friend void from_json( const nlohmann::json &json, ClangCoverageFile &data );
       };
 

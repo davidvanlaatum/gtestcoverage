@@ -19,8 +19,8 @@ namespace testing {
         void endProgram() override;
 
       protected:
-        boost::filesystem::path coverageFile;
-        boost::filesystem::path tmpFile;
+        path coverageFile;
+        path tmpFile;
         ClangCoverageDataPtr reference;
         ClangCoverageDataPtr current;
 

@@ -22,11 +22,11 @@ const std::string &FunctionInfo::getName() const {
   return name;
 }
 
-const std::set<boost::filesystem::path> &FunctionInfo::getSourceFiles() const {
+const std::set<path> &FunctionInfo::getSourceFiles() const {
   return sourceFiles;
 }
 
-void FunctionInfo::addSourceFile( const boost::filesystem::path &file ) {
+void FunctionInfo::addSourceFile( const path &file ) {
   sourceFiles.emplace( file );
 }
 

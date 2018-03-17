@@ -13,14 +13,14 @@ namespace testing {
     class FunctionInfo : public std::enable_shared_from_this<FunctionInfo> {
     public:
       FunctionInfo( const std::string &nName );
-      void addSourceFile( const boost::filesystem::path &file );
+      void addSourceFile( const path &file );
       const std::string &getName() const;
-      const std::set<boost::filesystem::path> &getSourceFiles() const;
+      const std::set<path> &getSourceFiles() const;
       void addHits( uint32_t count );
       void addCoveringTest( const TestInfoPtr &test );
     protected:
       std::string name;
-      std::set<boost::filesystem::path> sourceFiles;
+      std::set<path> sourceFiles;
       uint32_t hits{ 0 };
       std::map<std::string, TestInfoWeakPtr> tests;
 

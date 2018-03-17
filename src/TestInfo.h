@@ -18,15 +18,15 @@ namespace testing {
       TestCaseInfoPtr getTestCase() const;
       bool isSuccess() const;
       void setSuccess( bool nSuccess );
-      void addCoveredFile( const boost::filesystem::path &file );
+      void addCoveredFile( const path &file );
       void addCoveredFunction( const std::string &functionName );
-      const std::set<boost::filesystem::path> &getCoveredFiles() const;
+      const std::set<path> &getCoveredFiles() const;
       const std::set<std::string> &getCoveredFunctions() const;
     protected:
       std::string name;
       TestCaseInfoWeakPtr testCase;
       bool success{ false };
-      std::set<boost::filesystem::path> coveredFiles;
+      std::set<path> coveredFiles;
       std::set<std::string> coveredFunctions;
 
       friend void from_json( const nlohmann::json &j, TestInfo &data );

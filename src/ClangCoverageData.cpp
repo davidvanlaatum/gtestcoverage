@@ -106,10 +106,7 @@ void ClangCoverageData::fill( const testing::coverage::TestInfoPtr &test, const 
   for ( const auto &func : functions ) {
     auto demangledName = boost::core::demangle( func.first.c_str() );
     demangled.emplace( demangledName );
-    if ( coveredFunctions.find( demangledName ) != coveredFunctions.end() ) {
-      const auto &coveredFunc = data->getFunction( demangledName );
-      func.second->fill( coveredFunc );
-    }
+    func.second->fill( test, data );
   }
 
   for ( const auto &func : coveredFunctions ) {

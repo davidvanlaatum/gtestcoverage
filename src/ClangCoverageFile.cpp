@@ -1,6 +1,7 @@
 #include "ClangCoverageFile.h"
 
 using namespace testing::coverage::clang;
+using testing::coverage::path;
 
 void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCoverageFileSegment &data ) {
   data.line = json[0];
@@ -30,7 +31,7 @@ void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCover
 //  }
 }
 
-const boost::filesystem::path &ClangCoverageFile::getFilename() const {
+const path &ClangCoverageFile::getFilename() const {
   return filename;
 }
 

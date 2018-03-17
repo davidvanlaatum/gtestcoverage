@@ -10,6 +10,7 @@
 #include <memory>
 #include <boost/fusion/container/set.hpp>
 #include "ClangCoverageFwd.h"
+#include "Block.h"
 
 namespace testing {
   namespace coverage {
@@ -34,26 +35,22 @@ namespace testing {
           /// line execution count when its the only region in the line.
               GapRegion
         };
-        struct Point {
-          uint32_t line = 0;
-          uint32_t column = 0;
-          bool operator==( const Point &rhs ) const;
-          bool operator!=( const Point &rhs ) const;
-          bool operator<( const Point &rhs ) const;
-          bool operator>( const Point &rhs ) const;
-          bool operator<=( const Point &rhs ) const;
-          bool operator>=( const Point &rhs ) const;
-        };
+        ClangCoverageFunctionSegment();
+        ClangCoverageFunctionSegment( const BlockWithFilename &nLocation );
         bool operator==( const ClangCoverageFunctionSegment &rhs ) const;
         bool operator!=( const ClangCoverageFunctionSegment &rhs ) const;
         bool contains( const ClangCoverageFunctionSegment &other ) const;
+        const BlockWithFilename &getLocation() const;
+        uint32_t getHitCount() const;
+        const path &getFile() const;
+        void merge( const ClangCoverageFunctionSegment &other );
+        void addHits( uint32_t count );
       protected:
-        Point start, end;
-        uint32_t hitCount;
-        boost::filesystem::path file;
-        RegionKind kind;
-        uint32_t fileId;
-        uint32_t expandedFileId;
+        BlockWithFilename location;
+        uint32_t hitCount{ 0 };
+        RegionKind kind{ CodeRegion };
+        uint32_t fileId{ 0 };
+        uint32_t expandedFileId{ 0 };
         friend void from_json( const nlohmann::json &json, ClangCoverageFunctionSegment &data );
         friend void from_json( const nlohmann::json &json, ClangCoverageFunction &data );
         friend std::ostream &operator<<( std::ostream &os, const ClangCoverageFunctionSegment &data );
@@ -62,20 +59,20 @@ namespace testing {
       void from_json( const nlohmann::json &json, ClangCoverageFunctionSegment &data );
       std::ostream &operator<<( std::ostream &os, const ClangCoverageFunctionSegment &data );
       std::ostream &operator<<( std::ostream &os, ClangCoverageFunctionSegment::RegionKind kind );
-      std::ostream &operator<<( std::ostream &os, const ClangCoverageFunctionSegment::Point &point );
 
       class ClangCoverageFunction {
       public:
         const std::string &getName() const;
         void merge( const ClangCoverageFunction &other );
         ClangCoverageFunctionPtr diff( const ClangCoverageFunction &other ) const;
-        const std::set<boost::filesystem::path> &getSources() const;
+        const std::set<path> &getSources() const;
         uint32_t getHits() const;
         void fill( const FunctionInfoPtr &function ) const;
+        void fill( const testing::coverage::TestInfoPtr &test, const testing::coverage::CoverageDataPtr &data ) const;
       protected:
         std::string name;
-        std::vector<ClangCoverageFunctionSegment> segments;
-        std::set<boost::filesystem::path> sources;
+        std::map<BlockWithFilename, ClangCoverageFunctionSegmentPtr> segments;
+        std::set<path> sources;
         uint32_t hits{ 0 };
         friend void from_json( const nlohmann::json &json, ClangCoverageFunction &data );
         friend std::ostream &operator<<( std::ostream &os, const ClangCoverageFunction &data );
