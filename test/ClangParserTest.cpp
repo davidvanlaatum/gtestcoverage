@@ -14,7 +14,7 @@ using namespace testing::coverage;
 
 namespace boost {
   namespace filesystem {
-    void __unused PrintTo( const boost::filesystem::path &path, std::ostream *os ) {
+    void PrintTo( const boost::filesystem::path &path, std::ostream *os ) {
       *os << path.string();
     }
   }
