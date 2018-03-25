@@ -90,6 +90,10 @@ void CLI::doHelp() {
   }
 }
 
+#ifndef VERSION_STR
+#define VERSION_STR "Unknown"
+#endif
+
 void CLI::doVersion() {
   if ( version ) {
     std::clog << "GTestCoverage version: " << VERSION_STR << std::endl;
