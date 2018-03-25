@@ -27,7 +27,7 @@ namespace nlohmann {
 
   template<typename Key, typename Value> inline void from_json( const json &j, std::map<Key, Value> &data ) {
     for ( auto item = j.begin(); item != j.end(); ++item ) {
-      data.emplace( item.key(), item.value() );
+      data.emplace( item.key(), item.value().get<Value>() );
     }
   }
 }
