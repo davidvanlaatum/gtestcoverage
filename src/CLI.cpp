@@ -46,7 +46,7 @@ CLI::CLI() {
   actions[Text] = std::make_shared<TextCLIAction>();
 }
 
-int CLI::run( int argc, char **argv ) {
+int CLI::run( int argc, char *argv[] ) {
   executable = argv[0];
   baseName = boost::filesystem::path( executable ).filename();
   parseArgs( argc, argv );

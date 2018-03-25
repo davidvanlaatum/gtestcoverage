@@ -15,7 +15,7 @@ namespace testing {
       class CLI {
       public:
         CLI();
-        int run( int argc, char **argv );
+        int run( int argc, char *argv[] );
 
         enum Mode {
           Unset,
