@@ -18,11 +18,12 @@ using testing::coverage::path;
 void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCoverageFunction &data ) {
   data.name = json.at( "name" );
   data.hits = json.at( "count" );
-  auto filenames = json["filenames"].get<std::vector<std::string>>();
-  auto segments = json["regions"].get<std::vector<ClangCoverageFunctionSegmentPtr>>();
+  auto filenames = json.value<std::vector<std::string>>( "filenames", {} );
   data.segments.clear();
-  for ( auto &segment : segments ) {
-    segment->location.file = filenames[segment->fileId];
+  uint32_t index = 0;
+  for ( auto &segment : json.value<std::vector<ClangCoverageFunctionSegmentPtr>>( "regions", {} ) ) {
+    segment->location.file = filenames[segment->location.fileId];
+    segment->fileIndex = index++;
     data.segments.emplace( segment->getLocation(), segment );
   }
   for ( auto &file : filenames ) {
@@ -32,8 +33,9 @@ void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCover
 
 std::ostream &testing::coverage::clang::operator<<( std::ostream &os, const ClangCoverageFunction &data ) {
   os << "Function: " << boost::core::demangle( data.name.c_str() ) << " hits: " << data.hits << std::endl;
-  for ( const auto &segment : data.segments ) {
-    std::clog << segment.second << std::endl;
+  auto segments = data.getSegmentsByFileOrder();
+  for ( const auto &segment : segments ) {
+    std::clog << segment << std::endl;
   }
   return os;
 }
@@ -64,13 +66,13 @@ ClangCoverageFunctionPtr ClangCoverageFunction::diff( const ClangCoverageFunctio
   }
   mapDiff( segments, other.segments, [&rt]( const ClangCoverageFunctionSegmentPtr &a, const ClangCoverageFunctionSegmentPtr &b ) -> bool {
       auto &seg = rt->segments[a ? a->getLocation() : b->getLocation()];
-      if ( not seg ) {
-        seg = std::make_shared<ClangCoverageFunctionSegment>( a ? a->getLocation() : b->getLocation() );
-      }
       if ( a and b ) {
-        seg->addHits( a->getHitCount() - b->getHitCount() );
+        seg = a->diff( *b );
       } else if ( a ) {
-        seg->addHits( a->getHitCount() );
+        seg = std::make_shared<ClangCoverageFunctionSegment>( *a );
+      } else {
+        seg = std::make_shared<ClangCoverageFunctionSegment>( *b );
+        seg->resetHits();
       }
       return false;
   } );
@@ -95,35 +97,55 @@ void ClangCoverageFunction::fill( const testing::coverage::FunctionInfoPtr &func
 void ClangCoverageFunction::fill( const testing::coverage::TestInfoPtr &test, const testing::coverage::CoverageDataPtr &data ) const {
   auto demangledName = boost::core::demangle( name.c_str() );
   bool covered = false;
+  bool coveredByFile = false;
   if ( test->getCoveredFunctions().find( demangledName ) != test->getCoveredFunctions().end() ) {
-    fill( data->getFunction( demangledName ) );
     covered = true;
   }
   for ( const auto &segment : segments ) {
     if ( covered or test->getCoveredFiles().find( segment.second->getFile() ) != test->getCoveredFiles().end() ) {
+      coveredByFile = true;
       auto file = data->getFile( segment.second->getFile() );
       auto block = file->getBlock( segment.second->getLocation() );
-      block->addHits( segment.second->getHitCount() );
+      block->addHits( segment.second->getHitCount(), test->getFullName() );
     }
+  }
+  if ( covered or coveredByFile ) {
+    fill( data->getFunction( demangledName ) );
   }
 }
 
+void ClangCoverageFunction::resetHits() {
+  hits = 0;
+  for ( const auto &item : segments ) {
+    item.second->resetHits();
+  }
+}
+
+std::vector<ClangCoverageFunctionSegmentPtr> ClangCoverageFunction::getSegmentsByFileOrder() const {
+  std::vector<ClangCoverageFunctionSegmentPtr> rt;
+  std::for_each( segments.begin(), segments.end(), [&rt]( decltype( *segments.begin() ) &value ) { rt.push_back( value.second ); } );
+  std::sort( rt.begin(), rt.end(), []( ClangCoverageFunctionSegmentPtr &a, ClangCoverageFunctionSegmentPtr &b ) {
+      return a->getFileIndex() < b->getFileIndex();
+  } );
+  return rt;
+}
+
 void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCoverageFunctionSegment &data ) {
-  data.location = BlockWithFilename( Point{ json[0], json[1] }, Point{ json[2], json[3] } );
+  data.location = ClangCoverageFunctionSegment::locationType( Point{ json[0], json[1] }, Point{ json[2], json[3] } );
   data.hitCount = json[4];
-  data.fileId = json[5];
-  data.expandedFileId = json[6];
-  data.kind = json[7];
+  data.location.fileId = json[5];
+  data.location.expandedFileId = json[6];
+  data.location.kind = json[7];
 }
 
 std::ostream &testing::coverage::clang::operator<<( std::ostream &os, const ClangCoverageFunctionSegment &data ) {
-  os << data.location.file.string() << ":" << data.location << " hits: " << data.hitCount << " kind: " << data.kind;
+  os << data.location << " Index: " << data.fileIndex << " hits: " << data.hitCount << " kind: " << data.location.kind;
   return os;
 }
 
 ClangCoverageFunctionSegment::ClangCoverageFunctionSegment() = default;
 
-ClangCoverageFunctionSegment::ClangCoverageFunctionSegment( const testing::coverage::BlockWithFilename &nLocation ) : location( nLocation ) {}
+ClangCoverageFunctionSegment::ClangCoverageFunctionSegment( const locationType &nLocation ) : location( nLocation ) {}
 
 bool ClangCoverageFunctionSegment::operator==( const ClangCoverageFunctionSegment &rhs ) const {
   return location == rhs.location;
@@ -137,7 +159,7 @@ bool ClangCoverageFunctionSegment::contains( const ClangCoverageFunctionSegment 
   return location.contains( other.location );
 }
 
-const testing::coverage::BlockWithFilename &ClangCoverageFunctionSegment::getLocation() const {
+const ClangCoverageFunctionSegment::locationType &ClangCoverageFunctionSegment::getLocation() const {
   return location;
 }
 
@@ -152,17 +174,32 @@ const path &ClangCoverageFunctionSegment::getFile() const {
 void ClangCoverageFunctionSegment::merge( const ClangCoverageFunctionSegment &other ) {
   location = other.location;
   hitCount += other.hitCount;
-  kind = other.kind;
-  fileId = other.fileId;
-  expandedFileId = other.expandedFileId;
 }
 
 void ClangCoverageFunctionSegment::addHits( uint32_t count ) {
   hitCount += count;
 }
 
+void ClangCoverageFunctionSegment::resetHits() {
+  hitCount = 0;
+}
+
+ClangCoverageFunctionSegmentPtr ClangCoverageFunctionSegment::diff( const ClangCoverageFunctionSegment &other ) const {
+  ClangCoverageFunctionSegmentPtr rt = std::make_shared<ClangCoverageFunctionSegment>( location );
+  rt->hitCount = hitCount - other.hitCount;
+  rt->fileIndex = fileIndex;
+  return rt;
+}
+
+uint32_t ClangCoverageFunctionSegment::getFileIndex() const {
+  return fileIndex;
+}
+
 std::ostream &testing::coverage::clang::operator<<( std::ostream &os, ClangCoverageFunctionSegment::RegionKind kind ) {
   switch ( kind ) {
+    case ClangCoverageFunctionSegment::Unknown:
+      os << "Unknown";
+      break;
     case ClangCoverageFunctionSegment::CodeRegion:
       os << "Code";
       break;
@@ -177,4 +214,57 @@ std::ostream &testing::coverage::clang::operator<<( std::ostream &os, ClangCover
       break;
   }
   return os;
+}
+
+ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId::ClangCoverageFunctionSegmentId() : BlockWithFilename() {
+}
+
+ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId::ClangCoverageFunctionSegmentId( const testing::coverage::Point &nStart,
+                                                                                              const testing::coverage::Point &nEnd ) : BlockWithFilename(
+    nStart, nEnd ) {
+}
+
+bool ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId::operator==( const ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId &rhs ) const {
+  return static_cast<const testing::coverage::BlockWithFilename &>(*this) == static_cast<const testing::coverage::BlockWithFilename &>(rhs) &&
+         kind == rhs.kind &&
+         fileId == rhs.fileId &&
+         expandedFileId == rhs.expandedFileId;
+}
+
+bool ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId::operator!=( const ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId &rhs ) const {
+  return !( rhs == *this );
+}
+
+bool ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId::operator<( const ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId &rhs ) const {
+  if ( static_cast<const testing::coverage::BlockWithFilename &>(*this) < static_cast<const testing::coverage::BlockWithFilename &>(rhs) ) {
+    return true;
+  }
+  if ( static_cast<const testing::coverage::BlockWithFilename &>(rhs) < static_cast<const testing::coverage::BlockWithFilename &>(*this) ) {
+    return false;
+  }
+  if ( kind < rhs.kind ) {
+    return true;
+  }
+  if ( rhs.kind < kind ) {
+    return false;
+  }
+  if ( fileId < rhs.fileId ) {
+    return true;
+  }
+  if ( rhs.fileId < fileId ) {
+    return false;
+  }
+  return expandedFileId < rhs.expandedFileId;
+}
+
+bool ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId::operator>( const ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId &rhs ) const {
+  return rhs < *this;
+}
+
+bool ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId::operator<=( const ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId &rhs ) const {
+  return !( rhs < *this );
+}
+
+bool ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId::operator>=( const ClangCoverageFunctionSegment::ClangCoverageFunctionSegmentId &rhs ) const {
+  return !( *this < rhs );
 }

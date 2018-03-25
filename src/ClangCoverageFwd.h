@@ -16,6 +16,10 @@ namespace testing {
       typedef std::shared_ptr<ClangCoverageFile> ClangCoverageFilePtr;
       class ClangCoverageFunctionSegment;
       typedef std::shared_ptr<ClangCoverageFunctionSegment> ClangCoverageFunctionSegmentPtr;
+      class ClangCoverageFileSegment;
+      typedef std::shared_ptr<ClangCoverageFileSegment> ClangCoverageFileSegmentPtr;
+      class ClangLineInfo;
+      typedef std::shared_ptr<ClangLineInfo> ClangLineInfoPtr;
     }
   }
 }

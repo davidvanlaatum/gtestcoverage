@@ -78,6 +78,13 @@ namespace testing {
       json["endColumn"] = block.end.column;
     }
 
+    inline void from_json( const nlohmann::json &json, Block &block ) {
+      block.start.line = json.value<decltype( block.start.line )>( "startLine", 0 );
+      block.start.column = json.value<decltype( block.start.column )>( "startColumn", 0 );
+      block.end.line = json.value<decltype( block.end.line )>( "endLine", 0 );
+      block.end.column = json.value<decltype( block.end.column )>( "endColumn", 0 );
+    }
+
     bool Block::contains( const Block &other ) const {
       bool rt = false;
 
@@ -128,7 +135,7 @@ namespace testing {
     }
 
     inline std::ostream &operator<<( std::ostream &os, const BlockWithFilename &filename ) {
-      os << filename.file << ":" << static_cast<const Block &>(filename);
+      os << filename.file.native() << ":" << static_cast<const Block &>(filename);
       return os;
     }
   }

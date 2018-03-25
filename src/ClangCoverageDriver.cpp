@@ -89,6 +89,7 @@ ClangCoverageDataPtr ClangCoverageDriver::loadData() const {
     child exportjson( getenv( "LLVM_SHOW" ), "export", "-instr-profile", tmpFile, getenv( "COVERS_FILE" ), boost::process::std_out > output );
     nlohmann::json coverage;
     output >> coverage;
+//    std::clog << coverage << std::endl;
     data->merge( coverage );
     exportjson.wait();
     if ( exportjson.exit_code() != 0 ) {
@@ -102,6 +103,7 @@ ClangCoverageDataPtr ClangCoverageDriver::loadData() const {
     child exportjson( getenv( "LLVM_SHOW" ), "export", "-instr-profile", tmpFile, boost::dll::program_location(), boost::process::std_out > output );
     nlohmann::json coverage;
     output >> coverage;
+//    std::clog << coverage << std::endl;
     data->merge( coverage );
     exportjson.wait();
     if ( exportjson.exit_code() != 0 ) {

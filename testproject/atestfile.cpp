@@ -15,3 +15,14 @@ int atestfile::aFunction( int param ) {
   }
   return 0;
 }
+
+int atestfile::unusedFunction( int param ) {
+  if ( param == 1 ) {
+    std::cout << "Hi all";
+  } else if ( param == 2 ) {
+    std::cout << "Bye all";
+  } else {
+    std::cout << "Hi all";
+  }
+  return 0;
+}

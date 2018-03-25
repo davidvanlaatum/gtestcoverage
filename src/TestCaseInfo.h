@@ -12,9 +12,12 @@ namespace testing {
   namespace coverage {
     class TestCaseInfo : public std::enable_shared_from_this<TestCaseInfo> {
     public:
+      TestCaseInfo() = default;
       TestCaseInfo( const std::string &nName );
       TestInfoPtr getTest( const std::string &testName );
+      TestInfoPtr findTest( const std::string &testName );
       const std::string &getName() const;
+      void setName( const std::string &nName );
     protected:
       std::string name;
       std::map<std::string, TestInfoPtr> tests;

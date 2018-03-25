@@ -16,7 +16,6 @@ checkandaddflag ( "-Wl,${UNDEFINED}" DYNAMIC_LOOKUP )
 add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListener.h
               CoverageData.cpp CoverageData.h
               FileInfo.cpp FileInfo.h
-              #              LineInfo.cpp LineInfo.h
               TestInfo.cpp TestInfo.h
               ClangCoverageData.cpp ClangCoverageData.h
               ClangCoverageFunction.cpp ClangCoverageFunction.h
@@ -28,11 +27,19 @@ add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListen
               FunctionInfo.cpp FunctionInfo.h
               TestCaseInfo.cpp TestCaseInfo.h
               GCCCoverageDriver.cpp GCCCoverageDriver.h
-              GTestCoverageCovers.h NullCoverageDriver.cpp NullCoverageDriver.h Block.h Point.h BlockInfo.cpp BlockInfo.h LineInfo.cpp LineInfo.h MapDiff.h )
+              GTestCoverageCovers.h
+              NullCoverageDriver.cpp NullCoverageDriver.h
+              Block.h
+              Point.h
+              BlockInfo.cpp BlockInfo.h
+              LineInfo.cpp LineInfo.h
+              MapDiff.h
+              CLI.cpp CLI.h
+              CLIAction.cpp CLIAction.h BaseInputCLIAction.cpp BaseInputCLIAction.h CoberturaCLIAction.cpp CoberturaCLIAction.h clifwd.h SummaryCLIAction.cpp SummaryCLIAction.h BaseInputOutputCLIAction.cpp BaseInputOutputCLIAction.h CLIException.cpp CLIException.h TextCLIAction.cpp TextCLIAction.h )
 get_target_property ( SOURCES gtestcoverage SOURCES )
 list ( FILTER SOURCES INCLUDE REGEX ".*.h$" )
 set_target_properties ( gtestcoverage PROPERTIES PUBLIC_HEADER "${SOURCES}" )
-target_link_libraries ( gtestcoverage PUBLIC ${CMAKE_DL_LIBS} GMock::GMock Boost::boost Boost::filesystem PRIVATE json tinyxml ${DYNAMIC_LOOKUP_LIST} )
+target_link_libraries ( gtestcoverage PUBLIC ${CMAKE_DL_LIBS} GMock::GMock Boost::boost Boost::filesystem PRIVATE json tinyxml ${DYNAMIC_LOOKUP_LIST} Boost::program_options )
 target_include_directories ( gtestcoverage PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
                              $<INSTALL_INTERFACE:include/gtestcoverage> )
 target_compile_definitions ( gtestcoverage PRIVATE VERSION="${PROJECT_VERSION}" )
@@ -63,3 +70,7 @@ target_link_libraries ( gtestcoveragemain PUBLIC gtestcoverage PRIVATE Boost::bo
 install ( TARGETS gtestcoverage gtestcoveragemain EXPORT gtestcoverage
           LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
           PUBLIC_HEADER DESTINATION include/gtestcoverage COMPONENT devel )
+
+add_executable ( gtestcoveragecli main.cpp )
+target_link_libraries ( gtestcoveragecli PUBLIC gtestcoverage )
+target_compile_definitions ( gtestcoverage PUBLIC VERSION_STR="${PROJECT_VERSION}" )

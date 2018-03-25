@@ -6,6 +6,7 @@ class atestfile {
 public:
   int aFunction( const char *param );
   int aFunction( int param );
+  int unusedFunction( int param );
 
   template<typename T> void aTestFunction( T value ) {
     aFunction( value );

@@ -19,6 +19,8 @@ namespace testing {
         void merge( const ClangCoverageData &data );
         ClangCoverageDataPtr diff( const ClangCoverageData &other ) const;
         void fill( const TestInfoPtr &test, const CoverageDataPtr &data ) const;
+        ClangCoverageFunctionPtr getFunction( const std::string &name ) const;
+        ClangCoverageFilePtr getFile( const path &name ) const;
 
       protected:
         std::map<path, ClangCoverageFilePtr> files;

@@ -1,4 +1,5 @@
 #include "TestInfo.h"
+#include "TestCaseInfo.h"
 #include <filesystemserializers.h> // IWYU pragma: keep
 
 using namespace testing::coverage;
@@ -23,8 +24,11 @@ TestCaseInfoPtr TestInfo::getTestCase() const {
   return testCase.lock();
 }
 
-//void testing::coverage::from_json( const nlohmann::json &j, TestInfo &data ) {
-//}
+void testing::coverage::from_json( const nlohmann::json &j, TestInfo &data ) {
+  data.success = j.value( "success", false );
+  data.coveredFiles = j.value<decltype( data.coveredFiles )>( "coveredFiles", {} );
+  data.coveredFunctions = j.value<decltype( data.coveredFunctions )>( "coveredFunctions", {} );
+}
 
 void testing::coverage::to_json( nlohmann::json &j, const TestInfo &data ) {
   j["success"] = data.success;
@@ -46,4 +50,17 @@ const std::set<path> &TestInfo::getCoveredFiles() const {
 
 const std::set<std::string> &TestInfo::getCoveredFunctions() const {
   return coveredFunctions;
+}
+
+void TestInfo::setName( const std::string &nName ) {
+  name = nName;
+}
+
+void TestInfo::setTestCase( const TestCaseInfoPtr &pTestCase ) {
+  testCase = pTestCase;
+}
+
+std::string TestInfo::getFullName() const {
+  auto parent = testCase.lock();
+  return ( parent ? parent->getName() : std::string( "unknown" ) ) + "::" + getName();
 }

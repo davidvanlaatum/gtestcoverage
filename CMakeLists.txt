@@ -34,7 +34,7 @@ if ( NOT EXISTS ${CMAKE_SOURCE_DIR}/cmake/FindBoost.cmake )
          STATUS find_boost_download
          TIMEOUT 10 )
 endif ()
-find_package ( Boost 1.64 REQUIRED COMPONENTS filesystem )
+find_package ( Boost 1.64 REQUIRED COMPONENTS filesystem program_options )
 find_package ( tinyxml REQUIRED )
 find_package ( iwyu )
 find_package ( clang-tidy )
@@ -95,6 +95,11 @@ checkandaddflag ( -Wno-variadic-macros CMAKE_CXX_FLAGS )
 checkandaddflag ( -Wno-weak-vtables CMAKE_CXX_FLAGS )
 checkandaddflag ( -Wno-zero-as-null-pointer-constant CMAKE_CXX_FLAGS )
 checkandaddflag ( -Wno-unknown-warning-option CMAKE_CXX_FLAGS ) # keep last
+
+option ( WERROR "Turn warnings into errors" OFF )
+if ( WERROR )
+  checkandaddflag ( -Werror CMAKE_CXX_FLAGS )
+endif ()
 
 add_subdirectory ( json )
 add_subdirectory ( src )

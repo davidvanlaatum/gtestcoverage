@@ -1,6 +1,7 @@
 #include "ClangCoverageData.h"
 #include "ClangCoverageFile.h"              // for ClangCoverageFile
 #include "ClangCoverageFunction.h"          // for ClangCoverageFunction, operator<<
+#include "MapDiff.h"
 #include "TestInfo.h"                       // for TestInfo
 #include <boost/algorithm/string/join.hpp>  // for join
 #include <boost/core/demangle.hpp>          // for demangle
@@ -14,17 +15,13 @@
 using namespace testing::coverage::clang;
 
 void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCoverageData &coverageData ) {
-  if ( json.at( "type" ) == "llvm.coverage.json.export" && json.at( "version" ) == "2.0.0" ) {
-    for ( const auto &data : json["data"] ) {
-      for ( const auto &file : data["files"] ) {
-        ClangCoverageFilePtr f;
-        f = file;
-        coverageData.updateFile( std::move( f ) );
+  if ( json.value<std::string>( "type", "" ) == "llvm.coverage.json.export" and json.value<std::string>( "version", "" ) == "2.0.0" ) {
+    for ( const auto &data : json.at( "data" ) ) {
+      for ( auto &file : data.value<std::vector<ClangCoverageFilePtr>>( "files", {} ) ) {
+        coverageData.updateFile( std::move( file ) );
       }
-      for ( const auto &function : data["functions"] ) {
-        ClangCoverageFunctionPtr func;
-        func = function;
-        coverageData.updateFunction( std::move( func ) );
+      for ( auto &function : data.value<std::vector<ClangCoverageFunctionPtr>>( "functions", {} ) ) {
+        coverageData.updateFunction( std::move( function ) );
       }
     }
   }
@@ -64,42 +61,67 @@ void ClangCoverageData::merge( const ClangCoverageData &data ) {
       existing->second->merge( *function.second );
     }
   }
+
+  for ( const auto &file : data.files ) {
+    const auto &existing = files.find( file.first );
+    if ( existing == files.end() ) {
+      files.emplace( file );
+    } else {
+      existing->second->merge( *file.second );
+    }
+  }
 }
 
 ClangCoverageDataPtr ClangCoverageData::diff( const ClangCoverageData &other ) const {
   auto rt = std::make_shared<ClangCoverageData>();
-  std::set<std::string> left, right, all;
 
-  for ( const auto &function : functions ) {
-    left.emplace( function.first );
-  }
-  for ( const auto &function : other.functions ) {
-    right.emplace( function.first );
-  }
+  mapDiff( functions, other.functions, [&rt]( const ClangCoverageFunctionPtr &a, const ClangCoverageFunctionPtr &b ) {
+      ClangCoverageFunctionPtr func;
+      if ( a and b ) {
+        func = a->diff( *b );
+      } else if ( a ) {
+        func = std::make_shared<ClangCoverageFunction>( *a );
+      } else {
+        func = std::make_shared<ClangCoverageFunction>( *b );
+        func->resetHits();
+      }
+      rt->functions.emplace( func->getName(), func );
+      return false;
+  } );
 
-  if ( left != right ) {
-    std::clog << "Function name mismatch";
-    all.insert( left.begin(), left.end() );
-    all.insert( right.begin(), right.end() );
-  } else {
-    all = left;
-  }
-
-  for ( const auto &func : all ) {
-    const auto &leftFunc = functions.find( func );
-    const auto &rightFunc = other.functions.find( func );
-    ClangCoverageFunctionPtr result;
-    if ( leftFunc != functions.end() && rightFunc != other.functions.end() ) {
-      result = leftFunc->second->diff( *rightFunc->second );
-    } else if ( leftFunc != functions.end() ) {
-      result = std::make_shared<ClangCoverageFunction>( *leftFunc->second );
-    } else {
-      result = std::make_shared<ClangCoverageFunction>( *rightFunc->second );
-    }
-    rt->functions.emplace( result->getName(), result );
-  }
+  mapDiff( files, other.files, [&rt]( const ClangCoverageFilePtr &a, const ClangCoverageFilePtr &b ) {
+      ClangCoverageFilePtr file;
+      if ( a and b ) {
+        file = a->diff( *b );
+      } else if ( a ) {
+        file = std::make_shared<ClangCoverageFile>( *a );
+      } else {
+        file = std::make_shared<ClangCoverageFile>( *b );
+        file->resetHits();
+      }
+      rt->files.emplace( file->getFilename(), file );
+      return false;
+  } );
 
   return rt;
+}
+
+ClangCoverageFunctionPtr ClangCoverageData::getFunction( const std::string &name ) const {
+  auto item = functions.find( name );
+  if ( item != functions.end() ) {
+    return item->second;
+  } else {
+    return testing::coverage::clang::ClangCoverageFunctionPtr();
+  }
+}
+
+ClangCoverageFilePtr ClangCoverageData::getFile( const testing::coverage::path &name ) const {
+  auto item = files.find( name );
+  if ( item != files.end() ) {
+    return item->second;
+  } else {
+    return testing::coverage::clang::ClangCoverageFilePtr();
+  }
 }
 
 void ClangCoverageData::fill( const testing::coverage::TestInfoPtr &test, const testing::coverage::CoverageDataPtr &data ) const {
@@ -114,6 +136,13 @@ void ClangCoverageData::fill( const testing::coverage::TestInfoPtr &test, const 
   for ( const auto &func : coveredFunctions ) {
     if ( demangled.find( func ) == demangled.end() ) {
       throw std::runtime_error( "Function " + func + " not found in coverage data\n" + boost::join( demangled, "\n" ) );
+    }
+  }
+
+  const auto &coveredFiles = test->getCoveredFiles();
+  for ( const auto &file : files ) {
+    if ( coveredFiles.find( file.second->getFilename() ) != coveredFiles.end() ) {
+      file.second->fill( test, data );
     }
   }
 }

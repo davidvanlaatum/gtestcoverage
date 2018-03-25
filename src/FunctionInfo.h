@@ -14,12 +14,16 @@ namespace testing {
   namespace coverage {
     class FunctionInfo : public std::enable_shared_from_this<FunctionInfo> {
     public:
+      FunctionInfo() = default;
       FunctionInfo( const std::string &nName );
       void addSourceFile( const path &file );
       const std::string &getName() const;
+      void setName( const std::string &nName );
       const std::set<path> &getSourceFiles() const;
       void addHits( uint32_t count );
       void addCoveringTest( const TestInfoPtr &test );
+      void readResolve( const CoverageDataPtr &data );
+      bool hasCoverage() const;
     protected:
       std::string name;
       std::set<path> sourceFiles;

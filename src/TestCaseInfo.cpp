@@ -15,15 +15,31 @@ TestInfoPtr TestCaseInfo::getTest( const std::string &testName ) {
   return rt;
 }
 
+TestInfoPtr TestCaseInfo::findTest( const std::string &testName ) {
+  TestInfoPtr rt;
+  auto item = tests.find( testName );
+  if ( item != tests.end() ) {
+    rt = item->second;
+  }
+  return rt;
+}
+
 const std::string &TestCaseInfo::getName() const {
   return name;
 }
 
-//void testing::coverage::from_json( const nlohmann::json &j, testing::coverage::TestCaseInfo &data ) {
-//}
+void TestCaseInfo::setName( const std::string &nName ) {
+  name = nName;
+}
+
+void testing::coverage::from_json( const nlohmann::json &j, testing::coverage::TestCaseInfo &data ) {
+  data.tests = j.get<decltype( data.tests )>();
+  for ( const auto &item : data.tests ) {
+    item.second->setName( item.first );
+    item.second->setTestCase( data.shared_from_this() );
+  }
+}
 
 void testing::coverage::to_json( nlohmann::json &j, const testing::coverage::TestCaseInfo &data ) {
-  for ( const auto &test : data.tests ) {
-    j.emplace( test.first, test.second );
-  }
+  j = data.tests;
 }

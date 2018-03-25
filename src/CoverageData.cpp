@@ -2,6 +2,7 @@
 #include "FileInfo.h"                          // for FileInfo
 #include "FunctionInfo.h"                      // for FunctionInfo
 #include "TestCaseInfo.h"                      // for TestCaseInfo
+#include "TestInfo.h"
 #include <boost/filesystem/fstream.hpp>        // for ofstream, ifstream
 #include <boost/filesystem/operations.hpp>     // for absolute, current_path, exists
 #include <boost/filesystem/path.hpp>           // for path::reverse_iterator, operator<<, operator!=, path
@@ -12,17 +13,30 @@
 #include <stdexcept>                           // for runtime_error
 #include <type_traits>                         // for declval
 #include <utility>                             // for pair
-#include <stdserializers.h> // IWYU pragma: keep
+#include <stdserializers.h>                    // IWYU pragma: keep
+#include <filesystemserializers.h>
 
 using namespace testing::coverage;
 using namespace boost::filesystem;
 
-//void testing::coverage::from_json( const nlohmann::json &j, CoverageData &data ) {
-//}
+void testing::coverage::from_json( const nlohmann::json &j, CoverageData &data ) {
+  if ( j.value<std::string>( "type", "" ) != "gtestcoverage" ) {
+    throw std::runtime_error( "unsupported file format" );
+  } else if ( j.value<std::string>( "version", "" ) != VERSION ) {
+    throw std::runtime_error( "Version mismatch " VERSION );
+  } else {
+    data.coversSourceDir = j.value<boost::filesystem::path>( "coversDir", {} );
+    data.testCases = j.value<decltype( data.testCases )>( "tests", {} );
+    data.files = j.value<decltype( data.files )>( "files", {} );
+    data.functions = j.value<decltype( data.functions )>( "functions", {} );
+    data.readResolve();
+  }
+}
 
 void testing::coverage::to_json( nlohmann::json &j, const CoverageData &data ) {
   j["version"] = VERSION;
   j["type"] = "gtestcoverage";
+  j["coversDir"] = data.coversSourceDir;
   auto &jTests = j["tests"];
   for ( const auto &testCase : data.testCases ) {
     jTests.emplace( testCase.first, testCase.second );
@@ -35,6 +49,7 @@ void testing::coverage::to_json( nlohmann::json &j, const CoverageData &data ) {
   for ( const auto &file : data.files ) {
     jFiles.emplace( file.first.string(), file.second );
   }
+  j["coverage"] = data.getCoverageStats();
 }
 
 const FunctionInfoPtr &CoverageData::getFunction( const std::string &name ) {
@@ -43,6 +58,7 @@ const FunctionInfoPtr &CoverageData::getFunction( const std::string &name ) {
   }
   auto &rt = functions[name];
   if ( !rt ) {
+    std::clog << "New function " << name << std::endl;
     rt = std::make_shared<FunctionInfo>( name );
   }
   return rt;
@@ -83,7 +99,7 @@ void CoverageData::loadFileList( const path &list ) {
 }
 
 void CoverageData::printSummary( std::ostream &os ) const {
-  os << "Files: " << files.size() << " Functions: " << functions.size() << std::endl;
+  os << getCoverageStats() << std::endl;
 }
 
 const TestCaseInfoPtr &CoverageData::getTestCase( const std::string &name ) {
@@ -167,4 +183,81 @@ CoverageData::CoverageData() {
   } else {
     coversSourceDir = boost::filesystem::current_path();
   }
+}
+
+void CoverageData::readResolve() {
+  for ( const auto &item : functions ) {
+    item.second->setName( item.first );
+    item.second->readResolve( shared_from_this() );
+  }
+  for ( const auto &item : files ) {
+    item.second->setName( item.first );
+    item.second->readResolve( shared_from_this() );
+  }
+}
+
+TestInfoPtr CoverageData::getTestByFullName( const std::string &name ) const {
+  auto pos = name.find( "::" );
+  auto testCase = testCases.find( name.substr( 0, pos ) );
+  if ( testCase != testCases.end() ) {
+    const auto &test = testCase->second->findTest( name.substr( pos + 2 ) );
+    if ( test ) {
+      return test;
+    } else {
+      throw std::runtime_error( "No such test " + name );
+    }
+  } else {
+    throw std::runtime_error( "No such testcase " + name );
+  }
+}
+
+CoverageStats CoverageData::getCoverageStats() const {
+  CoverageStats stats;
+  stats.files.count = files.size();
+  for ( const auto &file : files ) {
+    stats.blocks.count += file.second->getBlockCount();
+    stats.blocks.covered += file.second->getCoveredBlocks();
+    stats.lines.count += file.second->getLineCount();
+    stats.lines.covered += file.second->getCoveredLines();
+    if ( file.second->hasCoverage() ) {
+      stats.files.covered++;
+    }
+  }
+  stats.functions.count = functions.size();
+  for ( const auto &func : functions ) {
+    if ( func.second->hasCoverage() ) {
+      stats.functions.covered++;
+    }
+  }
+  return stats;
+}
+
+std::vector<FileInfoPtr> CoverageData::getFiles() const {
+  std::vector<FileInfoPtr> rt;
+  for ( const auto &item : files ) {
+    rt.emplace_back( item.second );
+  }
+  return rt;
+}
+
+std::ostream &testing::coverage::operator<<( std::ostream &os, const CoverageStats &stats ) {
+  os << "Files: " << stats.files << " Functions: " << stats.functions << " Blocks: " << stats.blocks << " Lines: " << stats.lines;
+  return os;
+}
+
+std::ostream &testing::coverage::operator<<( std::ostream &os, const CoverageStats::Stats &stats ) {
+  os << stats.covered << "/" << stats.count << "/" << std::setprecision( 3 ) << ( static_cast<double>(stats.covered) / stats.count ) * 100 << "%";
+  return os;
+}
+
+void testing::coverage::to_json( nlohmann::json &j, const CoverageStats &stats ) {
+  j["files"] = stats.files;
+  j["functions"] = stats.functions;
+  j["lines"] = stats.lines;
+  j["blocks"] = stats.blocks;
+}
+
+void testing::coverage::to_json( nlohmann::json &j, const CoverageStats::Stats &stats ) {
+  j["count"] = stats.count;
+  j["covered"] = stats.covered;
 }

@@ -11,6 +11,13 @@
 
 namespace testing {
   namespace coverage {
+    struct CoverageStats {
+      struct Stats {
+        size_t count{ 0 };
+        size_t covered{ 0 };
+      } functions, files, lines, blocks;
+    };
+
     class CoverageData : public std::enable_shared_from_this<CoverageData> {
     public:
       CoverageData();
@@ -18,10 +25,14 @@ namespace testing {
       const FunctionInfoPtr &getFunction( const std::string &name );
       const FileInfoPtr &getFile( const path &name );
       void printSummary( std::ostream &os ) const;
+      CoverageStats getCoverageStats() const;
       void setOutputFile( const path &name );
       const TestCaseInfoPtr &getTestCase( const std::string &name );
+      TestInfoPtr getTestByFullName( const std::string &name ) const;
       void writeOutput() const;
       bool resolveSourceFile( const path &file, path &path ) const;
+      void readResolve();
+      std::vector<FileInfoPtr> getFiles() const;
     protected:
       std::map<path, FileInfoPtr> files;
       std::map<std::string, FunctionInfoPtr> functions;
@@ -35,6 +46,11 @@ namespace testing {
 
     void from_json( const nlohmann::json &j, CoverageData &data );
     void to_json( nlohmann::json &j, const CoverageData &data );
+
+    void to_json( nlohmann::json &j, const CoverageStats &stats );
+    void to_json( nlohmann::json &j, const CoverageStats::Stats &stats );
+    std::ostream &operator<<( std::ostream &os, const CoverageStats &stats );
+    std::ostream &operator<<( std::ostream &os, const CoverageStats::Stats &stats );
   }
 }
 
