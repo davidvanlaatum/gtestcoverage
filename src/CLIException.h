@@ -18,7 +18,7 @@ namespace testing {
 
       class CLIException : public std::exception {
       public:
-        CLIException( ExitCode nCode, const std::string &nMessage );
+        CLIException( ExitCode nCode, std::string nMessage );
         ExitCode getCode() const;
         const char *what() const noexcept override;
       protected:
