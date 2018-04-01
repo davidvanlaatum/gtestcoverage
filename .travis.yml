@@ -2,13 +2,15 @@ language: cpp
 dist: trusty
 cache:
   directories:
-    - ${TRAVIS_BUILD_DIR}/boost-*
+    - ${TRAVIS_BUILD_DIR}/boost
 before_install: |
+    RUNSONAR=0
+    if [[ "$CC" == "clang" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "${BOOST_VERSION}" == "current" ]]; then RUNSONAR=1; fi
     if [[ "${BOOST_VERSION}" != "" ]]; then
       if [[ "${BOOST_VERSION}" == "current" ]]; then
         BOOST_VERSION=$(curl -s https://sourceforge.net/projects/boost/rss?path=/boost | sed -e '/link/!d;/.tar.gz\//!d;/beta/d;/snapshots/d;s/<[^>]*>//g;s/.*\([0-9][0-9]*\.[0-9]*\.[0-9]*\).*/\1/' | head -n1)
       fi
-      BOOST_DIR=boost-${BOOST_VERSION}
+      BOOST_DIR=boost/${BOOST_VERSION}
       if [[ -z "$(ls -A ${BOOST_DIR})" ]]; then
           BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz"
           mkdir -p ${BOOST_DIR}
@@ -29,7 +31,7 @@ script:
     - mkdir -p build
     - cd build
     - cmake ../ -DCMAKE_BUILD_TYPE=Debug ${CMAKE_OPTIONS} && cmake --build . && ctest -V
-    - if [[ "$CC" == "clang" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "${BOOST_VERSION}" == "current" ]]; then sonar-scanner; fi
+    - if [[ $RUNSONAR -gt 0 ]]; then sonar-scanner; fi
 addons:
   apt:
     sources:
