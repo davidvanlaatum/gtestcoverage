@@ -16,10 +16,10 @@ before_install: |
           mkdir -p ${BOOST_DIR}
           { travis_retry wget -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_DIR}; }
       fi
-      cd ${BOOST_DIR}
+      pushd ${BOOST_DIR}
       ./bootstrap.sh --with-libraries=filesystem,program_options,system
       ./b2
-      cd ../..
+      popd
       CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
       export BOOST_ROOT=`pwd`/${BOOST_DIR}
     fi
