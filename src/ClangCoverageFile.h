@@ -9,16 +9,15 @@
 #include "fwd.h"     // for path
 #include <stdserializers.h>
 #include <filesystemserializers.h>
+#include "Point.h"
 
 namespace testing {
   namespace coverage {
     namespace clang {
       class ClangCoverageFileSegment {
       public:
-        struct LineAddress {
-          uint32_t line;
-          uint32_t column;
-          bool isLine;
+        struct LineAddress : Point {
+          bool newSegment;
           bool operator<( const LineAddress &rhs ) const;
           bool operator>( const LineAddress &rhs ) const;
           bool operator<=( const LineAddress &rhs ) const;
@@ -27,7 +26,8 @@ namespace testing {
           bool operator!=( const LineAddress &rhs ) const;
         };
         const LineAddress &getAddress() const;
-        bool isLine() const;
+        bool isNewSegment() const;
+        bool isHasCount() const;
         uint32_t getLine() const;
         void merge( const ClangCoverageFileSegment &other );
         ClangCoverageFileSegmentPtr diff( const ClangCoverageFileSegment &other ) const;
@@ -47,11 +47,14 @@ namespace testing {
 
       class ClangLineInfo {
       public:
+        ClangLineInfo( uint32_t num ) : line( num ) {}
         uint32_t getHits() const;
         void addHits( uint32_t count );
         void resetHits();
+        uint32_t getLine() const;
       protected:
-        uint32_t hits;
+        uint32_t hits{ 0 };
+        uint32_t line;
       };
 
       class ClangCoverageFile {
@@ -67,9 +70,18 @@ namespace testing {
         std::map<ClangCoverageFileSegment::LineAddress, ClangCoverageFileSegmentPtr> segments;
         void resolveLines();
         friend void from_json( const nlohmann::json &json, ClangCoverageFile &data );
+        inline const ClangLineInfoPtr &getLine( uint32_t num );
       };
 
       void from_json( const nlohmann::json &json, ClangCoverageFile &data );
+
+      const ClangLineInfoPtr &ClangCoverageFile::getLine( uint32_t num ) {
+        auto &line = lines[num];
+        if ( not line ) {
+          line = std::make_shared<ClangLineInfo>( num );
+        }
+        return line;
+      }
     }
   }
 }

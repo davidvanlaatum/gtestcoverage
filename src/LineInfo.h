@@ -24,6 +24,7 @@ namespace testing {
       FileInfoWeakPtr file;
       uint32_t lineNumber{ 0 };
       size_t hits{ 0 };
+      std::map<std::string, TestInfoWeakPtr> tests;
       friend void to_json( nlohmann::json &json, const LineInfo &info );
       friend void from_json( const nlohmann::json &json, LineInfo &info );
     };

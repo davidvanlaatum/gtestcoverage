@@ -19,7 +19,7 @@ endif ()
 find_package ( GTest REQUIRED )
 find_package ( gtestcoverage REQUIRED )
 
-add_library ( atestlibrary SHARED atestfile.h atestfile.cpp )
+add_library ( atestlibrary SHARED atestfile.h atestfile.cpp auntestedfile.cpp )
 setup_target_for_coverage ( atestlibrary )
 
 if ( NOT TARGET gtestcoveragemain )

@@ -1,11 +1,14 @@
 #include "ClangCoverageFile.h"
 #include <ostream>  // for operator<<, basic_ostream
 #include <string>   // for string
+#include <deque>
+#include <boost/filesystem/fstream.hpp>
 #include "MapDiff.h"
 #include "TestInfo.h"
 #include "CoverageData.h"
 #include "FileInfo.h"
 #include "LineInfo.h"
+#include "SourceFile.h"
 
 using namespace testing::coverage::clang;
 using testing::coverage::path;
@@ -15,16 +18,15 @@ void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCover
   data.address.column = json[1];
   data.hits = json[2];
   data.hasCount = json[3] > 0;
-  data.address.isLine = json[4] == 0;
+  data.address.newSegment = json[4] > 0;
 }
 
 std::ostream &testing::coverage::clang::operator<<( std::ostream &os, const ClangCoverageFileSegment &data ) {
   os << "Line: " << data.address.line;
-  if ( not data.address.isLine ) {
-    os << " Column: " << data.address.column;
-  }
+  os << " Column: " << data.address.column;
   os << " Hits: " << data.hits;
   os << " has: " << data.hasCount;
+  os << " new Segment " << data.address.newSegment;
   return os;
 }
 
@@ -32,8 +34,8 @@ const ClangCoverageFileSegment::LineAddress &ClangCoverageFileSegment::getAddres
   return address;
 }
 
-bool ClangCoverageFileSegment::isLine() const {
-  return address.isLine;
+bool ClangCoverageFileSegment::isNewSegment() const {
+  return address.newSegment;
 }
 
 uint32_t ClangCoverageFileSegment::getLine() const {
@@ -56,6 +58,10 @@ void ClangCoverageFileSegment::resetHits() {
 
 uint32_t ClangCoverageFileSegment::getHits() const {
   return hits;
+}
+
+bool ClangCoverageFileSegment::isHasCount() const {
+  return hasCount;
 }
 
 void testing::coverage::clang::from_json( const nlohmann::json &json, ClangCoverageFile &data ) {
@@ -84,14 +90,45 @@ void ClangCoverageFile::merge( const ClangCoverageFile &other ) {
 }
 
 void ClangCoverageFile::resolveLines() {
-  for ( const auto &segment : segments ) {
-    if ( segment.second->isLine() ) {
-      auto &line = lines[segment.second->getLine()];
-      if ( not line ) {
-        line = std::make_shared<ClangLineInfo>();
-      }
-      line->addHits( segment.second->getHits() );
+  SourceFile source( filename );
+  std::deque<ClangCoverageFileSegmentPtr> stack;
+
+  auto it = segments.begin();
+  auto next = it;
+  Point currentPos = static_cast<Point>(it->second->getAddress());
+  ClangLineInfoPtr lastLine;
+  while ( it != segments.end() ) {
+    ++next;
+    Point end = next == segments.end() ? Point() : static_cast<Point>(next->second->getAddress());
+    if ( not it->second->isHasCount() ) {
+      currentPos = end;
     }
+    if ( it->second->isNewSegment() ) {
+      stack.emplace_back( it->second );
+    }
+    while ( currentPos < end ) {
+      if ( not lastLine or lastLine->getLine() != currentPos.line ) {
+        if ( not stack.empty() ) {
+          if ( source.lineHasCode( currentPos.line, currentPos, end ) ) {
+            lastLine = getLine( currentPos.line );
+            lastLine->addHits( stack.back()->getHits() );
+          }
+        } else {
+          currentPos = end;
+          break;
+        }
+      }
+      if ( currentPos.line == end.line ) {
+        currentPos = end;
+      } else {
+        currentPos.line++;
+        currentPos.column = 1;
+      }
+    }
+    if ( not it->second->isNewSegment() ) {
+      stack.pop_back();
+    }
+    ++it;
   }
 }
 
@@ -151,7 +188,7 @@ bool ClangCoverageFileSegment::LineAddress::operator<( const ClangCoverageFileSe
   if ( rhs.column < column ) {
     return false;
   }
-  return isLine < rhs.isLine;
+  return newSegment < rhs.newSegment;
 }
 
 bool ClangCoverageFileSegment::LineAddress::operator>( const ClangCoverageFileSegment::LineAddress &rhs ) const {
@@ -169,7 +206,7 @@ bool ClangCoverageFileSegment::LineAddress::operator>=( const ClangCoverageFileS
 bool ClangCoverageFileSegment::LineAddress::operator==( const ClangCoverageFileSegment::LineAddress &rhs ) const {
   return line == rhs.line &&
          column == rhs.column &&
-         isLine == rhs.isLine;
+         newSegment == rhs.newSegment;
 }
 
 bool ClangCoverageFileSegment::LineAddress::operator!=( const ClangCoverageFileSegment::LineAddress &rhs ) const {
@@ -186,4 +223,8 @@ void ClangLineInfo::addHits( uint32_t count ) {
 
 void ClangLineInfo::resetHits() {
   hits = 0;
+}
+
+uint32_t ClangLineInfo::getLine() const {
+  return line;
 }

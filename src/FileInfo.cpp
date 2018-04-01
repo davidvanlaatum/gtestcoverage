@@ -59,6 +59,12 @@ void FileInfo::readResolve( const CoverageDataPtr &data ) {
   for ( auto &item : tests ) {
     item.second = data->getTestByFullName( item.first );
   }
+  for ( auto &item : lines ) {
+    item.second->readResolve( data );
+  }
+  for ( auto &item : blocks ) {
+    item.second->readResolve( data );
+  }
 }
 
 bool FileInfo::hasCoverage() const {

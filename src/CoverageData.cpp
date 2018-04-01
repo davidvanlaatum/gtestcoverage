@@ -58,7 +58,6 @@ const FunctionInfoPtr &CoverageData::getFunction( const std::string &name ) {
   }
   auto &rt = functions[name];
   if ( !rt ) {
-    std::clog << "New function " << name << std::endl;
     rt = std::make_shared<FunctionInfo>( name );
   }
   return rt;
@@ -127,10 +126,14 @@ void CoverageData::writeOutput() const {
 
 bool endsWith( const path &heystack, const path &needle ) {
   bool rt = true;
-  for ( auto it1 = needle.rbegin(), it2 = heystack.rbegin(); it1 != needle.rend() && it2 != heystack.rend(); ++it1, ++it2 ) {
-    if ( *it1 != *it2 ) {
-      rt = false;
-      break;
+  if ( needle.size() > heystack.size() ) {
+    rt = false;
+  } else {
+    for ( auto it1 = needle.rbegin(), it2 = heystack.rbegin(); it1 != needle.rend() && it2 != heystack.rend(); ++it1, ++it2 ) {
+      if ( *it1 != *it2 ) {
+        rt = false;
+        break;
+      }
     }
   }
   return rt;
