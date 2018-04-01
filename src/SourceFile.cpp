@@ -1,8 +1,10 @@
 #include "SourceFile.h"
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/utility/string_view.hpp>
 
 using namespace testing::coverage;
+using boost::string_view;
 
 SourceFile::SourceFile( const path &filename ) {
   if ( boost::filesystem::exists( filename ) ) {
@@ -32,7 +34,7 @@ bool SourceFile::lineHasCode( uint32_t line, Point start, Point end ) const {
   bool rt = false;
   const auto x = index.find( line );
   if ( x != index.end() ) {
-    std::string_view section = contents.data();
+    string_view section = contents.data();
     if ( end.line == start.line ) {
       section = section.substr( x->second + start.column - 1, end.column - start.column );
     } else {
