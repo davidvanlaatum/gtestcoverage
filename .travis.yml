@@ -1,12 +1,5 @@
 language: cpp
 dist: trusty
-skip_commits:
-  files:
-    - Jenkinsfile
-    - iwyu.imp
-    - .gitignore
-    - .clang*
-    - '*.md'
 cache:
   directories:
     - ${TRAVIS_BUILD_DIR}/boost-*
@@ -36,20 +29,20 @@ script:
     - mkdir -p build
     - cd build
     - cmake ../ -DCMAKE_BUILD_TYPE=Debug ${CMAKE_OPTIONS} && cmake --build . && ctest -V
-    - if [[ "$CC" == "gcc" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "${BOOST_VERSION}" == "current" ]]; then sonar-scanner; fi
+    - if [[ "$CC" == "clang" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "${BOOST_VERSION}" == "current" ]]; then sonar-scanner; fi
 addons:
-    apt:
-      sources:
-        - ubuntu-toolchain-r-test
-        - llvm-toolchain-trusty-5.0
-      packages:
-        - cmake-data
-        - cmake
-        - ninja-build
-        - g++-4.9
-        - clang-5.0
-    sonarcloud:
-      organisation: davidvanlaatum-github
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-trusty-5.0
+    packages:
+      - cmake-data
+      - cmake
+      - ninja-build
+      - g++-4.9
+      - clang-5.0
+  sonarcloud:
+    organisation: davidvanlaatum-github
 compiler:
   - clang
   - gcc
