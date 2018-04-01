@@ -19,7 +19,7 @@ before_install: |
       cd ${BOOST_DIR}
       ./bootstrap.sh --with-libraries=filesystem,program_options,system
       ./b2
-      cd ..
+      cd ../..
       CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
       export BOOST_ROOT=`pwd`/${BOOST_DIR}
     fi
