@@ -1,4 +1,5 @@
 language: cpp
+dist: trusty
 skip_commits:
   files:
     - Jenkinsfile
@@ -35,6 +36,7 @@ script:
     - mkdir -p build
     - cd build
     - cmake ../ -DCMAKE_BUILD_TYPE=Debug ${CMAKE_OPTIONS} && cmake --build . && ctest -V
+    - if [[ "$CC" == "gcc" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "${BOOST_VERSION}" == "current" ]]; then sonar-scanner; fi
 addons:
     apt:
       sources:
@@ -46,6 +48,8 @@ addons:
         - ninja-build
         - g++-4.9
         - clang-5.0
+    sonarcloud:
+      organisation: davidvanlaatum-github
 compiler:
   - clang
   - gcc
