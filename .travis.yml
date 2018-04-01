@@ -31,7 +31,7 @@ script:
     - mkdir -p build
     - cd build
     - cmake ../ -DCMAKE_BUILD_TYPE=Debug ${CMAKE_OPTIONS} && cmake --build . && ctest -V
-    - if [[ $RUNSONAR -gt 0 ]]; then sonar-scanner; fi
+    - if [[ $RUNSONAR -gt 0 ]]; then sonar-scanner -Dsonar.projectKey=GTestCoverage -Dsonar.sources=.; fi
 addons:
   apt:
     sources:
