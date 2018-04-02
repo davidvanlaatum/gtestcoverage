@@ -6,10 +6,10 @@ cache:
     - '$HOME/.sonar/cache'
 before_install: |
     RUNSONAR=0
-    BUILDWRAPPER="build-wrapper-linux-x86-64 --out-dir bw-output"
+    BUILDWRAPPER=
     if [[ "$CC" == "clang" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "${BOOST_VERSION}" == "current" ]]; then
       RUNSONAR=1;
-      BUILDWRAPPER=
+      BUILDWRAPPER="build-wrapper-linux-x86-64 --out-dir bw-output"
     fi
     if [[ "${BOOST_VERSION}" != "" ]]; then
       if [[ "${BOOST_VERSION}" == "current" ]]; then
