@@ -9,7 +9,7 @@ before_install: |
     BUILDWRAPPER=
     if [[ "$CC" == "clang" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "${BOOST_VERSION}" == "current" ]]; then
       RUNSONAR=1;
-      BUILDWRAPPER="build-wrapper-linux-x86-64 --out-dir bw-output"
+      BUILDWRAPPER="build-wrapper-linux-x86-64 --out-dir ../bw-output"
     fi
     export BUILDWRAPPER
     if [[ "${BOOST_VERSION}" != "" ]]; then
@@ -36,7 +36,9 @@ script:
     - chmod a+x scripts/*
     - mkdir -p build
     - pushd build
-    - cmake ../ -DCMAKE_BUILD_TYPE=Debug ${CMAKE_OPTIONS} && ${BUILDWRAPPER} cmake --build . -- -j4 && ctest -V
+    - cmake ../ -DCMAKE_BUILD_TYPE=Debug ${CMAKE_OPTIONS}
+    - ${BUILDWRAPPER} cmake --build . -- -j4
+    - ctest -V
     - popd
     - if [[ $RUNSONAR -gt 0 ]]; then sonar-scanner; fi
 addons:
