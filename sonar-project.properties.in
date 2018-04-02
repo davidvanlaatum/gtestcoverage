@@ -1,5 +1,6 @@
 sonar.projectKey=GTestCoverage
 sonar.sources=.
+sonar.tests=test,testproject
 sonar.organization=davidvanlaatum-github
 sonar.cfamily.build-wrapper-output=bw-output
 sonar.exclusions=boost/**,build/**,cmake-build*/**,json/json.hpp
