@@ -40,7 +40,7 @@ script:
     - ${BUILDWRAPPER} cmake --build . -- -j4
     - ctest -V
     - popd
-    - if [[ $RUNSONAR -gt 0 ]]; then sonar-scanner; fi
+    - if [[ $RUNSONAR -gt 0 ]]; then git fetch --unshallow; sonar-scanner; fi
 addons:
   apt:
     sources:
