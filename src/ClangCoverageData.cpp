@@ -1,6 +1,7 @@
 #include "ClangCoverageData.h"
 #include "ClangCoverageFile.h"              // for ClangCoverageFile
 #include "ClangCoverageFunction.h"          // for ClangCoverageFunction, operator<<
+#include "CoverageData.h"
 #include "MapDiff.h"
 #include "TestInfo.h"                       // for TestInfo
 #include <boost/algorithm/string/join.hpp>  // for join
@@ -141,8 +142,6 @@ void ClangCoverageData::fill( const testing::coverage::TestInfoPtr &test, const 
 
   const auto &coveredFiles = test->getCoveredFiles();
   for ( const auto &file : files ) {
-    if ( coveredFiles.find( file.second->getFilename() ) != coveredFiles.end() ) {
-      file.second->fill( test, data );
-    }
+    file.second->fill( coveredFiles.find( file.second->getFilename() ) != coveredFiles.end() ? test : TestInfoPtr(), data );
   }
 }

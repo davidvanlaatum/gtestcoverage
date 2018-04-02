@@ -29,7 +29,9 @@ void LineInfo::addHits( uint32_t count ) {
 }
 
 void LineInfo::addCoveringTest( const TestInfoPtr &test ) {
-  tests[test->getFullName()] = test;
+  if ( test ) {
+    tests[test->getFullName()] = test;
+  }
 }
 
 void LineInfo::readResolve( const CoverageDataPtr &data ) {

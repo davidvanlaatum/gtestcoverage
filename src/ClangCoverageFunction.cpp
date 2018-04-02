@@ -105,9 +105,11 @@ void ClangCoverageFunction::fill( const testing::coverage::TestInfoPtr &test, co
     if ( covered or test->getCoveredFiles().find( segment.second->getFile() ) != test->getCoveredFiles().end() ) {
       coveredByFile = true;
       auto file = data->getFile( segment.second->getFile() );
-      auto block = file->getBlock( segment.second->getLocation() );
-      block->addHits( segment.second->getHitCount() );
-      block->addCoveringTest( test );
+      if ( file ) {
+        auto block = file->getBlock( segment.second->getLocation() );
+        block->addHits( segment.second->getHitCount() );
+        block->addCoveringTest( test );
+      }
     }
   }
   if ( covered or coveredByFile ) {

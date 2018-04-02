@@ -35,7 +35,7 @@ add_library ( gtestcoverage SHARED GTestCoverageListener.cpp GTestCoverageListen
               LineInfo.cpp LineInfo.h
               MapDiff.h
               CLI.cpp CLI.h
-              CLIAction.cpp CLIAction.h BaseInputCLIAction.cpp BaseInputCLIAction.h CoberturaCLIAction.cpp CoberturaCLIAction.h clifwd.h SummaryCLIAction.cpp SummaryCLIAction.h BaseInputOutputCLIAction.cpp BaseInputOutputCLIAction.h CLIException.cpp CLIException.h TextCLIAction.cpp TextCLIAction.h SourceFile.cpp SourceFile.h )
+              CLIAction.cpp CLIAction.h BaseInputCLIAction.cpp BaseInputCLIAction.h CoberturaCLIAction.cpp CoberturaCLIAction.h clifwd.h SummaryCLIAction.cpp SummaryCLIAction.h BaseInputOutputCLIAction.cpp BaseInputOutputCLIAction.h CLIException.cpp CLIException.h TextCLIAction.cpp TextCLIAction.h SourceFile.cpp SourceFile.h CLangCoverageException.cpp CLangCoverageException.h )
 get_target_property ( SOURCES gtestcoverage SOURCES )
 list ( FILTER SOURCES INCLUDE REGEX ".*.h$" )
 set_target_properties ( gtestcoverage PROPERTIES PUBLIC_HEADER "${SOURCES}" )

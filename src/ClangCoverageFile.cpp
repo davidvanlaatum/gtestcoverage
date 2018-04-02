@@ -9,6 +9,7 @@
 #include "FileInfo.h"
 #include "LineInfo.h"
 #include "SourceFile.h"
+#include "CLangCoverageException.h"
 
 using namespace testing::coverage::clang;
 using testing::coverage::path;
@@ -100,33 +101,37 @@ void ClangCoverageFile::resolveLines() {
   while ( it != segments.end() ) {
     ++next;
     Point end = next == segments.end() ? Point() : static_cast<Point>(next->second->getAddress());
-    if ( not it->second->isHasCount() ) {
-      currentPos = end;
-    }
     if ( it->second->isNewSegment() ) {
       stack.emplace_back( it->second );
     }
-    while ( currentPos < end ) {
-      if ( not lastLine or lastLine->getLine() != currentPos.line ) {
-        if ( not stack.empty() ) {
-          if ( source.lineHasCode( currentPos.line, currentPos, end ) ) {
-            lastLine = getLine( currentPos.line );
-            lastLine->addHits( stack.back()->getHits() );
+    if ( not it->second->isHasCount() ) {
+      currentPos = end;
+    } else {
+      while ( currentPos < end ) {
+        if ( not lastLine or lastLine->getLine() != currentPos.line ) {
+          if ( not stack.empty() ) {
+            if ( source.lineHasCode( currentPos.line, currentPos, end ) ) {
+              lastLine = getLine( currentPos.line );
+              lastLine->addHits( stack.back()->getHits() );
+            }
+          } else {
+            currentPos = end;
+            break;
           }
-        } else {
+        }
+        if ( currentPos.line == end.line ) {
           currentPos = end;
-          break;
+        } else {
+          currentPos.line++;
+          currentPos.column = 1;
         }
       }
-      if ( currentPos.line == end.line ) {
-        currentPos = end;
-      } else {
-        currentPos.line++;
-        currentPos.column = 1;
+      if ( not it->second->isNewSegment() ) {
+        if ( stack.empty() ) {
+          throw CLangCoverageException( "Unbalanced segments for file " + filename.native() );
+        }
+        stack.pop_back();
       }
-    }
-    if ( not it->second->isNewSegment() ) {
-      stack.pop_back();
     }
     ++it;
   }
@@ -166,11 +171,13 @@ void ClangCoverageFile::resetHits() {
 
 void ClangCoverageFile::fill( const testing::coverage::TestInfoPtr &test, const testing::coverage::CoverageDataPtr &data ) const {
   auto file = data->getFile( filename );
-  for ( const auto &item : lines ) {
-    const auto &line = file->getLine( item.first );
-    if ( item.second->getHits() ) {
-      line->addHits( item.second->getHits() );
-      line->addCoveringTest( test );
+  if ( file ) {
+    for ( const auto &item : lines ) {
+      const auto &line = file->getLine( item.first );
+      if ( item.second->getHits() ) {
+        line->addHits( item.second->getHits() );
+        line->addCoveringTest( test );
+      }
     }
   }
 }

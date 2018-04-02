@@ -23,7 +23,7 @@ namespace testing {
       CoverageData();
       void loadFileList( const path &list );
       const FunctionInfoPtr &getFunction( const std::string &name );
-      const FileInfoPtr &getFile( const path &name );
+      FileInfoPtr getFile( const path &name ) const;
       void printSummary( std::ostream &os ) const;
       CoverageStats getCoverageStats() const;
       void setOutputFile( const path &name );

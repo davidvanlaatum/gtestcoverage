@@ -41,3 +41,14 @@ TEST( ClangParserTest, Test ) {
   ASSERT_NE( file, nullptr );
   EXPECT_EQ( file->getFilename(), "/Users/david/Projects/gtestcoverage/src/GTestCoverageCovers.h" );
 }
+
+TEST( ClangParserTest, Test2 ) {
+  ClangCoverageDataPtr data;
+  {
+    std::ifstream file( TEST_LOCATION "/clang3.json", std::ios_base::in );
+    nlohmann::json json;
+    file >> json;
+    data = json;
+    std::clog << data;
+  }
+}

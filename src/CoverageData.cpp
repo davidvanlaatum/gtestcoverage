@@ -63,15 +63,12 @@ const FunctionInfoPtr &CoverageData::getFunction( const std::string &name ) {
   return rt;
 }
 
-const FileInfoPtr &CoverageData::getFile( const path &name ) {
+FileInfoPtr CoverageData::getFile( const path &name ) const {
   if ( name.empty() ) {
     throw std::runtime_error( "Requested file with empty name" );
   }
-  auto &rt = files[name];
-  if ( !rt ) {
-    rt = std::make_shared<FileInfo>( name );
-  }
-  return rt;
+  auto file = files.find( name );
+  return file == files.end() ? FileInfoPtr() : file->second;
 }
 
 void CoverageData::setOutputFile( const path &name ) {

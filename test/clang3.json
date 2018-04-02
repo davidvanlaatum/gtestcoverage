@@ -1,0 +1,415 @@
+{
+  "data": [
+    {
+      "files": [
+        {
+          "expansions": [ ],
+          "filename": "/code/src/GTestCoverageCovers.h",
+          "segments": [
+            [ 13, 71, 1, 1, 1 ],
+            [ 16, 38, 3, 1, 0 ],
+            [ 16, 39, 3, 1, 1 ],
+            [ 17, 14, 3, 1, 1 ],
+            [ 17, 19, 1, 1, 0 ],
+            [ 17, 22, 1, 1, 1 ],
+            [ 19, 10, 2, 1, 0 ],
+            [ 19, 16, 2, 1, 1 ],
+            [ 21, 10, 3, 1, 0 ],
+            [ 23, 8, 1, 1, 0 ],
+            [ 25, 6, 0, 0, 0 ],
+            [ 35, 80, 5, 1, 1 ],
+            [ 35, 134, 0, 0, 0 ],
+            [ 36, 103, 3, 1, 1 ],
+            [ 36, 144, 0, 0, 0 ],
+            [ 40, 134, 3, 1, 1 ],
+            [ 42, 12, 3, 1, 1 ],
+            [ 42, 41, 2, 1, 0 ],
+            [ 42, 44, 2, 1, 1 ],
+            [ 44, 8, 3, 1, 0 ],
+            [ 46, 12, 3, 1, 1 ],
+            [ 46, 41, 2, 1, 0 ],
+            [ 46, 44, 2, 1, 1 ],
+            [ 48, 8, 3, 1, 0 ],
+            [ 51, 6, 0, 0, 0 ],
+            [ 54, 134, 3, 1, 1 ],
+            [ 54, 136, 0, 0, 0 ],
+            [ 58, 31, 1, 1, 1 ],
+            [ 58, 45, 0, 0, 0 ],
+            [ 59, 35, 1, 1, 1 ],
+            [ 59, 53, 0, 0, 0 ],
+            [ 62, 31, 1, 1, 1 ],
+            [ 62, 47, 1, 1, 1 ],
+            [ 62, 68, 1, 1, 0 ],
+            [ 62, 77, 0, 0, 0 ],
+            [ 63, 32, 1, 1, 1 ],
+            [ 64, 36, 0, 0, 0 ],
+            [ 66, 3, 1, 1, 1 ],
+            [ 67, 56, 0, 0, 0 ],
+            [ 69, 3, 2, 1, 1 ],
+            [ 70, 59, 0, 0, 0 ],
+            [ 71, 30, 1, 1, 1 ],
+            [ 71, 45, 1, 1, 1 ],
+            [ 71, 70, 1, 1, 0 ],
+            [ 72, 2, 0, 0, 0 ]
+          ],
+          "summary": {
+            "functions": { "count": 5, "covered": 5, "percent": 100 },
+            "instantiations": { "count": 10, "covered": 10, "percent": 100 },
+            "lines": { "count": 28, "covered": 28, "percent": 100 },
+            "regions": { "count": 13, "covered": 13, "notcovered": 0, "percent": 100 }
+          }
+        },
+        {
+          "expansions": [ ],
+          "filename": "/code/testproject/atestfile.h",
+          "segments": [ [ 11, 54, 2, 1, 1 ], [ 13, 4, 0, 0, 0 ], [ 16, 18, 0, 1, 1 ], [ 17, 24, 0, 0, 0 ] ],
+          "summary": {
+            "functions": { "count": 1, "covered": 1, "percent": 100 },
+            "instantiations": { "count": 2, "covered": 2, "percent": 100 },
+            "lines": { "count": 3, "covered": 3, "percent": 100 },
+            "regions": { "count": 1, "covered": 1, "notcovered": 0, "percent": 100 }
+          }
+        },
+        {
+          "expansions": [
+            {
+              "filenames": [
+                "/code/testproject/unittest.cpp",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h"
+              ],
+              "source_region": [ 16, 3, 16, 25, 1, 0, 1, 1 ],
+              "target_regions": [
+                [ 15, 27, 28, 2, 1, 0, 0, 0 ],
+                [ 16, 3, 16, 25, 1, 0, 1, 1 ],
+                [ 17, 5, 17, 26, 1, 0, 2, 1 ],
+                [ 19, 5, 19, 28, 1, 0, 3, 1 ],
+                [ 20, 5, 20, 28, 1, 0, 4, 1 ],
+                [ 22, 3, 22, 23, 1, 0, 5, 1 ],
+                [ 63, 32, 64, 36, 1, 1, 0, 0 ],
+                [ 66, 3, 67, 56, 1, 2, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 3, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 4, 0, 0 ],
+                [ 71, 30, 72, 2, 1, 5, 0, 0 ],
+                [ 71, 45, 71, 70, 1, 5, 6, 1 ],
+                [ 59, 35, 59, 53, 1, 6, 0, 0 ]
+              ]
+            },
+            {
+              "filenames": [
+                "/code/testproject/unittest.cpp",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h"
+              ],
+              "source_region": [ 17, 5, 17, 26, 1, 0, 2, 1 ],
+              "target_regions": [
+                [ 15, 27, 28, 2, 1, 0, 0, 0 ],
+                [ 16, 3, 16, 25, 1, 0, 1, 1 ],
+                [ 17, 5, 17, 26, 1, 0, 2, 1 ],
+                [ 19, 5, 19, 28, 1, 0, 3, 1 ],
+                [ 20, 5, 20, 28, 1, 0, 4, 1 ],
+                [ 22, 3, 22, 23, 1, 0, 5, 1 ],
+                [ 63, 32, 64, 36, 1, 1, 0, 0 ],
+                [ 66, 3, 67, 56, 1, 2, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 3, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 4, 0, 0 ],
+                [ 71, 30, 72, 2, 1, 5, 0, 0 ],
+                [ 71, 45, 71, 70, 1, 5, 6, 1 ],
+                [ 59, 35, 59, 53, 1, 6, 0, 0 ]
+              ]
+            },
+            {
+              "filenames": [
+                "/code/testproject/unittest.cpp",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h"
+              ],
+              "source_region": [ 19, 5, 19, 28, 1, 0, 3, 1 ],
+              "target_regions": [
+                [ 15, 27, 28, 2, 1, 0, 0, 0 ],
+                [ 16, 3, 16, 25, 1, 0, 1, 1 ],
+                [ 17, 5, 17, 26, 1, 0, 2, 1 ],
+                [ 19, 5, 19, 28, 1, 0, 3, 1 ],
+                [ 20, 5, 20, 28, 1, 0, 4, 1 ],
+                [ 22, 3, 22, 23, 1, 0, 5, 1 ],
+                [ 63, 32, 64, 36, 1, 1, 0, 0 ],
+                [ 66, 3, 67, 56, 1, 2, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 3, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 4, 0, 0 ],
+                [ 71, 30, 72, 2, 1, 5, 0, 0 ],
+                [ 71, 45, 71, 70, 1, 5, 6, 1 ],
+                [ 59, 35, 59, 53, 1, 6, 0, 0 ]
+              ]
+            },
+            {
+              "filenames": [
+                "/code/testproject/unittest.cpp",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h"
+              ],
+              "source_region": [ 20, 5, 20, 28, 1, 0, 4, 1 ],
+              "target_regions": [
+                [ 15, 27, 28, 2, 1, 0, 0, 0 ],
+                [ 16, 3, 16, 25, 1, 0, 1, 1 ],
+                [ 17, 5, 17, 26, 1, 0, 2, 1 ],
+                [ 19, 5, 19, 28, 1, 0, 3, 1 ],
+                [ 20, 5, 20, 28, 1, 0, 4, 1 ],
+                [ 22, 3, 22, 23, 1, 0, 5, 1 ],
+                [ 63, 32, 64, 36, 1, 1, 0, 0 ],
+                [ 66, 3, 67, 56, 1, 2, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 3, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 4, 0, 0 ],
+                [ 71, 30, 72, 2, 1, 5, 0, 0 ],
+                [ 71, 45, 71, 70, 1, 5, 6, 1 ],
+                [ 59, 35, 59, 53, 1, 6, 0, 0 ]
+              ]
+            },
+            {
+              "filenames": [
+                "/code/testproject/unittest.cpp",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h",
+                "/code/src/GTestCoverageCovers.h"
+              ],
+              "source_region": [ 22, 3, 22, 23, 1, 0, 5, 1 ],
+              "target_regions": [
+                [ 15, 27, 28, 2, 1, 0, 0, 0 ],
+                [ 16, 3, 16, 25, 1, 0, 1, 1 ],
+                [ 17, 5, 17, 26, 1, 0, 2, 1 ],
+                [ 19, 5, 19, 28, 1, 0, 3, 1 ],
+                [ 20, 5, 20, 28, 1, 0, 4, 1 ],
+                [ 22, 3, 22, 23, 1, 0, 5, 1 ],
+                [ 63, 32, 64, 36, 1, 1, 0, 0 ],
+                [ 66, 3, 67, 56, 1, 2, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 3, 0, 0 ],
+                [ 69, 3, 70, 59, 1, 4, 0, 0 ],
+                [ 71, 30, 72, 2, 1, 5, 0, 0 ],
+                [ 71, 45, 71, 70, 1, 5, 6, 1 ],
+                [ 59, 35, 59, 53, 1, 6, 0, 0 ]
+              ]
+            },
+            {
+              "filenames": [ "/code/testproject/unittest.cpp", "/code/testproject/atestfile.h" ],
+              "source_region": [ 37, 3, 37, 11, 0, 0, 1, 1 ],
+              "target_regions": [ [ 36, 27, 41, 2, 0, 0, 0, 0 ], [ 37, 3, 37, 11, 0, 0, 1, 1 ], [ 38, 1, 41, 1, 0, 0, 0, 2 ], [ 16, 18, 17, 24, 0, 1, 0, 0 ] ]
+            },
+            {
+              "filenames": [ "/code/testproject/unittest.cpp", "/code/src/GTestCoverageCovers.h", "/code/src/GTestCoverageCovers.h" ],
+              "source_region": [ 10, 5, 10, 17, 1, 0, 1, 1 ],
+              "target_regions": [
+                [ 9, 25, 11, 4, 1, 0, 0, 0 ],
+                [ 10, 5, 10, 17, 1, 0, 1, 1 ],
+                [ 62, 31, 62, 77, 1, 1, 0, 0 ],
+                [ 62, 47, 62, 68, 1, 1, 2, 1 ],
+                [ 58, 31, 58, 45, 1, 2, 0, 0 ]
+              ]
+            }
+          ],
+          "filename": "/code/testproject/unittest.cpp",
+          "segments": [
+            [ 9, 25, 1, 1, 1 ],
+            [ 10, 5, 1, 1, 1 ],
+            [ 10, 17, 1, 1, 0 ],
+            [ 11, 4, 0, 0, 0 ],
+            [ 15, 27, 1, 1, 1 ],
+            [ 16, 3, 1, 1, 1 ],
+            [ 16, 25, 1, 1, 0 ],
+            [ 17, 5, 1, 1, 1 ],
+            [ 17, 26, 1, 1, 0 ],
+            [ 19, 5, 1, 1, 1 ],
+            [ 19, 28, 1, 1, 0 ],
+            [ 20, 5, 1, 1, 1 ],
+            [ 20, 28, 1, 1, 0 ],
+            [ 22, 3, 1, 1, 1 ],
+            [ 22, 23, 1, 1, 0 ],
+            [ 28, 2, 0, 0, 0 ],
+            [ 30, 27, 0, 1, 1 ],
+            [ 34, 2, 0, 0, 0 ],
+            [ 36, 27, 0, 1, 1 ],
+            [ 37, 3, 0, 1, 1 ],
+            [ 37, 11, 0, 1, 0 ],
+            [ 38, 1, 0, 0, 1 ],
+            [ 41, 1, 0, 1, 0 ],
+            [ 41, 2, 0, 0, 0 ]
+          ],
+          "summary": {
+            "functions": { "count": 4, "covered": 2, "percent": 50 },
+            "instantiations": { "count": 4, "covered": 2, "percent": 50 },
+            "lines": { "count": 24, "covered": 17, "percent": 70 },
+            "regions": { "count": 13, "covered": 10, "notcovered": 3, "percent": 76 }
+          }
+        }
+      ],
+      "functions": [
+        {
+          "count": 3,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage26functionComponentsToStringERKSt9type_infoS3_PKcRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESD_",
+          "regions": [
+            [ 40, 134, 51, 6, 3, 0, 0, 0 ],
+            [ 42, 12, 42, 41, 3, 0, 0, 0 ],
+            [ 42, 41, 42, 44, 2, 0, 0, 3 ],
+            [ 42, 44, 44, 8, 2, 0, 0, 0 ],
+            [ 46, 12, 46, 41, 3, 0, 0, 0 ],
+            [ 46, 41, 46, 44, 2, 0, 0, 3 ],
+            [ 46, 44, 48, 8, 2, 0, 0, 0 ]
+          ]
+        },
+        {
+          "count": 1,
+          "filenames": [
+            "/code/testproject/unittest.cpp",
+            "/code/src/GTestCoverageCovers.h",
+            "/code/src/GTestCoverageCovers.h",
+            "/code/src/GTestCoverageCovers.h",
+            "/code/src/GTestCoverageCovers.h",
+            "/code/src/GTestCoverageCovers.h",
+            "/code/src/GTestCoverageCovers.h"
+          ],
+          "name": "_ZN19unittest_Test1_Test8TestBodyEv",
+          "regions": [
+            [ 15, 27, 28, 2, 1, 0, 0, 0 ],
+            [ 16, 3, 16, 25, 1, 0, 1, 1 ],
+            [ 17, 5, 17, 26, 1, 0, 2, 1 ],
+            [ 19, 5, 19, 28, 1, 0, 3, 1 ],
+            [ 20, 5, 20, 28, 1, 0, 4, 1 ],
+            [ 22, 3, 22, 23, 1, 0, 5, 1 ],
+            [ 63, 32, 64, 36, 1, 1, 0, 0 ],
+            [ 66, 3, 67, 56, 1, 2, 0, 0 ],
+            [ 69, 3, 70, 59, 1, 3, 0, 0 ],
+            [ 69, 3, 70, 59, 1, 4, 0, 0 ],
+            [ 71, 30, 72, 2, 1, 5, 0, 0 ],
+            [ 71, 45, 71, 70, 1, 5, 6, 1 ],
+            [ 59, 35, 59, 53, 1, 6, 0, 0 ]
+          ]
+        },
+        {
+          "count": 0,
+          "filenames": [ "/code/testproject/unittest.cpp" ],
+          "name": "_ZN19unittest_Test2_Test8TestBodyEv",
+          "regions": [ [ 30, 27, 34, 2, 0, 0, 0, 0 ] ]
+        },
+        {
+          "count": 0,
+          "filenames": [ "/code/testproject/unittest.cpp", "/code/testproject/atestfile.h" ],
+          "name": "_ZN19unittest_Test3_Test8TestBodyEv",
+          "regions": [ [ 36, 27, 41, 2, 0, 0, 0, 0 ], [ 37, 3, 37, 11, 0, 0, 1, 1 ], [ 38, 1, 41, 1, 0, 0, 0, 2 ], [ 16, 18, 17, 24, 0, 1, 0, 0 ] ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage8toStringERKNSt7__cxx114listINS1_12basic_stringIcSt11char_traitsIcESaIcEEESaIS7_EEE",
+          "regions": [
+            [ 13, 71, 25, 6, 1, 0, 0, 0 ],
+            [ 16, 38, 16, 39, 3, 0, 0, 3 ],
+            [ 16, 39, 23, 8, 3, 0, 0, 0 ],
+            [ 17, 14, 17, 19, 3, 0, 0, 0 ],
+            [ 17, 19, 17, 22, 1, 0, 0, 3 ],
+            [ 17, 22, 19, 10, 1, 0, 0, 0 ],
+            [ 19, 10, 19, 16, 2, 0, 0, 3 ],
+            [ 19, 16, 21, 10, 2, 0, 0, 0 ]
+          ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/testproject/unittest.cpp", "/code/src/GTestCoverageCovers.h", "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN8unittest5SetUpEv",
+          "regions": [
+            [ 9, 25, 11, 4, 1, 0, 0, 0 ],
+            [ 10, 5, 10, 17, 1, 0, 1, 1 ],
+            [ 62, 31, 62, 77, 1, 1, 0, 0 ],
+            [ 62, 47, 62, 68, 1, 1, 2, 1 ],
+            [ 58, 31, 58, 45, 1, 2, 0, 0 ]
+          ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage11argsExtractIJFiPKcEEE8toStringB5cxx11Ev",
+          "regions": [ [ 36, 103, 36, 144, 1, 0, 0, 0 ] ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage13functionCheckIJ9atestfileFiPKcEEE4funcEMS2_FiS4_E",
+          "regions": [ [ 54, 134, 54, 136, 1, 0, 0, 0 ] ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage11argsExtractIJFviEEE8toStringB5cxx11Ev",
+          "regions": [ [ 36, 103, 36, 144, 1, 0, 0, 0 ] ]
+        },
+        {
+          "count": 2,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage11argsExtractIJiEE8toStringB5cxx11Ev",
+          "regions": [ [ 35, 80, 35, 134, 2, 0, 0, 0 ] ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage13functionCheckIJ9atestfileFviEEE4funcEMS2_FviE",
+          "regions": [ [ 54, 134, 54, 136, 1, 0, 0, 0 ] ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/testproject/atestfile.h" ],
+          "name": "_ZN9atestfile13aTestFunctionIiEEvT_",
+          "regions": [ [ 11, 54, 13, 4, 1, 0, 0, 0 ] ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage11argsExtractIJFvPKcEEE8toStringB5cxx11Ev",
+          "regions": [ [ 36, 103, 36, 144, 1, 0, 0, 0 ] ]
+        },
+        {
+          "count": 3,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage11argsExtractIJPKcEE8toStringB5cxx11Ev",
+          "regions": [ [ 35, 80, 35, 134, 3, 0, 0, 0 ] ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/src/GTestCoverageCovers.h" ],
+          "name": "_ZN7testing8coverage13functionCheckIJ9atestfileFvPKcEEE4funcEMS2_FvS4_E",
+          "regions": [ [ 54, 134, 54, 136, 1, 0, 0, 0 ] ]
+        },
+        {
+          "count": 1,
+          "filenames": [ "/code/testproject/atestfile.h" ],
+          "name": "_ZN9atestfile13aTestFunctionIPKcEEvT_",
+          "regions": [ [ 11, 54, 13, 4, 1, 0, 0, 0 ] ]
+        }
+      ],
+      "totals": {
+        "functions": { "count": 10, "covered": 8, "percent": 80 },
+        "instantiations": { "count": 16, "covered": 14, "percent": 87 },
+        "lines": { "count": 55, "covered": 48, "percent": 87 },
+        "regions": { "count": 27, "covered": 24, "notcovered": 3, "percent": 88 }
+      }
+    }
+  ],
+  "type": "llvm.coverage.json.export",
+  "version": "2.0.0"
+}

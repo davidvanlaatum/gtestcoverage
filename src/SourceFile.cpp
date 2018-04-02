@@ -10,7 +10,7 @@ SourceFile::SourceFile( const path &filename ) {
   if ( boost::filesystem::exists( filename ) ) {
     auto size = boost::filesystem::file_size( filename );
     boost::filesystem::ifstream sourceFile( filename );
-    contents.resize( size );
+    contents.resize( size + 1 );
     sourceFile.read( contents.data(), static_cast<std::streamsize>(size) );
 
     uint32_t line = 1;
@@ -23,7 +23,7 @@ SourceFile::SourceFile( const path &filename ) {
       i++;
     }
     for ( auto &c : index ) {
-      if ( contents[c.second] == '\r' ) {
+      if ( c.second < contents.size() && contents[c.second] == '\r' ) {
         c.second++;
       }
     }
