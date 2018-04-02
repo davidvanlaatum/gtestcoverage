@@ -3,9 +3,14 @@ dist: trusty
 cache:
   directories:
     - ${TRAVIS_BUILD_DIR}/boost
+    - '$HOME/.sonar/cache'
 before_install: |
     RUNSONAR=0
-    if [[ "$CC" == "clang" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "${BOOST_VERSION}" == "current" ]]; then RUNSONAR=1; fi
+    BUILDWRAPPER=build-wrapper-linux-x86-64 --out-dir bw-output
+    if [[ "$CC" == "clang" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "${BOOST_VERSION}" == "current" ]]; then
+      RUNSONAR=1;
+      BUILDWRAPPER=
+    fi
     if [[ "${BOOST_VERSION}" != "" ]]; then
       if [[ "${BOOST_VERSION}" == "current" ]]; then
         BOOST_VERSION=$(curl -s https://sourceforge.net/projects/boost/rss?path=/boost | sed -e '/link/!d;/.tar.gz\//!d;/beta/d;/snapshots/d;s/<[^>]*>//g;s/.*\([0-9][0-9]*\.[0-9]*\.[0-9]*\).*/\1/' | head -n1)
@@ -30,7 +35,7 @@ script:
     - chmod a+x scripts/*
     - mkdir -p build
     - pushd build
-    - cmake ../ -DCMAKE_BUILD_TYPE=Debug ${CMAKE_OPTIONS} && cmake --build . && ctest -V
+    - cmake ../ -DCMAKE_BUILD_TYPE=Debug ${CMAKE_OPTIONS} && ${BUILDWRAPPER} cmake --build . && ctest -V
     - popd
     - if [[ $RUNSONAR -gt 0 ]]; then sonar-scanner; fi
 addons:
