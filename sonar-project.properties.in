@@ -1,5 +1,5 @@
 sonar.projectKey=GTestCoverage
-sonar.sources=.
+sonar.sources=src
 sonar.tests=test,testproject
 sonar.organization=davidvanlaatum-github
 sonar.cfamily.build-wrapper-output=bw-output
@@ -8,3 +8,4 @@ sonar.projectVersion=@PROJECT_VERSION@
 sonar.sourceEncoding=UTF-8
 sonar.cpp.file.suffixes=.cc,.cpp,.cxx,.c++,.hh,.hpp,.hxx,.h++,.ipp,.h
 sonar.c.file.suffixes=.c
+sonar.sourceEncoding=UTF-8
