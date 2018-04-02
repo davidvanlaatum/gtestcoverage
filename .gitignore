@@ -160,3 +160,4 @@ cmake/FindBoost.cmake
 .idea/*.iml
 cmake-build*
 *.profdata
+sonar-project.properties

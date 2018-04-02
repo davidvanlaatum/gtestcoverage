@@ -3,5 +3,5 @@ sonar.sources=.
 sonar.organization=davidvanlaatum-github
 sonar.cfamily.build-wrapper-output=bw-output
 sonar.exclusions=boost/**,build/**,cmake-build*/**,json/json.hpp
-sonar.projectVersion=1.0.0
+sonar.projectVersion=@PROJECT_VERSION@
 sonar.sourceEncoding=UTF-8

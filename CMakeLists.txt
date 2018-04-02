@@ -108,6 +108,7 @@ if ( BUILD_TESTING )
   add_subdirectory ( test )
   add_subdirectory ( testproject )
 endif ()
+configure_file ( sonar-project.properties.in ${CMAKE_SOURCE_DIR}/sonar-project.properties )
 
 include ( CMakePackageConfigHelpers )
 write_basic_package_version_file ( "${CMAKE_CURRENT_BINARY_DIR}/gtestcoverageVersion.cmake"
